@@ -10,13 +10,13 @@ char *strPtr;
 strPtr=str;
 regex_t func_dec;
 regmatch_t m[1];
-int regExErr1 = regcomp(&func_dec, "[[:alpha:]]*[ ]+[[:alpha:]]*[ ]*\\(", REG_EXTENDED);
+int regExErr1 = regcomp(&func_dec, "[[:alpha:]]+[ ]+[[:alpha:]]+[ ]*\\([[ ]*[[:alpha:]]+[ ]+[[:alpha:]]+,[ ]*]*[[:alpha:]]+[ ]+[[:alpha:]]+[ ]*\\)", REG_EXTENDED);
 
 if( regExErr1 ) {
   printf("regex err\n");
   return -1;
 }
-strcpy(str,"int sub(");
+strcpy(str,"int sub(int x,  int yuh )");
       regExErr1 = regexec(&func_dec, str, 1, m, 0);
       if( regExErr1 != 0 ){
         printf("not found\n");

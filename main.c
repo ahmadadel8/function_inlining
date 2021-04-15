@@ -9,47 +9,21 @@
 #include <unistd.h>
 #include <regex.h>
 
-/*
-void parsefile(char* filename){
-  FILE *fp;
-  char str[100];
-  regex_t regex;
-  regmatch_t m[50];
-  int regExErr1 = regcomp(&regex, "[sub]", REG_EXTENDED|REG_NEWLINE);
-  if( regExErr1 ) {
-    return;
-  }
-  fp=fopen(filename,  "r");
-  if (fp == NULL){
-        printf("Could not open file %s",filename);
-        return;
-    }
-    int i = 0;
-    while (fgets(str, 100, fp) != NULL){
-        regExErr1 = regexec(&regex, str, 10, m, 0);
-        if( regExErr1 != 0 ){
-            continue;}
-
-            printf("entering loop at index %i\n", i);
-            int start = m[i].rm_so;
-            int finish = m[i].rm_eo;
-            char result[(finish - start)];
-            i++;
-    }
-    fclose(fp);
-    return;
-}
-*/
 int main(int argc, char *argv[]){
 FILE *fp;
 char str[100];
 char *strPtr;
 strPtr=str;
-regex_t regex;
+regex_t func_call, func_dec;
 regmatch_t m[1];
-int regExErr1 = regcomp(&regex, "[[:alnum:]_]*\\([ ]*[[:digit:]+[ ]*,[ ]*]*[[:digit:]+][ ]*\\)", REG_EXTENDED);
-if( regExErr1 ) {
-  printf("regex err\n");
+int regExErr_call = regcomp(&func_call, "[[:alnum:]_]*\\([ ]*[[:digit:]+[ ]*,[ ]*]*[[:digit:]+][ ]*\\)", REG_EXTENDED);
+if( regExErr_call ) {
+  printf("regex err call\n");
+  return -1;
+}
+int regExErr_dec = regcomp(&func_dec, "[[:alpha:]]+[ ]+[[:alpha:]]+[ ]*\\([[ ]*[[:alpha:]]+[ ]+[[:alpha:]]+,[ ]*]*[[:alpha:]]+[ ]+[[:alpha:]]+[ ]*\\)", REG_EXTENDED);
+if( regExErr_dec ) {
+  printf("regex err dec\n");
   return -1;
 }
 fp=fopen(argv[1],  "r");
@@ -59,17 +33,27 @@ if (fp == NULL){
   }
   int i = 0;
   while (fgets(str, 100, fp) != NULL){
-      regExErr1 = regexec(&regex, str, 1, m, 0);
-      if( regExErr1 != 0 ){
-          continue;}
+      regExErr_call = regexec(&func_call, str, 1, m, 0);
+      regExErr_dec = regexec(&func_dec, str, 1, m, 0);
+
+      if(regExErr_call == 0){
           int len = m[0].rm_eo-m[0].rm_so;
           char result[(len+1)];
           result[len]='\0';
           strncpy(result, &strPtr[m[0].rm_so], len);
-          printf("function= %s at line %s\n", result, str);
+          printf("function call= %s at line %s\n", result, str);
+        }
+      else if(regExErr_dec == 0) {
+          int len = m[0].rm_eo-m[0].rm_so;
+          char result[(len+1)];
+          result[len]='\0';
+          strncpy(result, &strPtr[m[0].rm_so], len);
+          printf("function dec= %s at line %s\n", result, str);
+        }
+      else continue;
+      }
 
 
-  }
   fclose(fp);
   return 0;
 }
