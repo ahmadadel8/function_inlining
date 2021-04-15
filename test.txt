@@ -2,7 +2,7 @@ main () {
 
 int diff;
 
-diff1 = sub(3, 7);
+diff1 = sub(  34, 7 );
 
 printf(“diff = %d\n”, diff);
 

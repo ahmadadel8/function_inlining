@@ -47,7 +47,7 @@ char *strPtr;
 strPtr=str;
 regex_t regex;
 regmatch_t m[1];
-int regExErr1 = regcomp(&regex, "sub", REG_EXTENDED);
+int regExErr1 = regcomp(&regex, "[[:alnum:]_]*\\([ ]*[[:digit:]+[ ]*,[ ]*]*[[:digit:]+][ ]*\\)", REG_EXTENDED);
 if( regExErr1 ) {
   printf("regex err\n");
   return -1;
@@ -62,11 +62,12 @@ if (fp == NULL){
       regExErr1 = regexec(&regex, str, 1, m, 0);
       if( regExErr1 != 0 ){
           continue;}
-          int start = m[0].rm_so;
-          int finish = m[0].rm_eo;
-          char result[(finish - start)];
-          strncpy(result, &strPtr[start], finish-start);
+          int len = m[0].rm_eo-m[0].rm_so;
+          char result[(len+1)];
+          result[len]='\0';
+          strncpy(result, &strPtr[m[0].rm_so], len);
           printf("function= %s at line %s\n", result, str);
+
 
   }
   fclose(fp);
