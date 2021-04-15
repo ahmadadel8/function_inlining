@@ -1,0 +1,19 @@
+main () {
+
+int diff;
+
+diff1 = sub(3, 7);
+
+printf(“diff = %d\n”, diff);
+
+}
+
+int sub(int x, int y) {
+
+     int z;
+
+     z = x – y;
+
+     return z;
+
+}
