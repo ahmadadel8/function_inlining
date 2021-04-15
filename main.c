@@ -42,32 +42,33 @@ void parsefile(char* filename){
 */
 int main(int argc, char *argv[]){
 FILE *fp;
-char *str;
+char str[100];
+char *strPtr;
+strPtr=str;
 regex_t regex;
-regmatch_t m[50];
-int regExErr1 = regcomp(&regex, "[sub]", REG_EXTENDED|REG_NEWLINE);
+regmatch_t m[1];
+int regExErr1 = regcomp(&regex, "sub", REG_EXTENDED);
 if( regExErr1 ) {
-  return;
+  printf("regex err\n");
+  return -1;
 }
 fp=fopen(argv[1],  "r");
 if (fp == NULL){
       printf("Could not open file");
-      return;
+      return -1;
   }
   int i = 0;
   while (fgets(str, 100, fp) != NULL){
-      regExErr1 = regexec(&regex, str, 10, m, 0);
+      regExErr1 = regexec(&regex, str, 1, m, 0);
       if( regExErr1 != 0 ){
           continue;}
-
-          printf("entering loop at index %i\n", i);
-          int start = m[i].rm_so;
-          int finish = m[i].rm_eo;
+          int start = m[0].rm_so;
+          int finish = m[0].rm_eo;
           char result[(finish - start)];
-          strcpy(result, strstr(("%.*s\n", (finish - start), str + start), "<"));
-          printf("function, %s", result);
-          i++;
+          strncpy(result, &strPtr[start], finish-start);
+          printf("function= %s at line %s\n", result, str);
+
   }
   fclose(fp);
-  return;
+  return 0;
 }
