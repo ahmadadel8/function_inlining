@@ -47,7 +47,7 @@ if (fp == NULL){
           int len = m[0].rm_eo-m[0].rm_so;
           char result[(len+1)];
           result[len]='\0';
-          
+          //testing with jessica
           strncpy(result, &strPtr[m[0].rm_so], len);
           printf("function dec= %s at line %s\n", result, str);
         }
