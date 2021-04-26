@@ -38,8 +38,8 @@ struct Hello :  public FunctionPass
         */
         virtual bool runOnFunction(llvm::Function &F){
 		errs() << "Hello: " ;
-		errs().write_escaped(F->getName())<< "\n";
-		for (Function::iterator blk =F->begin(), blk_e=F->end(); blk!=blk_e; ++blk){
+		errs().write_escaped((*F).getName())<< "\n";
+		for (Function::iterator blk =(*F).begin(), blk_e=(*F).end(); blk!=blk_e; ++blk){
 			errs() << "Basic block (name=" << blk->getName() << ") has " <<blk->size() << "instructions which are:\n";
 			for(BasicBlock::iterator i=blk->begin(), e=blk->end(); i!=e; ++i)
 				errs()<< *i << "\n";
