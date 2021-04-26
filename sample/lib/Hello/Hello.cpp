@@ -36,9 +36,9 @@ struct Hello :  public FunctionPass
          * @param [in,out] func The function to analyze
          * @return true if the function was modified; false otherwise
         */
-        virtual bool runOnFunction(llvm::Function &F){
+        virtual bool runOnFunction(llvm::Function *F){
 		errs() << "Hello: " ;
-		errs().write_escaped(F.getName())<< "\n";
+		errs().write_escaped(*F.getName())<< "\n";
 		for (Function::iterator blk =F->begin(), blk_e=F->end(); blk!=blk_e; ++blk){
 			eers() << "Basic block (name=" << blk->getName() << ") has " <<blk->size() << "instructions which are:\n";
 			for(BasicBlock::iterator i=blk->begin(), e=blk->end(); i!=e; ++i)
