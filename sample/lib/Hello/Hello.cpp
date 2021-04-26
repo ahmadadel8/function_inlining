@@ -52,4 +52,4 @@ struct Hello :  public FunctionPass
 }
 
 char Hello::ID = 0;
-static RegisterPass<Hello> X("hello", "Hello World Pass", false, false);
+static RegisterPass<Hello> X("hello_new", "Hello World Pass", false, false);
