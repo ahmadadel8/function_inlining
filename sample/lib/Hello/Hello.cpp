@@ -36,7 +36,7 @@ struct Hello :  public FunctionPass
          * @param [in,out] func The function to analyze
          * @return true if the function was modified; false otherwise
         */
-        virtual bool runOnFunction(llvm::Function *F){
+        virtual bool runOnFunction(llvm::Function &F){
 		errs() << "Hello: " ;
 		errs().write_escaped(F->getName())<< "\n";
 		for (Function::iterator blk =F->begin(), blk_e=F->end(); blk!=blk_e; ++blk){
@@ -52,4 +52,4 @@ struct Hello :  public FunctionPass
 }
 
 char Hello::ID = 0;
-static RegisterPass<Hello> X("hello_new", "Hello World Pass", false, false);
+static RegisterPass<Hello> X("hello", "Hello World Pass", false, false);
