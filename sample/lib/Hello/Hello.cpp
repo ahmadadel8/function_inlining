@@ -26,7 +26,7 @@ struct Hello :  public FunctionPass
 {
 
         /** Constructor. */
-	static char ID;                           
+	static char ID;
 	Hello() : FunctionPass(ID) {}
 
         //DEFINE_INTPASS_ANALYSIS_ADJUSTMENT(PointerAnalysisPass);
@@ -39,6 +39,12 @@ struct Hello :  public FunctionPass
         virtual bool runOnFunction(llvm::Function &F){
 		errs() << "Hello: " ;
 		errs().write_escaped(F.getName())<< "\n";
+		for (Function::iterator blk =F->begin(), blk_e=F->end(); blk!=blk_e; ++blk){
+			eers() << "Basic block (name=" << blk->getName() << ") has " <<blk->size() << "instructions which are:\n";
+			for(BasicBlock::iterator i=blk->begin(), e=blk->end(); i!=e; ++i)
+				errs()<< *i << "\n";
+
+		}
 		return false;
 	}
 
@@ -47,6 +53,3 @@ struct Hello :  public FunctionPass
 
 char Hello::ID = 0;
 static RegisterPass<Hello> X("hello", "Hello World Pass", false, false);
-
-
-
