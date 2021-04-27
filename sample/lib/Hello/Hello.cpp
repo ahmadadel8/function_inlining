@@ -42,7 +42,7 @@ struct Hello :  public FunctionPass
 		errs() <<"In function ";
 		errs().write_escaped(F.getName())<<  "\n";
 		Function *func = &F;
-		Function *calledFunc = &F;
+		Function *calledFunc;
 		CallInst* callInst;
 		Value* V;
 		//CallBase value;
@@ -55,7 +55,7 @@ struct Hello :  public FunctionPass
 				if(isa<Constant>(V)){
 					calledFunc=callInst->getCalledFunction();
 					errs()<< "Function ";
-					errs().write_escaped(calledFunc.getName())<<  "is called with actual arguments";
+					errs().write_escaped(calledFunc->getName())<<  "is called with actual arguments";
 					errs()<< *V << "\n";
 				}
 			}
