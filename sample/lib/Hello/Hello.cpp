@@ -41,13 +41,18 @@ struct Hello :  public FunctionPass
         virtual bool runOnFunction(llvm::Function &F){
 		errs().write_escaped(F.getName())<< " arguments are: \n";
 		Function *func = &F;
+		CallInst* callInst;
+		Value* V;
 		//CallBase value;
 
 		for (inst_iterator I = inst_begin(func), E=inst_end(func); I!=E; ++I)
-			if (CallInst* callInst = dyn_cast<CallInst>(&*I))
+			if (callInst = dyn_cast<CallInst>(&*I))
 			{errs()<< *I << "\n";
 			for (unsigned ArgIdx=0; ArgIdx<callInst->getNumArgOperands(); ++ArgIdx)
-				errs() << * callInst->getArgOperand(ArgIdx)<<"\n";
+				V=callInst->getArgOperand(ArgIdx)<<"\n";
+				errs()<< *V <<;
+				if(isa<Constant>(V))
+					errs()<< *V <<;
 			}
 		return false;
 	}
