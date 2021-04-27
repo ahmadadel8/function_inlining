@@ -42,11 +42,12 @@ struct Hello :  public FunctionPass
 		errs().write_escaped(F.getName())<< " arguments are: \n";
 		Function *func = &F;
 		//CallBase value;
-		for (Function::arg_iterator ArgIdx = func->arg_begin(), ArgEnd= func->arg_end(); ArgIdx !=ArgEnd; ++ArgIdx)
-			errs() << *ArgIdx <<"\n";
+
 		for (inst_iterator I = inst_begin(func), E=inst_end(func); I!=E; ++I)
 			if (CallInst* callInst = dyn_cast<CallInst>(&*I))
-					errs()<< *I << "\n";
+			{errs()<< *I << "\n";
+			for (CallInst::arg_iterator ArgIdx = callInst->arg_begin(), ArgEnd= callInst->arg_end(); ArgIdx !=ArgEnd; ++ArgIdx)
+				errs() << *ArgIdx <<"\n";
 
 		return false;
 	}
