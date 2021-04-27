@@ -55,7 +55,7 @@ struct Hello :  public FunctionPass
 				if(isa<Constant>(V)){
 					calledFunc=callInst->getCalledFunction();
 					errs()<< "Function ";
-					errs().write_escaped(calledFunc->getName())<<  "is called with actual arguments";
+					errs().write_escaped(calledFunc->getName())<<  " is called with actual arguments ";
 					errs()<< *V << "\n";
 				}
 			}
