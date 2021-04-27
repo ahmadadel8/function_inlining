@@ -52,17 +52,18 @@ struct Hello :  public FunctionPass
 			if (callInst = dyn_cast<CallInst>(&*I))
 			{areArgsConst= true;
 				for (unsigned ArgIdx=0; ArgIdx<callInst->getNumArgOperands(); ++ArgIdx){
-				V=callInst->getArgOperand(ArgIdx);
-				errs()<< *V << "\n";
-				if(!isa<Constant>(V))
-					areArgsConst= false;
-				}
+					V=callInst->getArgOperand(ArgIdx);
+					if(!isa<Constant>(V))
+						areArgsConst= false;
+					}
 				if (areArgsConst)
 					{
 					calledFunc=callInst->getCalledFunction();
 					errs()<< "Function ";
 					errs().write_escaped(calledFunc->getName())<<  " is called with actual arguments ";
-					errs()<< *V << "\n";
+					for (unsigned ArgIdx=0; ArgIdx<callInst->getNumArgOperands(); ++ArgIdx){
+						errs()<< *callInst->getArgOperand(ArgIdx) <<",";
+					errs() << "\n";
 				}
 			}
 		return false;
