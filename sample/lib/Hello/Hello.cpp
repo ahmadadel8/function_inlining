@@ -45,7 +45,7 @@ struct Hello :  public FunctionPass
 		for (Function::arg_iterator ArgIdx = func->arg_begin(), ArgEnd= func->arg_end(); ArgIdx !=ArgEnd; ++ArgIdx)
 			errs() << *ArgIdx <<"\n";
 		for (inst_iterator I = inst_begin(func), E=inst_end(func); I!=E; ++I)
-			if (CAllInst* callInst = dyn_cast<CAllInst>(&*I))
+			if (CallInst* callInst = dyn_cast<CallInst>(&*I))
 					errs()<< *I << "\n";
 
 		return false;
