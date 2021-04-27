@@ -48,7 +48,7 @@ struct Hello :  public FunctionPass
 		for (inst_iterator I = inst_begin(func), E=inst_end(func); I!=E; ++I)
 					errs()<< *I << "\n";
 
-		}
+		
 		return false;
 	}
 
