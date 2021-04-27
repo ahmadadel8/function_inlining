@@ -41,10 +41,8 @@ struct Hello :  public FunctionPass
 		errs().write_escaped(F.getName())<< "arguments are: ";
 		llvm::Function *func = &F;
 		Function::const_arg_iterator arg =func->arg_begin();
-		errs() << arg << "\n";
-
 		for (Function::const_arg_iterator arg =func->arg_begin(), arg_e=func->arg_end(); arg!=arg_e; ++arg)
-			errs() << arg << "\n";
+			errs() << *arg << "\n";
 		for (Function::iterator blk =func->begin(), blk_e=func->end(); blk!=blk_e; ++blk){
 			errs() << "Basic block (name=" << blk->getName() << ") has " <<blk->size() << "instructions which are:\n";
 		for(BasicBlock::iterator i=blk->begin(), e=blk->end(); i!=e; ++i)
