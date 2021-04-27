@@ -53,6 +53,7 @@ struct Hello :  public FunctionPass
 			{areArgsConst= true;
 				for (unsigned ArgIdx=0; ArgIdx<callInst->getNumArgOperands(); ++ArgIdx){
 				V=callInst->getArgOperand(ArgIdx);
+				errs()<< *V << "\n";
 				if(!isa<Constant>(V))
 					areArgsConst= false;
 				}
