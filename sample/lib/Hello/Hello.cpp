@@ -46,7 +46,7 @@ struct Hello :  public FunctionPass
 		for (inst_iterator I = inst_begin(func), E=inst_end(func); I!=E; ++I)
 			if (CallInst* callInst = dyn_cast<CallInst>(&*I))
 			{errs()<< *I << "\n";
-			for (CallInst::arg_iterator ArgIdx = callInst->arg_begin(), ArgEnd= callInst->arg_end(); ArgIdx !=ArgEnd; ++ArgIdx)
+			for (Function::arg_iterator ArgIdx = callInst->arg_begin(), ArgEnd= callInst->arg_end(); ArgIdx !=ArgEnd; ++ArgIdx)
 				errs() << *ArgIdx <<"\n";
 			}
 		return false;
