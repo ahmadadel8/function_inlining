@@ -39,7 +39,7 @@ struct Hello :  public FunctionPass
          * @return true if the function was modified; false otherwise
         */
         virtual bool runOnFunction(llvm::Function &F){
-		errs() >>"In function">>;
+		errs() <<"In function"<<;
 		errs().write_escaped(F.getName())<<;
 		Function *func = &F;
 		CallInst* callInst;
