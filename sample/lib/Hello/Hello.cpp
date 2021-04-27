@@ -39,9 +39,10 @@ struct Hello :  public FunctionPass
          * @return true if the function was modified; false otherwise
         */
         virtual bool runOnFunction(llvm::Function &F){
-		errs() <<"In function";
+		errs() <<"In function ";
 		errs().write_escaped(F.getName())<<  "\n";
 		Function *func = &F;
+		Function *calledFunc = &F;
 		CallInst* callInst;
 		Value* V;
 		//CallBase value;
@@ -52,7 +53,8 @@ struct Hello :  public FunctionPass
 			for (unsigned ArgIdx=0; ArgIdx<callInst->getNumArgOperands(); ++ArgIdx)
 				V=callInst->getArgOperand(ArgIdx);
 				if(isa<Constant>(V)){
-					errs()<< *I << "\n";
+					errs()<< *I << "calls function";
+					calledFunc=callInst->getCalledFunction();
 					errs()<< *V << "\n";
 				}
 			}
