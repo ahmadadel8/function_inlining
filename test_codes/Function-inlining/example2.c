@@ -16,7 +16,7 @@ void print_int(int x)
 int main()
 {
     int a;
-    a = foo(2,4);
+    a = foo(2,a);
     printf("a = ");
     print_int(a);
     return 0;
