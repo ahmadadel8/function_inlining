@@ -50,11 +50,11 @@ struct Hello :  public FunctionPass
 
 		for (inst_iterator I = inst_begin(func), E=inst_end(func); I!=E; ++I)
 			if (callInst = dyn_cast<CallInst>(&*I))
-			{areArgsConst= True;
+			{areArgsConst= true;
 				for (unsigned ArgIdx=0; ArgIdx<callInst->getNumArgOperands(); ++ArgIdx){
 				V=callInst->getArgOperand(ArgIdx);
 				if(!isa<Constant>(V))
-					areArgsConst= False;
+					areArgsConst= false;
 				}
 				if (areArgsConst)
 					{
