@@ -61,7 +61,7 @@ struct Hello :  public FunctionPass
 					calledFunc=callInst->getCalledFunction();
 					errs()<< "Function ";
 					errs().write_escaped(calledFunc->getName())<<  " is called with actual arguments ";
-					for (unsigned ArgIdx=0; ArgIdx<callInst->getNumArgOperands(); ++ArgIdx){
+					for (unsigned ArgIdx=0; ArgIdx<callInst->getNumArgOperands(); ++ArgIdx)
 						errs()<< *callInst->getArgOperand(ArgIdx) <<",";
 					errs() << "\n";
 				}
