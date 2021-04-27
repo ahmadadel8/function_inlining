@@ -16,6 +16,7 @@
 #include "llvm/Pass.h"
 #include "llvm/IR/Function.h"
 #include "llvm/Support/raw_ostream.h"
+#include "llvm/IR/InstrTypes.h"
 
 using namespace llvm;
 
@@ -41,8 +42,8 @@ struct Hello :  public FunctionPass
 		errs().write_escaped(F.getName())<< "arguments are: ";
 		Function *func = &F;
 		//CallBase value;
-		for (unsigned AggArgIdx = 0; AggArgIdx < func->arg_size(); AggArgIdx++) 
-			errs().write_escaped(func->getArg(AggArgIdx))<<"\n";
+		for (unsigned AggArgIdx = 0; AggArgIdx < func->arg_size(); AggArgIdx++)
+			errs().write_escaped(func->getArgOperand(AggArgIdx))<<"\n";
 		for (Function::iterator blk =func->begin(), blk_e=func->end(); blk!=blk_e; ++blk){
 			errs() << "Basic block (name=" << blk->getName() << ") has " <<blk->size() << "instructions which are:\n";
 		for(BasicBlock::iterator i=blk->begin(), e=blk->end(); i!=e; ++i)
