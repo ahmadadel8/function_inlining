@@ -42,7 +42,7 @@ struct Hello :  public FunctionPass
 		Function *func = &F;
 		//CallBase value;
 		for (Function::const_arg_iterator arg =func->arg_begin(), arg_e=func->arg_end(); arg!=arg_e; ++arg)
-			errs().write_escaped(func->getArg(arg))<<"\n";
+			errs().write_escaped(func->arg_size())<<"\n";
 		for (Function::iterator blk =func->begin(), blk_e=func->end(); blk!=blk_e; ++blk){
 			errs() << "Basic block (name=" << blk->getName() << ") has " <<blk->size() << "instructions which are:\n";
 		for(BasicBlock::iterator i=blk->begin(), e=blk->end(); i!=e; ++i)
