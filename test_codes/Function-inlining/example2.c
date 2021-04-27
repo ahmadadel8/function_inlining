@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-int foo(int y)
+int foo(int y, int x)
 {
     int p;
     p = y+1;
@@ -16,7 +16,7 @@ void print_int(int x)
 int main()
 {
     int a;
-    a = foo(2);
+    a = foo(2,4);
     printf("a = ");
     print_int(a);
     return 0;
