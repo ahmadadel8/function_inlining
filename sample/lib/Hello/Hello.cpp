@@ -48,8 +48,12 @@ struct Hello :  public FunctionPass
 			errs() << "Basic block (name=" << blk->getName() << ") has " <<blk->size() << "instructions which are:\n";
 		for(BasicBlock::iterator i=blk->begin(), e=blk->end(); i!=e; ++i)
 
-				if(dynamic_cast<CallInst>(*i))
+				try{dynamic_cast<CallInst>(*i);
 					errs()<< *i << "\n";
+				}
+				catch(const std::bad_cast& e) {
+					// Cast failed
+				}
 
 
 		}
