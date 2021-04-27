@@ -47,7 +47,7 @@ struct Hello :  public FunctionPass
 			if (CallInst* callInst = dyn_cast<CallInst>(&*I))
 			{errs()<< *I << "\n";
 			for (unsigned ArgIdx=0; ArgIdx<callInst->getNumArgOperands(); ++ArgIdx)
-				errs() << callInst->getArgOperand(ArgIdx)<<"\n";
+				errs() << *callInst->getArgOperand(ArgIdx)<<"\n";
 			}
 		return false;
 	}
