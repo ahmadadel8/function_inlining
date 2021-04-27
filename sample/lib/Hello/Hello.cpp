@@ -46,8 +46,8 @@ struct Hello :  public FunctionPass
 		for (inst_iterator I = inst_begin(func), E=inst_end(func); I!=E; ++I)
 			if (CallInst* callInst = dyn_cast<CallInst>(&*I))
 			{errs()<< *I << "\n";
-			for (unsigned ArgIdx=0; ArgIdx<callInst.getNumArgOperands(); ++ArgIdx)
-				errs() << callInst.getArgOperand(ArgIdx)<<"\n";
+			for (unsigned ArgIdx=0; ArgIdx<callInst->getNumArgOperands(); ++ArgIdx)
+				errs() << callInst->getArgOperand(ArgIdx)<<"\n";
 			}
 		return false;
 	}
