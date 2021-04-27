@@ -17,6 +17,7 @@
 #include "llvm/IR/Function.h"
 #include "llvm/Support/raw_ostream.h"
 #include "llvm/IR/Instructions.h"
+#include "llvm/IR/InstIterator.h"
 
 using namespace llvm;
 
@@ -44,17 +45,8 @@ struct Hello :  public FunctionPass
 		//CallBase value;
 		for (Function::arg_iterator ArgIdx = func->arg_begin(), ArgEnd= func->arg_end(); ArgIdx !=ArgEnd; ++ArgIdx)
 			errs() << *ArgIdx <<"\n";
-		for (Function::iterator blk =func->begin(), blk_e=func->end(); blk!=blk_e; ++blk){
-			errs() << "Basic block (name=" << blk->getName() << ") has " <<blk->size() << "instructions which are:\n";
-		for(BasicBlock::iterator i=blk->begin(), e=blk->end(); i!=e; ++i)
-
-				try{dynamic_cast<CallInst>(*i);
-					errs()<< *i << "\n";
-				}
-				catch(...) {
-					continue;
-				}
-
+		for (inst_iterator I = inst_begin(func), E=inst_end(func); I!=E; ++I)
+					errs()<< *I << "\n";
 
 		}
 		return false;

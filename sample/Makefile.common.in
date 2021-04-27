@@ -41,7 +41,6 @@ CXXWARNINGS :=-Wno-variadic-macros
 
 CXXFLAGS := ${CXXFLAGS} ${WARNINGS} ${CXXWARNINGS} -fPIC
 CFLAGS := ${CFLAGS} -std=c99 ${WARNINGS} ${CWARNINGS} -fPIC
-LOCAL_CPPFLAGS += -fexceptions
 
 # Include LLVM's Master Makefile.
 include $(LLVM_OBJ_ROOT)/Makefile.common
