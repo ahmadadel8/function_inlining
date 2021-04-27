@@ -45,14 +45,19 @@ struct Hello :  public FunctionPass
 		Function *calledFunc;
 		CallInst* callInst;
 		Value* V;
+		bool areArgsConst;
 		//CallBase value;
 
 		for (inst_iterator I = inst_begin(func), E=inst_end(func); I!=E; ++I)
 			if (callInst = dyn_cast<CallInst>(&*I))
-			{
-			for (unsigned ArgIdx=0; ArgIdx<callInst->getNumArgOperands(); ++ArgIdx)
+			{areArgsConst= True;
+				for (unsigned ArgIdx=0; ArgIdx<callInst->getNumArgOperands(); ++ArgIdx){
 				V=callInst->getArgOperand(ArgIdx);
-				if(isa<Constant>(V)){
+				if(!isa<Constant>(V))
+					areArgsConst= False;
+				}
+				if (areArgsConst)
+					{
 					calledFunc=callInst->getCalledFunction();
 					errs()<< "Function ";
 					errs().write_escaped(calledFunc->getName())<<  " is called with actual arguments ";
