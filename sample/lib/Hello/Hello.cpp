@@ -49,10 +49,10 @@ struct Hello :  public FunctionPass
 			if (callInst = dyn_cast<CallInst>(&*I))
 			{errs()<< *I << "\n";
 			for (unsigned ArgIdx=0; ArgIdx<callInst->getNumArgOperands(); ++ArgIdx)
-				V=callInst->getArgOperand(ArgIdx)<<"\n";
+				V=callInst->getArgOperand(ArgIdx);
 				errs()<< *V <<;
 				if(isa<Constant>(V))
-					errs()<< *V <<;
+					errs()<< *V << "\n";
 			}
 		return false;
 	}
