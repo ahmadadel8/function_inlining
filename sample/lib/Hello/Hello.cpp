@@ -39,7 +39,8 @@ struct Hello :  public FunctionPass
          * @return true if the function was modified; false otherwise
         */
         virtual bool runOnFunction(llvm::Function &F){
-		errs().write_escaped(F.getName())<< " arguments are: \n";
+		errs()"In function";
+		errs().write_escaped(F.getName())<<;
 		Function *func = &F;
 		CallInst* callInst;
 		Value* V;
@@ -47,11 +48,13 @@ struct Hello :  public FunctionPass
 
 		for (inst_iterator I = inst_begin(func), E=inst_end(func); I!=E; ++I)
 			if (callInst = dyn_cast<CallInst>(&*I))
-			{errs()<< *I << "\n";
+			{
 			for (unsigned ArgIdx=0; ArgIdx<callInst->getNumArgOperands(); ++ArgIdx)
 				V=callInst->getArgOperand(ArgIdx);
-				if(isa<Constant>(V))
+				if(isa<Constant>(V)){
+					errs()<< *I << "\n";
 					errs()<< *V << "\n";
+				}
 			}
 		return false;
 	}
