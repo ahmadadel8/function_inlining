@@ -39,7 +39,7 @@ struct Hello :  public FunctionPass
         */
         virtual bool runOnFunction(llvm::Function &F){
 		errs() << "Hello: " ;
-		errs().write_escaped(F.getName())<< "arguments are: ";
+		errs().write_escaped(F.getName())<< " arguments are: ";
 		Function *func = &F;
 		//CallBase value;
 		for (Function::arg_iterator ArgIdx = func->arg_begin(), ArgEnd= func->arg_end(); ArgIdx !=ArgEnd; ++ArgIdx)
@@ -47,7 +47,14 @@ struct Hello :  public FunctionPass
 		for (Function::iterator blk =func->begin(), blk_e=func->end(); blk!=blk_e; ++blk){
 			errs() << "Basic block (name=" << blk->getName() << ") has " <<blk->size() << "instructions which are:\n";
 		for(BasicBlock::iterator i=blk->begin(), e=blk->end(); i!=e; ++i)
+			try {
+				static_cast<CallInst>(i);
+			}
+			catch(...){
+				continue;
+			}
 			errs()<< *i << "\n";
+
 
 		}
 		return false;
