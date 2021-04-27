@@ -53,8 +53,9 @@ struct Hello :  public FunctionPass
 			for (unsigned ArgIdx=0; ArgIdx<callInst->getNumArgOperands(); ++ArgIdx)
 				V=callInst->getArgOperand(ArgIdx);
 				if(isa<Constant>(V)){
-					errs()<< *I << "calls function";
 					calledFunc=callInst->getCalledFunction();
+					errs()<< "Function ";
+					errs().write_escaped(calledFunc.getName())<<  "is called with actual arguments";
 					errs()<< *V << "\n";
 				}
 			}
