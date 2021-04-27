@@ -51,8 +51,8 @@ struct Hello :  public FunctionPass
 				try{dynamic_cast<CallInst>(*i);
 					errs()<< *i << "\n";
 				}
-				catch(const std::bad_cast& e) {
-					// Cast failed
+				catch(const std::bad_cast;) {
+					continue;
 				}
 
 
