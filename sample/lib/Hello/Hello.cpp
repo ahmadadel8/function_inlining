@@ -63,10 +63,11 @@ struct Hello :  public FunctionPass
 								{
 								constArg = dyn_cast<ConstantInt>(V);
 								//constArg=ConstantInt::get(IntegerType::get(V->getContext(),32), (uint64_t)*V);
-								errs()<<"testing ";
-								errs()<<*V<<", "<<*constArg<<'\n';
-								/*calledFunc=callInst->getCalledFunction();
-								errs()<< "Function ";
+
+								calledFunc=callInst->getCalledFunction();
+								for (Function::arg_iterator ArgPtr = calledFunc->arg_begin(), ArgEnd= calledFunc->arg_end(); ArgPtr !=ArgEnd; ++ArgIdx)
+									*ArgPtr->replaceAllUsesWith(constArg);
+								/*errs()<< "Function ";
 								errs().write_escaped(calledFunc->getName())<<  " is called with actual arguments ";
 								for (unsigned ArgIdx=0; ArgIdx<callInst->getNumArgOperands(); ++ArgIdx)
 									errs()<< *callInst->getArgOperand(ArgIdx) <<",";
