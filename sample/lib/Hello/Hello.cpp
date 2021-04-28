@@ -19,6 +19,8 @@
 #include "llvm/IR/Instructions.h"
 #include "llvm/Support/InstIterator.h"
 #include "llvm/IR/Constants.h"
+#include "llvm/IR/DerivedTypes.h"
+
 
 using namespace llvm;
 
@@ -27,58 +29,51 @@ using namespace llvm;
 namespace {
 struct Hello :  public FunctionPass
 {
-
         /** Constructor. */
 	static char ID;
 	Hello() : FunctionPass(ID) {}
 
         //DEFINE_INTPASS_ANALYSIS_ADJUSTMENT(PointerAnalysisPass);
 
-        /**
          * @brief Runs this pass on the given function.
          * @param [in,out] func The function to analyze
          * @return true if the function was modified; false otherwise
         */
         virtual bool runOnFunction(llvm::Function &F){
-		errs() <<"In function ";
-		errs().write_escaped(F.getName())<<  "\n";
-		Function *func = &F;
-		Function *calledFunc;
-		CallInst* callInst;
-		bool areArgsConst;
-		unsigned numArgs;
-		//CallBase value;
+					errs() <<"In function ";
+					errs().write_escaped(F.getName())<<  "\n";
+					Function *func = &F;
+					Function *calledFunc;
+					CallInst* callInst;
+					bool areArgsConst;
+					ConstantInt * constArg;
+					//CallBase value;
 
-		for (inst_iterator I = inst_begin(func), E=inst_end(func); I!=E; ++I)
-		{
-			callInst = dyn_cast<CallInst>(&*I);
-			if (callInst)
-			{
-				areArgsConst= true;
-				numArgs=callInst->getNumArgOperands();
-				vector<Value*>args(numArgs);
-				vector<ConstantInt*>constArgs(numArgs);
-				for (unsigned ArgIdx=0; ArgIdx<numArgs; ++ArgIdx)
+					for (inst_iterator I = inst_begin(func), E=inst_end(func); I!=E; ++I)
 					{
-					args[ArgIdx]=callInst->getArgOperand(ArgIdx);
-					if(!isa<Constant>(args[ArgIdx]))
-						areArgsConst= false;
-					else
-						constArgs[numArgs]=get(Value,args[ArgIdx]);
+						callInst = dyn_cast<CallInst>(&*I);
+						if (callInst){
+							areArgsConst= true;
+							for (unsigned ArgIdx=0; ArgIdx<callInst->getNumArgOperands(); ++ArgIdx){
+								V=callInst->getArgOperand(ArgIdx);
+								if(!isa<Constant>(V)) areArgsConst= false;
+								}
+							if (areArgsConst)
+								{
+								constArg=ConstantInt::get(IntegerType::Int32Ty, V);
+								
+								/*calledFunc=callInst->getCalledFunction();
+								errs()<< "Function ";
+								errs().write_escaped(calledFunc->getName())<<  " is called with actual arguments ";
+								for (unsigned ArgIdx=0; ArgIdx<callInst->getNumArgOperands(); ++ArgIdx)
+									errs()<< *callInst->getArgOperand(ArgIdx) <<",";
+								errs() << "\n";*/
+
+								}
+						}
 					}
-				if (areArgsConst)
-					{
-					calledFunc=callInst->getCalledFunction();
-					errs()<< "Function ";
-					errs().write_escaped(calledFunc->getName())<<  " is called with actual arguments ";
-					for (unsigned ArgIdx=0; ArgIdx<callInst->getNumArgOperands(); ++ArgIdx)
-						errs()<< *callInst->getArgOperand(ArgIdx) <<",";
-					errs() << "\n";
-					}
-			}
-		}
-		return false;
-	}
+					return false;
+				}
 
 };
 }
