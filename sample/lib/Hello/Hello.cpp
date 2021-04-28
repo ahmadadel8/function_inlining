@@ -47,6 +47,7 @@ struct Hello :  public FunctionPass
 					CallInst* callInst;
 					bool areArgsConst;
 					ConstantInt * constArg;
+					Value* V;
 					//CallBase value;
 
 					for (inst_iterator I = inst_begin(func), E=inst_end(func); I!=E; ++I)
@@ -60,8 +61,7 @@ struct Hello :  public FunctionPass
 								}
 							if (areArgsConst)
 								{
-								constArg=ConstantInt::get(IntegerType::Int32Ty, V);
-
+								constArg=ConstantInt::get(IntegerType::get(V->getContext(),32), V);
 								/*calledFunc=callInst->getCalledFunction();
 								errs()<< "Function ";
 								errs().write_escaped(calledFunc->getName())<<  " is called with actual arguments ";
