@@ -34,7 +34,7 @@ struct Hello :  public FunctionPass
 	Hello() : FunctionPass(ID) {}
 
         //DEFINE_INTPASS_ANALYSIS_ADJUSTMENT(PointerAnalysisPass);
-
+				/*
          * @brief Runs this pass on the given function.
          * @param [in,out] func The function to analyze
          * @return true if the function was modified; false otherwise
@@ -61,7 +61,7 @@ struct Hello :  public FunctionPass
 							if (areArgsConst)
 								{
 								constArg=ConstantInt::get(IntegerType::Int32Ty, V);
-								
+
 								/*calledFunc=callInst->getCalledFunction();
 								errs()<< "Function ";
 								errs().write_escaped(calledFunc->getName())<<  " is called with actual arguments ";
