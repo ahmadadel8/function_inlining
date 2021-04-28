@@ -64,7 +64,7 @@ struct Hello :  public FunctionPass
 								constArg = dyn_cast<ConstantInt>(V);
 								//constArg=ConstantInt::get(IntegerType::get(V->getContext(),32), (uint64_t)*V);
 								errs()<<"testing ";
-								errs()<<(uint64_t)*V<<", "<<*constArg<<'\n';
+								errs()<<*V<<", "<<*constArg<<'\n';
 								/*calledFunc=callInst->getCalledFunction();
 								errs()<< "Function ";
 								errs().write_escaped(calledFunc->getName())<<  " is called with actual arguments ";
