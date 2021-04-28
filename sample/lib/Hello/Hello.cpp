@@ -18,6 +18,7 @@
 #include "llvm/Support/raw_ostream.h"
 #include "llvm/IR/Instructions.h"
 #include "llvm/Support/InstIterator.h"
+#include "llvm/IR/Constants.h"
 
 using namespace llvm;
 
@@ -50,10 +51,12 @@ struct Hello :  public FunctionPass
 		//CallBase value;
 
 		for (inst_iterator I = inst_begin(func), E=inst_end(func); I!=E; ++I)
-			if (callInst = dyn_cast<CallInst>(&*I))
+		{
+			callInst = dyn_cast<CallInst>(&*I);
+			if (callInst)
 			{
 				areArgsConst= true;
-				numArgs=callInst->getNumArgOperands()
+				numArgs=callInst->getNumArgOperands();
 				Value* args[numArgs];
 				ConstantInt* constArgs[numArgs];
 				for (unsigned ArgIdx=0; ArgIdx<numArgs; ++ArgIdx)
@@ -62,7 +65,7 @@ struct Hello :  public FunctionPass
 					if(!isa<Constant>(args[ArgIdx]))
 						areArgsConst= false;
 					else
-						constArgs[numArgs]=get(i32,args[ArgIdx]);
+						constArgs[numArgs]=get(Value,args[ArgIdx]);
 					}
 				if (areArgsConst)
 					{
@@ -74,6 +77,7 @@ struct Hello :  public FunctionPass
 					errs() << "\n";
 					}
 			}
+		}
 		return false;
 	}
 
