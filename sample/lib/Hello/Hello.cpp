@@ -45,7 +45,6 @@ struct Hello :  public FunctionPass
 		Function *func = &F;
 		Function *calledFunc;
 		CallInst* callInst;
-		Value* V;
 		bool areArgsConst;
 		unsigned numArgs;
 		//CallBase value;
@@ -57,8 +56,8 @@ struct Hello :  public FunctionPass
 			{
 				areArgsConst= true;
 				numArgs=callInst->getNumArgOperands();
-				Value* args[numArgs];
-				ConstantInt* constArgs[numArgs];
+				Value* args= new Value[numArgs];
+				ConstantInt* constArgs= new ConstantInt[numArgs];
 				for (unsigned ArgIdx=0; ArgIdx<numArgs; ++ArgIdx)
 					{
 					args[ArgIdx]=callInst->getArgOperand(ArgIdx);
