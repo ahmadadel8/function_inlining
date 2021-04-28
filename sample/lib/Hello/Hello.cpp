@@ -63,7 +63,7 @@ struct Hello :  public FunctionPass
 								{
 								constArg=ConstantInt::get(IntegerType::get(V->getContext(),32), (uint64_t)V);
 								errs()<<"testing";
-								errs()<<constArg;
+								errs()<<*constArg;
 								/*calledFunc=callInst->getCalledFunction();
 								errs()<< "Function ";
 								errs().write_escaped(calledFunc->getName())<<  " is called with actual arguments ";
