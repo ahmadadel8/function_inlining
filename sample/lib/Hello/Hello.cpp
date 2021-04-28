@@ -46,15 +46,23 @@ struct Hello :  public FunctionPass
 		CallInst* callInst;
 		Value* V;
 		bool areArgsConst;
+		unsigned numArgs;
 		//CallBase value;
 
 		for (inst_iterator I = inst_begin(func), E=inst_end(func); I!=E; ++I)
 			if (callInst = dyn_cast<CallInst>(&*I))
-			{areArgsConst= true;
-				for (unsigned ArgIdx=0; ArgIdx<callInst->getNumArgOperands(); ++ArgIdx){
-					V=callInst->getArgOperand(ArgIdx);
-					if(!isa<Constant>(V))
+			{
+				areArgsConst= true;
+				numArgs=callInst->getNumArgOperands()
+				Value* args[numArgs];
+				ConstantInt* constArgs[numArgs];
+				for (unsigned ArgIdx=0; ArgIdx<numArgs; ++ArgIdx)
+					{
+					args[ArgIdx]=callInst->getArgOperand(ArgIdx);
+					if(!isa<Constant>(args[ArgIdx]))
 						areArgsConst= false;
+					else
+						constArgs[numArgs]=get(i32,args[ArgIdx]);
 					}
 				if (areArgsConst)
 					{
@@ -64,7 +72,7 @@ struct Hello :  public FunctionPass
 					for (unsigned ArgIdx=0; ArgIdx<callInst->getNumArgOperands(); ++ArgIdx)
 						errs()<< *callInst->getArgOperand(ArgIdx) <<",";
 					errs() << "\n";
-				}
+					}
 			}
 		return false;
 	}
