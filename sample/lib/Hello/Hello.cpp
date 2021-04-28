@@ -56,8 +56,8 @@ struct Hello :  public FunctionPass
 			{
 				areArgsConst= true;
 				numArgs=callInst->getNumArgOperands();
-				Value* args= new Value[numArgs];
-				ConstantInt* constArgs= new ConstantInt[numArgs];
+				vector<Value*>args(numArgs);
+				vector<ConstantInt*>constArgs(numArgs);
 				for (unsigned ArgIdx=0; ArgIdx<numArgs; ++ArgIdx)
 					{
 					args[ArgIdx]=callInst->getArgOperand(ArgIdx);
