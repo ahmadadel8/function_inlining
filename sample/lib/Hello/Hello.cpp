@@ -61,7 +61,7 @@ struct Hello :  public FunctionPass
 								}
 							if (areArgsConst)
 								{
-								constArg=ConstantInt::get(IntegerType::get(V->getContext(),32), (uint64_t)V);
+								constArg=ConstantInt::get(IntegerType::get(V->getContext(),32), (uint64_t)*V);
 								errs()<<"testing";
 								errs()<<*(uint64_t)V<<*constArg<<'\n';
 								/*calledFunc=callInst->getCalledFunction();
