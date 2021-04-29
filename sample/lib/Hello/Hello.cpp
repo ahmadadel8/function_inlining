@@ -73,7 +73,9 @@ struct Hello :  public FunctionPass
 										ArgPtr->replaceAllUsesWith(constArg);
 										}
 									actualArgVector.clear();
-									errs()<<"didn't enter the loop";
+									errs()<<"entering function ";
+									errs().write_escaped(calleeFunc->getName())<<  "\n";
+
 									int i=0;
 									for (inst_iterator callee_I = inst_begin(calleeFunc), callee_E=inst_end(calleeFunc); callee_I!=callee_E; ++callee_I)
 											{errs()<<i<<": Current Instruction:"<< *callee_I <<", End :" << *callee_E <<"\n";
