@@ -42,8 +42,8 @@ struct Hello :  public FunctionPass
         virtual bool runOnFunction(llvm::Function &F){
 					errs() <<"In function ";
 					errs().write_escaped(F.getName())<<  "\n";
-					Function *func = &F;
-					Function *calledFunc;
+					Function *callerFunc = &F;
+					Function *calleeFunc;
 					CallInst* callInst;
 					bool areArgsConst;
 					ConstantInt * constArg;
@@ -53,7 +53,7 @@ struct Hello :  public FunctionPass
 
 					//CallBase value;
 
-					for (inst_iterator I = inst_begin(func), E=inst_end(func); I!=E; ++I)
+					for (inst_iterator I = inst_begin(callerFunc), E=inst_end(callerFunc); I!=E; ++I)
 					{
 						callInst = dyn_cast<CallInst>(&*I);
 						if (callInst){
@@ -66,15 +66,15 @@ struct Hello :  public FunctionPass
 								}
 								//constArg=ConstantInt::get(IntegerType::get(V->getContext(),32), (uint64_t)*V);
 								if (areArgsConst){
-									calledFunc=callInst->getCalledFunction();
+									calleeFunc=callInst->getcalleeFunction();
 									unsigned Idx=0;
-									for (Function::arg_iterator ArgPtr = calledFunc->arg_begin(), ArgEnd= calledFunc->arg_end(); ArgPtr !=ArgEnd; ++ArgPtr){
+									for (Function::arg_iterator ArgPtr = calleeFunc->arg_begin(), ArgEnd= calleeFunc->arg_end(); ArgPtr !=ArgEnd; ++ArgPtr){
 										constArg = dyn_cast<ConstantInt>(actualArgVector[Idx++]);
 										ArgPtr->replaceAllUsesWith(constArg);
 										}
 									actualArgVector.clear();
 
-									for (inst_iterator callee_I = inst_begin(func), callee_E=inst_end(func); callee_I!=callee_E; ++callee_I)
+									for (inst_iterator callee_I = inst_begin(calleeFunc), callee_E=inst_end(calleeFunc); callee_I!=callee_E; ++callee_I)
 											I->getParent()->getInstList().insert(I+1,callee_I);
 									I->eraseFromParent();
 
