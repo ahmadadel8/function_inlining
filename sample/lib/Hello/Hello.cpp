@@ -54,7 +54,7 @@ struct Hello :  public FunctionPass
 					//CallBase value;
 
 					for (inst_iterator I = inst_begin(callerFunc), E=inst_end(callerFunc); I!=E; ++I)
-					{	
+					{
 						callInst = dyn_cast<CallInst>(&*I);
 						if (callInst){
 							areArgsConst= true;
@@ -77,9 +77,8 @@ struct Hello :  public FunctionPass
 									errs()<<"entering function ";
 									errs().write_escaped(calleeFunc->getName())<<  "\n";
 
-									int i=0;
 									for (inst_iterator callee_I = inst_begin(calleeFunc), callee_E=inst_end(calleeFunc); callee_I!=callee_E; ++callee_I)
-											{errs()<<i<<": Current Instruction:"<< *callee_I <<", End :" << *callee_E <<"\n";
+											{errs()<<"Current Instruction:"<< *callee_I <<", End :" << *callee_E <<"\n";
 												&*I->getParent()->getInstList().insert(&*I,&*callee_I);
 											}
 									I->eraseFromParent();
