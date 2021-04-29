@@ -55,7 +55,7 @@ struct Hello :  public FunctionPass
 
 					for (inst_iterator I = inst_begin(callerFunc), E=inst_end(callerFunc); I!=E; ++I)
 					{
-						callInst = dyn_cast<CallInst>(*I);
+						callInst = dyn_cast<CallInst>(&*I);
 						if (callInst){
 							areArgsConst= true;
 							numArgs=callInst->getNumArgOperands();
