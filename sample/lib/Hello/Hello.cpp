@@ -67,7 +67,7 @@ struct Hello :  public FunctionPass
 								//constArg=ConstantInt::get(IntegerType::get(V->getContext(),32), (uint64_t)*V);
 								if (areArgsConst){
 									calleeFunc=callInst->getCalledFunction();
-									if(!calleeFunc) continue;
+									//if(!calleeFunc) continue;
 									unsigned Idx=0;
 									for (Function::arg_iterator ArgPtr = calleeFunc->arg_begin(), ArgEnd= calleeFunc->arg_end(); ArgPtr !=ArgEnd; ++ArgPtr){
 										constArg = dyn_cast<ConstantInt>(actualArgVector[Idx++]);
@@ -81,7 +81,7 @@ struct Hello :  public FunctionPass
 									for (inst_iterator callee_I = inst_begin(calleeFunc), callee_E=inst_end(calleeFunc); callee_I!=callee_E; ++callee_I)
 											{errs()<<i<<": Current Instruction:"<< *callee_I <<", End :" << *callee_E <<"\n";
 												//&*I->getParent()->getInstList().insert(&*I,&*callee_I);
-											if (i++==7) break;}
+											}
 									I->eraseFromParent();
 
 
