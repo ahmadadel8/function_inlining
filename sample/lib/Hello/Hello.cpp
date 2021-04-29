@@ -61,7 +61,7 @@ struct Hello :  public FunctionPass
 							numArgs=callInst->getNumArgOperands();
 							for (unsigned ArgIdx=0; ArgIdx<numArgs; ++ArgIdx){
 								V=callInst->getArgOperand(ArgIdx);
-								errs()<<"OR Is the problem here????????????????\n";
+								errs()<<"OR  Is the problem here????????????????\n";
 								if(!isa<Constant>(V)) areArgsConst= false;
 								else actualArgVector.push_back(V);
 								}
