@@ -75,7 +75,7 @@ struct Hello :  public FunctionPass
 									actualArgVector.clear();
 
 									for (inst_iterator callee_I = inst_begin(func), callee_E=inst_end(func); callee_I!=callee_E; ++callee_I)
-											I->getParent()->getInstList().insert(I+1,callee_I)
+											I->getParent()->getInstList().insert(I+1,callee_I);
 									I->eraseFromParent();
 
 
