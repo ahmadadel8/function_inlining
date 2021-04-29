@@ -54,11 +54,9 @@ struct Hello :  public FunctionPass
 					//CallBase value;
 
 					for (inst_iterator I = inst_begin(callerFunc), E=inst_end(callerFunc); I!=E; ++I)
-					{	errs()<<"Is the problem here????????????????\n";
+					{	
 						callInst = dyn_cast<CallInst>(&*I);
-						errs()<<"OR1  Is the problem here????????????????\n";
 						if (callInst){
-							errs()<<"OR3  Is the problem here????????????????\n";
 							areArgsConst= true;
 							numArgs=callInst->getNumArgOperands();
 							for (unsigned ArgIdx=0; ArgIdx<numArgs; ++ArgIdx){
