@@ -69,7 +69,7 @@ struct Hello :  public FunctionPass
 									calledFunc=callInst->getCalledFunction();
 									unsigned Idx=0;
 									for (Function::arg_iterator ArgPtr = calledFunc->arg_begin(), ArgEnd= calledFunc->arg_end(); ArgPtr !=ArgEnd; ++ArgPtr){
-										constArg = dyn_cast<ConstantInt>(actualArgVector[Idx++];
+										constArg = dyn_cast<ConstantInt>(actualArgVector[Idx++]);
 										ArgPtr->replaceAllUsesWith(constArg);
 										}
 								/*errs()<< "Function ";
