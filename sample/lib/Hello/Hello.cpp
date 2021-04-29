@@ -66,7 +66,7 @@ struct Hello :  public FunctionPass
 								}
 								//constArg=ConstantInt::get(IntegerType::get(V->getContext(),32), (uint64_t)*V);
 								if (areArgsConst){
-									calleeFunc=callInst->getcalleeFunction();
+									calleeFunc=callInst->getcalledFunction();
 									unsigned Idx=0;
 									for (Function::arg_iterator ArgPtr = calleeFunc->arg_begin(), ArgEnd= calleeFunc->arg_end(); ArgPtr !=ArgEnd; ++ArgPtr){
 										constArg = dyn_cast<ConstantInt>(actualArgVector[Idx++]);
