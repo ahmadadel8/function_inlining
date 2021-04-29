@@ -56,7 +56,7 @@ struct Hello :  public FunctionPass
 					{
 						callInst = dyn_cast<CallInst>(&*I);
 						if (callInst){
-							std::vector<Value> actualArgVector;
+							std::vector<Value*&> actualArgVector;
 							areArgsConst= true;
 							numArgs=callInst->getNumArgOperands();
 							for (unsigned ArgIdx=0; ArgIdx<numArgs; ++ArgIdx){
