@@ -76,6 +76,7 @@ struct Hello :  public FunctionPass
 
 									for (inst_iterator callee_I = inst_begin(calleeFunc), callee_E=inst_end(calleeFunc); callee_I!=callee_E; ++callee_I)
 											&*I->getParent()->getInstList().insert(&*I,&*callee_I);
+											errs<"not exiting";
 									I->eraseFromParent();
 
 
