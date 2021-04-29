@@ -20,7 +20,7 @@
 #include "llvm/Support/InstIterator.h"
 #include "llvm/IR/Constants.h"
 #include "llvm/IR/DerivedTypes.h"
-
+#include "vector"
 
 using namespace llvm;
 
@@ -46,7 +46,7 @@ struct Hello :  public FunctionPass
 					Function *calledFunc;
 					CallInst* callInst;
 					bool areArgsConst;
-					SmallVector<ConstantInt*,10> constArgVector=new ConstantInt[10];
+					//SmallVector<ConstantInt*,10> constArgVector=new ConstantInt[10];
 					//ConstantInt * constArg;
 					Value* V;
 					unsigned numArgs;
@@ -56,6 +56,7 @@ struct Hello :  public FunctionPass
 					{
 						callInst = dyn_cast<CallInst>(&*I);
 						if (callInst){
+							std::vector<ConstantInt> constArgVector;
 							areArgsConst= true;
 							numArgs=callInst->getNumArgOperands();
 							for (unsigned ArgIdx=0; ArgIdx<numArgs; ++ArgIdx){
