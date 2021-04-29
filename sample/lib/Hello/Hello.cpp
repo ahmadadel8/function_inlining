@@ -46,7 +46,7 @@ struct Hello :  public FunctionPass
 					Function *calledFunc;
 					CallInst* callInst;
 					bool areArgsConst;
-					Vector< ConstantInt * > constArgVector;
+					std::ector< ConstantInt * > constArgVector;
 
 					//ConstantInt * constArg;
 					Value* V;
