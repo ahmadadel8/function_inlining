@@ -57,7 +57,7 @@ struct Hello :  public FunctionPass
 						if (callInst){
 							areArgsConst= true;
 							numArgs=callInst->getNumArgOperands();
-							SmallVector< ConstantInt *, numArgs > constArgVector;
+							SmallVector< ConstantInt *, numArgs > constArgVector>;
 							for (unsigned ArgIdx=0; ArgIdx<numArgs; ++ArgIdx){
 								V=callInst->getArgOperand(ArgIdx);
 								if(!isa<Constant>(V)) areArgsConst= false;
