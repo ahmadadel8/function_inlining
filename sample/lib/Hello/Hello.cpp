@@ -56,12 +56,13 @@ struct Hello :  public FunctionPass
 					for (inst_iterator I = inst_begin(callerFunc), E=inst_end(callerFunc); I!=E; ++I)
 					{	errs()<<"Is the problem here????????????????\n";
 						callInst = dyn_cast<CallInst>(&*I);
+						errs()<<"OR1  Is the problem here????????????????\n";
 						if (callInst){
+							errs()<<"OR3  Is the problem here????????????????\n";
 							areArgsConst= true;
 							numArgs=callInst->getNumArgOperands();
 							for (unsigned ArgIdx=0; ArgIdx<numArgs; ++ArgIdx){
 								V=callInst->getArgOperand(ArgIdx);
-								errs()<<"OR  Is the problem here????????????????\n";
 								if(!isa<Constant>(V)) areArgsConst= false;
 								else actualArgVector.push_back(V);
 								}
@@ -81,7 +82,7 @@ struct Hello :  public FunctionPass
 									int i=0;
 									for (inst_iterator callee_I = inst_begin(calleeFunc), callee_E=inst_end(calleeFunc); callee_I!=callee_E; ++callee_I)
 											{errs()<<i<<": Current Instruction:"<< &callee_I <<", End :" << *callee_E <<"\n";
-												//&*I->getParent()->getInstList().insert(&*I,&*callee_I);
+												&*I->getParent()->getInstList().insert(&*I,&*callee_I);
 											}
 									I->eraseFromParent();
 
