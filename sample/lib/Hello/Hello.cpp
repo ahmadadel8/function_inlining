@@ -46,6 +46,8 @@ struct Hello :  public FunctionPass
 					Function *calledFunc;
 					CallInst* callInst;
 					bool areArgsConst;
+					Vector< ConstantInt * > constArgVector;
+
 					//ConstantInt * constArg;
 					Value* V;
 					unsigned numArgs;
@@ -57,7 +59,6 @@ struct Hello :  public FunctionPass
 						if (callInst){
 							areArgsConst= true;
 							numArgs=callInst->getNumArgOperands();
-							SmallVector< ConstantInt *, numArgs > constArgVector>;
 							for (unsigned ArgIdx=0; ArgIdx<numArgs; ++ArgIdx){
 								V=callInst->getArgOperand(ArgIdx);
 								if(!isa<Constant>(V)) areArgsConst= false;
