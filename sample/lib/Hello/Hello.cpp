@@ -46,8 +46,9 @@ struct Hello :  public FunctionPass
 					Function *calledFunc;
 					CallInst* callInst;
 					bool areArgsConst;
-					ConstantInt * constArg;
+					//ConstantInt * constArg;
 					Value* V;
+					unsigned numArgs;
 					//CallBase value;
 
 					for (inst_iterator I = inst_begin(func), E=inst_end(func); I!=E; ++I)
@@ -55,18 +56,19 @@ struct Hello :  public FunctionPass
 						callInst = dyn_cast<CallInst>(&*I);
 						if (callInst){
 							areArgsConst= true;
-							for (unsigned ArgIdx=0; ArgIdx<callInst->getNumArgOperands(); ++ArgIdx){
+							numArgs=callInst->getNumArgOperands();
+							SmallVector< ConstantInt *, numArgs > constArgVector;
+							for (unsigned ArgIdx=0; ArgIdx<numArgs; ++ArgIdx){
 								V=callInst->getArgOperand(ArgIdx);
 								if(!isa<Constant>(V)) areArgsConst= false;
+								else constArgVector[ArgIdx] = cast<ConstantInt>(V);
 								}
-							if (areArgsConst)
-								{
-								constArg = dyn_cast<ConstantInt>(V);
 								//constArg=ConstantInt::get(IntegerType::get(V->getContext(),32), (uint64_t)*V);
-
-								calledFunc=callInst->getCalledFunction();
-								for (Function::arg_iterator ArgPtr = calledFunc->arg_begin(), ArgEnd= calledFunc->arg_end(); ArgPtr !=ArgEnd; ++ArgPtr)
-									ArgPtr->replaceAllUsesWith(constArg);
+								if (areArgsConst){
+									calledFunc=callInst->getCalledFunction();
+									for (Function::arg_iterator ArgPtr = calledFunc->arg_begin(), ArgEnd= calledFunc->arg_end(); ArgPtr !=ArgEnd; ++ArgPtr){
+										ArgPtr->replaceAllUsesWith(constArgVector[calledFunc->arg_begin()-ArgPtr]);
+										}
 								/*errs()<< "Function ";
 								errs().write_escaped(calledFunc->getName())<<  " is called with actual arguments ";
 								for (unsigned ArgIdx=0; ArgIdx<callInst->getNumArgOperands(); ++ArgIdx)
