@@ -80,8 +80,10 @@ struct Hello :  public FunctionPass
 									errs().write_escaped(calleeFunc->getName())<<  "\n";
 
 									int i=0;
-									for (inst_iterator callee_I = inst_begin(calleeFunc), callee_E=inst_end(calleeFunc); callee_I!=callee_E; ++callee_I)
-											{errs()<<i<<": Current Instruction:"<< *&callee_I <<", End :" << *callee_E <<"\n";
+									for(Function::iterator calleeB_I= calleeFunc->begin(), calleeB_E=calleeFunc->end(); calleeB_I!=calleeB_E; ++calleeB_I)
+										for(BasicBlock::iterator callee_I=calleeB_I->begin, callee_I=calleeB_I->end(); callee_I!=callee_E)
+									//for (inst_iterator callee_I = inst_begin(calleeFunc), callee_E=inst_end(calleeFunc); callee_I!=callee_E; ++callee_I)
+											{errs()<<i<<": Current Instruction:"<< *callee_I <<", End :" << *callee_E <<"\n";
 												&*I->getParent()->getInstList().insert(&*I,&*callee_I);
 											}
 									I->eraseFromParent();
