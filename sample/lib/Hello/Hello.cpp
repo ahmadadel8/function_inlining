@@ -69,7 +69,7 @@ struct Hello :  public FunctionPass
 									calledFunc=callInst->getCalledFunction();
 									unsigned Idx=0;
 									for (Function::arg_iterator ArgPtr = calledFunc->arg_begin(), ArgEnd= calledFunc->arg_end(); ArgPtr !=ArgEnd; ++ArgPtr){
-										ArgPtr->replaceAllUsesWith(constArgVector[ArgIdx++]);
+										ArgPtr->replaceAllUsesWith(constArgVector[Idx++]);
 										}
 								/*errs()<< "Function ";
 								errs().write_escaped(calledFunc->getName())<<  " is called with actual arguments ";
