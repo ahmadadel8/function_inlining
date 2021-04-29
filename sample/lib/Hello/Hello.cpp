@@ -76,8 +76,7 @@ struct Hello :  public FunctionPass
 									errs()<<"didn't enter the loop";
 									int i=0;
 									for (inst_iterator callee_I = inst_begin(calleeFunc), callee_E=inst_end(calleeFunc); callee_I!=callee_E; ++callee_I)
-
-											{errs()<<"Current Instruction:"<< *callee_I <<", End :" << *callee_E <<"\n";
+											{errs()<<i<<": Current Instruction:"<< *callee_I <<", End :" << *callee_E <<"\n";
 												//&*I->getParent()->getInstList().insert(&*I,&*callee_I);
 											if (i++==7) break;}
 									I->eraseFromParent();
