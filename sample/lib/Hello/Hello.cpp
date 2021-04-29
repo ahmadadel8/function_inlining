@@ -66,7 +66,7 @@ struct Hello :  public FunctionPass
 
 								calledFunc=callInst->getCalledFunction();
 								for (Function::arg_iterator ArgPtr = calledFunc->arg_begin(), ArgEnd= calledFunc->arg_end(); ArgPtr !=ArgEnd; ++ArgPtr)
-									*ArgPtr->replaceAllUsesWith(constArg);
+									ArgPtr->replaceAllUsesWith(constArg);
 								/*errs()<< "Function ";
 								errs().write_escaped(calledFunc->getName())<<  " is called with actual arguments ";
 								for (unsigned ArgIdx=0; ArgIdx<callInst->getNumArgOperands(); ++ArgIdx)
