@@ -67,7 +67,7 @@ struct Hello :  public FunctionPass
 								//constArg=ConstantInt::get(IntegerType::get(V->getContext(),32), (uint64_t)*V);
 								if (areArgsConst){
 									calledFunc=callInst->getCalledFunction();
-									ArgIdx=0;
+									unsigned Idx=0;
 									for (Function::arg_iterator ArgPtr = calledFunc->arg_begin(), ArgEnd= calledFunc->arg_end(); ArgPtr !=ArgEnd; ++ArgPtr){
 										ArgPtr->replaceAllUsesWith(constArgVector[ArgIdx++]);
 										}
