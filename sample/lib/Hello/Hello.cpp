@@ -54,13 +54,14 @@ struct Hello :  public FunctionPass
 					//CallBase value;
 
 					for (inst_iterator I = inst_begin(callerFunc), E=inst_end(callerFunc); I!=E; ++I)
-					{
+					{	errs()<<"Is the problem here????????????????\n";
 						callInst = dyn_cast<CallInst>(&*I);
 						if (callInst){
 							areArgsConst= true;
 							numArgs=callInst->getNumArgOperands();
 							for (unsigned ArgIdx=0; ArgIdx<numArgs; ++ArgIdx){
 								V=callInst->getArgOperand(ArgIdx);
+								errs()<<"OR Is the problem here????????????????\n";
 								if(!isa<Constant>(V)) areArgsConst= false;
 								else actualArgVector.push_back(V);
 								}
