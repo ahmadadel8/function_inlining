@@ -46,17 +46,17 @@ struct Hello :  public FunctionPass
 					Function *calledFunc;
 					CallInst* callInst;
 					bool areArgsConst;
-					//SmallVector<ConstantInt*,10> constArgVector=new ConstantInt[10];
 					ConstantInt * constArg;
 					Value* V;
 					unsigned numArgs;
+					std::vector<Value*> actualArgVector;
+
 					//CallBase value;
 
 					for (inst_iterator I = inst_begin(func), E=inst_end(func); I!=E; ++I)
 					{
 						callInst = dyn_cast<CallInst>(&*I);
 						if (callInst){
-							std::vector<Value*> actualArgVector;
 							areArgsConst= true;
 							numArgs=callInst->getNumArgOperands();
 							for (unsigned ArgIdx=0; ArgIdx<numArgs; ++ArgIdx){
@@ -72,11 +72,12 @@ struct Hello :  public FunctionPass
 										constArg = dyn_cast<ConstantInt>(actualArgVector[Idx++]);
 										ArgPtr->replaceAllUsesWith(constArg);
 										}
-								/*errs()<< "Function ";
-								errs().write_escaped(calledFunc->getName())<<  " is called with actual arguments ";
-								for (unsigned ArgIdx=0; ArgIdx<callInst->getNumArgOperands(); ++ArgIdx)
-									errs()<< *callInst->getArgOperand(ArgIdx) <<",";
-								errs() << "\n";*/
+									actualArgVector.clear();
+
+									for (inst_iterator callee_I = inst_begin(func), callee_E=inst_end(func); callee_I!=callee_E; ++callee_I)
+											I->getParent()->getInstList().insert(I+1,callee_I)
+									I->eraseFromParent();
+
 
 								}
 						}
