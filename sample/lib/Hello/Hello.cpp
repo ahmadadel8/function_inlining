@@ -62,7 +62,7 @@ struct Hello :  public FunctionPass
 							for (unsigned ArgIdx=0; ArgIdx<numArgs; ++ArgIdx){
 								V=callInst->getArgOperand(ArgIdx);
 								if(!isa<Constant>(V)) areArgsConst= false;
-								else constArgVector[ArgIdx] = cast<ConstantInt>(V);
+								else constArgVector.push_back(cast<ConstantInt>(V));
 								}
 								//constArg=ConstantInt::get(IntegerType::get(V->getContext(),32), (uint64_t)*V);
 								if (areArgsConst){
