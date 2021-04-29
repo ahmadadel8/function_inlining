@@ -46,7 +46,7 @@ struct Hello :  public FunctionPass
 					Function *calledFunc;
 					CallInst* callInst;
 					bool areArgsConst;
-					SmallVector<ConstantInt,10> *constArgVector;
+					SmallVector<ConstantInt*,10> constArgVector;
 					//ConstantInt * constArg;
 					Value* V;
 					unsigned numArgs;
