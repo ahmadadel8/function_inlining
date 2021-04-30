@@ -88,7 +88,7 @@ struct Hello :  public FunctionPass
 												{Value* ret=ri->getReturnValue();
 													if(!(ret)) break;
 													else {
-														Type *RetTy= ri->getOperand(0)->getType();
+														Type *RetTy= ret->getType();
 														//i operand=return instruction operand
 														break;
 													}}
