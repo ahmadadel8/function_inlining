@@ -83,8 +83,8 @@ struct Hello :  public FunctionPass
 										//auto *dummy_Inst = new Instruction(Type::getInt32Ty(), 0, NULL, 0, *I);
 										ValueToValueMapTy vmap;
 										for (inst_iterator callee_I = inst_begin(calleeFunc), callee_E=inst_end(calleeFunc); callee_I!=callee_E; ++callee_I)
-											{
-												if (ReturnInst *ri = dyn_cast<ReturnInst>(callee_I)) break;
+											{ ReturnInst *ri = dyn_cast<ReturnInst>(&*callee_I);
+												if (ri) break;
 												Instruction* new_Inst = callee_I->clone();
 												new_Inst->insertBefore(&*I);
 												vmap[&*callee_I] = new_Inst;
