@@ -73,6 +73,7 @@ struct Hello :  public FunctionPass
 									//if(!calleeFunc) continue;
 									errs()<<"entering function ";
 									errs().write_escaped(calleeFunc->getName())<<  "\n";
+									errs().write_escaped(inst_begin(calleeFunc))<< "\n";
 									for (inst_iterator callee_I = inst_begin(calleeFunc), callee_E=inst_end(calleeFunc); callee_I!=callee_E; ++callee_I)
 											{errs()<<"Current Instruction:"<< *callee_I <<"\n";}
 
