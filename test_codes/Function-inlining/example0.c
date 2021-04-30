@@ -15,6 +15,8 @@ void print_int(int x)
 int main()
 {
     int a;
+    int b;
+    a=b;
     scan_int(&a);
     printf("The entered value is: ");
     print_int(a);
