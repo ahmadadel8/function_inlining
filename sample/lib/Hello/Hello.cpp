@@ -57,7 +57,7 @@ struct Hello :  public FunctionPass
 					//CallBase value;
 
 					for (inst_iterator I = inst_begin(callerFunc), E=inst_end(callerFunc); I!=E; ++I)
-					{	errs()<<"New Instruction:" << *I<<"\n";
+					{	errs()<<"New Instruction:" << &I<<"\n";
 						callInst = dyn_cast<CallInst>(&*I);
 						if (callInst){
 							areArgsConst= true;
