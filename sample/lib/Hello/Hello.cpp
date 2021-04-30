@@ -90,7 +90,7 @@ struct Hello :  public FunctionPass
 										}
 									actualArgVector.clear();
 
-									auto *ai = new AllocaInst(Type::getInt32Ty());
+									//auto *ai = new AllocaInst(Type::getInt32Ty(LLVMContext &C)));
 									//auto *dummy_Inst = new Instruction(Type::getInt32Ty(), 0, NULL, 0, *I);
 									// ValueToValueMapTy vmap;
 									// for (inst_iterator callee_I = inst_begin(calleeFunc), callee_E=inst_end(calleeFunc); callee_I!=callee_E; ++callee_I)
@@ -103,10 +103,10 @@ struct Hello :  public FunctionPass
 									for (inst_iterator callee_I = inst_begin(calleeFunc), callee_E=inst_end(calleeFunc); callee_I!=callee_E; ++callee_I){
 									  Instruction* temp = callee_I->clone();
 
-									  temp->insertBefore(I);
+									  temp->insertBefore(*I);
 
 									  Value* copyInstVal = temp;
-									  Value* originalInstVal = &(*i);
+									  Value* originalInstVal = &(*callee_I);
 
 									  copyInstVal->setName(originalInstVal->getName());
 									}
