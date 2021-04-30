@@ -96,7 +96,7 @@ struct Hello :  public FunctionPass
 									for (inst_iterator callee_I = inst_begin(calleeFunc), callee_E=inst_end(calleeFunc); callee_I!=callee_E; ++callee_I)
 										{
 											Instruction* new_Inst = *callee_I->clone();
-											new_Inst->insertBefore(I);
+											new_Inst->insertBefore(&*I);
 											vmap[&*callee_I] = new_Inst;
 											RemapInstruction(new_Inst, vmap, RF_NoModuleLevelChanges | RF_IgnoreMissingLocals);
 										}
