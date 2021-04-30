@@ -89,7 +89,9 @@ struct Hello :  public FunctionPass
 										ArgPtr->replaceAllUsesWith(constArg);
 										}
 									actualArgVector.clear();
-									auto *ai = new AllocaInst(Type::getInt32Ty(llvm::getGlobalContext()));
+									static LLVMContext TheContext;
+
+									auto *ai = new AllocaInst(Type::getInt32Ty(TheContext));
 									//auto *dummy_Inst = new Instruction(Type::getInt32Ty(), 0, NULL, 0, *I);
 									// ValueToValueMapTy vmap;
 									// for (inst_iterator callee_I = inst_begin(calleeFunc), callee_E=inst_end(calleeFunc); callee_I!=callee_E; ++callee_I)
