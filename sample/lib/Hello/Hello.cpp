@@ -90,7 +90,7 @@ struct Hello :  public FunctionPass
 										}
 									actualArgVector.clear();
 									//auto *ai = new AllocaInst(Type::Int32Ty);
-									Instruction *dummy_Inst = new Instruction(Type::Int32Ty, 0, NULL, 0, *I);
+									Instruction *dummy_Inst = new Instruction(Type::getInt32Ty, 0, NULL, 0, *I);
 									// ValueToValueMapTy vmap;
 									// for (inst_iterator callee_I = inst_begin(calleeFunc), callee_E=inst_end(calleeFunc); callee_I!=callee_E; ++callee_I)
 									// 	{
