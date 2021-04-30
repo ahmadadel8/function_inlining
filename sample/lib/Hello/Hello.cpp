@@ -24,8 +24,6 @@
 #include "llvm/Transforms/Utils/ValueMapper.h"
 #include "llvm/IR/Type.h"
 
-
-
 using namespace llvm;
 
 
@@ -91,7 +89,7 @@ struct Hello :  public FunctionPass
 										ArgPtr->replaceAllUsesWith(constArg);
 										}
 									actualArgVector.clear();
-									auto *ai = new AllocaInst(Type::getInt32Ty());
+									auto *ai = new AllocaInst(Type::getInt32Ty(llvm::getGlobalContext()));
 									//auto *dummy_Inst = new Instruction(Type::getInt32Ty(), 0, NULL, 0, *I);
 									// ValueToValueMapTy vmap;
 									// for (inst_iterator callee_I = inst_begin(calleeFunc), callee_E=inst_end(calleeFunc); callee_I!=callee_E; ++callee_I)
