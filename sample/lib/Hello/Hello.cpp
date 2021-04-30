@@ -57,7 +57,7 @@ struct Hello :  public FunctionPass
 					//CallBase value;
 
 					for (inst_iterator I = inst_begin(callerFunc), E=inst_end(callerFunc); I!=E; ++I)
-					{
+					{	Instruction*
 						callInst = dyn_cast<CallInst>(&*I);
 						if (callInst){
 							areArgsConst= true;
@@ -92,7 +92,7 @@ struct Hello :  public FunctionPass
 								                           RF_NoModuleLevelChanges);
 											}
 										errs()<<"Current Instruction:"<<*callInst<<"\n";
-										*callInst->eraseFromParent();
+										I->eraseFromParent();
 										// for (inst_iterator callee_I = inst_begin(calleeFunc), callee_E=inst_end(calleeFunc); callee_I!=callee_E; ++callee_I){
 										//   Instruction* temp = callee_I->clone();
 										//
