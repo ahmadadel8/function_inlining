@@ -21,6 +21,8 @@
 #include "llvm/IR/Constants.h"
 #include "llvm/IR/DerivedTypes.h"
 #include "vector"
+#include "llvm/Transforms/Utils/ValueMapper.h"
+
 
 using namespace llvm;
 
