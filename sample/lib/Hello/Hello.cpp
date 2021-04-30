@@ -103,7 +103,7 @@ struct Hello :  public FunctionPass
 									for (inst_iterator callee_I = inst_begin(calleeFunc), callee_E=inst_end(calleeFunc); callee_I!=callee_E; ++callee_I){
 									  Instruction* temp = callee_I->clone();
 
-									  temp->insertBefore(*I);
+									  temp->insertBefore(&I);
 
 									  Value* copyInstVal = temp;
 									  Value* originalInstVal = &(*callee_I);
