@@ -57,7 +57,7 @@ struct Hello :  public FunctionPass
 					//CallBase value;
 
 					for (inst_iterator I = inst_begin(callerFunc), E=inst_end(callerFunc); I!=E; ++I)
-					{	
+					{
 						callInst = dyn_cast<CallInst>(&*I);
 						if (callInst){
 							areArgsConst= true;
@@ -88,31 +88,11 @@ struct Hello :  public FunctionPass
 												Instruction* new_Inst = callee_I->clone();
 												new_Inst->insertBefore(&*I);
 												vmap[&*callee_I] = new_Inst;
-												llvm::RemapInstruction(new_Inst, vmap,
-								                           RF_NoModuleLevelChanges);
+												llvm::RemapInstruction(new_Inst, vmap, RF_NoModuleLevelChanges | RF_IgnoreMissingLocals);
+
 											}
-
 										I++->eraseFromParent();
-										errs()<<"Instruction Deleted Successfully\n";
 
-										// for (inst_iterator callee_I = inst_begin(calleeFunc), callee_E=inst_end(calleeFunc); callee_I!=callee_E; ++callee_I){
-										//   Instruction* temp = callee_I->clone();
-										//
-										//   temp->insertBefore(&*I);
-										//
-										//   Value* copyInstVal = temp;
-										//   Value* originalInstVal = &(*callee_I);
-										//
-										//   copyInstVal->setName(originalInstVal->getName());
-										// }
-
-
-
-										// for (inst_iterator callee_I = inst_begin(calleeFunc), callee_E=inst_end(calleeFunc); callee_I!=callee_E; ++callee_I)
-										// 		{errs()<<"Current Instruction:"<< *callee_I <<", End :" << *callee_E <<"\n";
-										// 			&*I->getParent()->getInstList().insert(&*I,&*callee_I);
-										// 		}
-										// I->eraseFromParent();
 									}
 							}
 						}
