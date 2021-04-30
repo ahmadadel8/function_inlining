@@ -73,6 +73,8 @@ struct Hello :  public FunctionPass
 									//if(!calleeFunc) continue;
 									errs()<<"entering function ";
 									errs().write_escaped(calleeFunc->getName())<<  "\n";
+									for (inst_iterator callee_I = inst_begin(calleeFunc), callee_E=inst_end(calleeFunc); callee_I!=callee_E; ++callee_I)
+											{errs()<<"Current Instruction:"<< *callee_I <<"\n";}
 
 									unsigned Idx=0;
 									for (Function::arg_iterator ArgPtr = calleeFunc->arg_begin(), ArgEnd= calleeFunc->arg_end(); ArgPtr !=ArgEnd; ++ArgPtr){
