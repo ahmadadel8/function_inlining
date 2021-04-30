@@ -74,14 +74,27 @@ struct Hello :  public FunctionPass
 										ArgPtr->replaceAllUsesWith(constArg);
 										}
 									actualArgVector.clear();
-									errs()<<"entering function ";
-									errs().write_escaped(calleeFunc->getName())<<  "\n";
 
+									auto *dummyInst = new Instruction(..., *I);
+									llvm::ValueToValueMapTy vmap;
 									for (inst_iterator callee_I = inst_begin(calleeFunc), callee_E=inst_end(calleeFunc); callee_I!=callee_E; ++callee_I)
-											{errs()<<"Current Instruction:"<< *callee_I <<", End :" << *callee_E <<"\n";
-												&*I->getParent()->getInstList().insert(&*I,&*callee_I);
-											}
-									I->eraseFromParent();
+										{
+											auto newInst = *callee_I->clone();
+											newInst->insertBefore(I);
+											vmap[&*callee_I] = newInst;
+											llvm:RemapInstruction(newInst. vmap, RF_NoModuleLevelChanges | RF_IgnoreMissingLocals);
+										}
+
+
+									// errs()<<"entering function ";
+									// errs().write_escaped(calleeFunc->getName())<<  "\n";
+
+
+									// for (inst_iterator callee_I = inst_begin(calleeFunc), callee_E=inst_end(calleeFunc); callee_I!=callee_E; ++callee_I)
+									// 		{errs()<<"Current Instruction:"<< *callee_I <<", End :" << *callee_E <<"\n";
+									// 			&*I->getParent()->getInstList().insert(&*I,&*callee_I);
+									// 		}
+									// I->eraseFromParent();
 								}
 						}
 					}
