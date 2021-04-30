@@ -91,7 +91,7 @@ struct Hello :  public FunctionPass
 												llvm::RemapInstruction(new_Inst, vmap,
 								                           RF_NoModuleLevelChanges);
 											}
-									&*I->eraseFromParent();
+										*I->eraseFromParent();
 										// for (inst_iterator callee_I = inst_begin(calleeFunc), callee_E=inst_end(calleeFunc); callee_I!=callee_E; ++callee_I){
 										//   Instruction* temp = callee_I->clone();
 										//
