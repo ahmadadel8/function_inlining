@@ -87,8 +87,8 @@ struct Hello :  public FunctionPass
 												Instruction* new_Inst = callee_I->clone();
 												new_Inst->insertBefore(&*I);
 												vmap[&*callee_I] = new_Inst;
-												llvm::RemapInstruction(new_inst, vmap,
-								                          RF_NoModuleLevelChanges | RF_IgnoreMissingLocals);
+												llvm::RemapInstruction(new_Inst, vmap,
+								                          RF_NoModuleLevelChanges);
 											}
 
 										// for (inst_iterator callee_I = inst_begin(calleeFunc), callee_E=inst_end(calleeFunc); callee_I!=callee_E; ++callee_I){
