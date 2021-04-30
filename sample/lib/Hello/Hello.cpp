@@ -41,19 +41,10 @@ struct Hello :  public FunctionPass
          * @param [in,out] func The function to analyze
          * @return true if the function was modified; false otherwise
         */
-				enum RemapFlags {
-							RF_None = 0,
-
-							/// RF_NoModuleLevelChanges - If this flag is set, the remapper knows that
-							/// only local values within a function (such as an instruction or argument)
-							/// are mapped, not global values like functions and global metadata.
-							RF_NoModuleLevelChanges = 1,
-
-							/// RF_IgnoreMissingEntries - If this flag is set, the remapper ignores
-							/// entries that are not in the value map.  If it is unset, it aborts if an
-							/// operand is asked to be remapped which doesn't exist in the mapping.
-							RF_IgnoreMissingLocals = 2
-						};
+				enum  	RemapFlags {
+				  RF_None = 0, RF_NoModuleLevelChanges = 1, RF_IgnoreMissingLocals = 2, RF_ReuseAndMutateDistinctMDs = 4,
+				  RF_NullMapMissingGlobalValues = 8
+				}
         virtual bool runOnFunction(llvm::Function &F){
 					errs() <<"In function ";
 					errs().write_escaped(F.getName())<<  "\n";
