@@ -97,6 +97,9 @@ struct Hello :  public FunctionPass
 													if (ri) break;
 													Instruction* new_Inst = callee_I->clone();
 													&*I->getParent()->getInstList().insert(&*I,&*new_Inst);
+													vmap[&*callee_I] = new_Inst;
+													RemapInstruction(new_Inst, vmap, RF_NoModuleLevelChanges);
+
 												}
 										I++->eraseFromParent();
 
