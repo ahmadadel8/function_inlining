@@ -23,7 +23,9 @@
 #include "vector"
 #include "llvm/Transforms/Utils/ValueMapper.h"
 #include "llvm/IR/Type.h"
-
+#include "llvm/ADT/ArrayRef.h"
+#include "llvm/IR/ValueHandle.h"
+#include "llvm/IR/ValueMap.h"
 using namespace llvm;
 
 
@@ -41,10 +43,7 @@ struct Hello :  public FunctionPass
          * @param [in,out] func The function to analyze
          * @return true if the function was modified; false otherwise
         */
-				enum  	RemapFlags {
-				  RF_None = 0, RF_NoModuleLevelChanges = 1, RF_IgnoreMissingLocals = 2, RF_ReuseAndMutateDistinctMDs = 4,
-				  RF_NullMapMissingGlobalValues = 8
-				}
+
         virtual bool runOnFunction(llvm::Function &F){
 					errs() <<"In function ";
 					errs().write_escaped(F.getName())<<  "\n";
