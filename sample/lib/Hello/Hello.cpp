@@ -24,7 +24,6 @@
 #include "llvm/Transforms/Utils/ValueMapper.h"
 #include "llvm/IR/Type.h"
 #include "llvm/ADT/ArrayRef.h"
-#include "llvm/IR/ValueHandle.h"
 #include "llvm/IR/ValueMap.h"
 using namespace llvm;
 
