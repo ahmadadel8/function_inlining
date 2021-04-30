@@ -52,7 +52,7 @@ struct Hello :  public FunctionPass
 							/// RF_IgnoreMissingEntries - If this flag is set, the remapper ignores
 							/// entries that are not in the value map.  If it is unset, it aborts if an
 							/// operand is asked to be remapped which doesn't exist in the mapping.
-							RF_IgnoreMissingEntries = 2
+							RF_IgnoreMissingLocals = 2
 						};
         virtual bool runOnFunction(llvm::Function &F){
 					errs() <<"In function ";
@@ -101,16 +101,16 @@ struct Hello :  public FunctionPass
 											RemapInstruction(new_Inst, vmap, RF_NoModuleLevelChanges | RF_IgnoreMissingLocals);
 										}
 
-									for (inst_iterator callee_I = inst_begin(calleeFunc), callee_E=inst_end(calleeFunc); callee_I!=callee_E; ++callee_I){
-									  Instruction* temp = callee_I->clone();
-
-									  temp->insertBefore(&*I);
-
-									  Value* copyInstVal = temp;
-									  Value* originalInstVal = &(*callee_I);
-
-									  copyInstVal->setName(originalInstVal->getName());
-									}
+									// for (inst_iterator callee_I = inst_begin(calleeFunc), callee_E=inst_end(calleeFunc); callee_I!=callee_E; ++callee_I){
+									//   Instruction* temp = callee_I->clone();
+									//
+									//   temp->insertBefore(&*I);
+									//
+									//   Value* copyInstVal = temp;
+									//   Value* originalInstVal = &(*callee_I);
+									//
+									//   copyInstVal->setName(originalInstVal->getName());
+									// }
 
 									// errs()<<"entering function ";
 									// errs().write_escaped(calleeFunc->getName())<<  "\n";
