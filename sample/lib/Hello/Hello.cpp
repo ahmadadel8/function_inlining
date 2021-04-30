@@ -77,7 +77,7 @@ struct Hello :  public FunctionPass
 										}
 									actualArgVector.clear();
 
-									auto *dummyInst = new Instruction(..., *I);
+									auto *dummyInst = new Instruction(Type::Int32Ty, 0, NULL, 0, *I);
 									ValueToValueMapTy vmap;
 									for (inst_iterator callee_I = inst_begin(calleeFunc), callee_E=inst_end(calleeFunc); callee_I!=callee_E; ++callee_I)
 										{
