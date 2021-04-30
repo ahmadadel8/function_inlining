@@ -76,15 +76,15 @@ struct Hello :  public FunctionPass
 										ArgPtr->replaceAllUsesWith(constArg);
 										}
 									actualArgVector.clear();
-
-									auto *dummyInst = new Instruction(Type::Int32Ty, 0, NULL, 0, *I);
+									auto *ai = new AllocaInst(Type::Int32Ty);
+									auto *dummy_Inst = new Instruction(Type::Int32Ty, 0, NULL, 0, *I);
 									ValueToValueMapTy vmap;
 									for (inst_iterator callee_I = inst_begin(calleeFunc), callee_E=inst_end(calleeFunc); callee_I!=callee_E; ++callee_I)
 										{
-											auto *newInst = *callee_I->clone();
-											newInst->insertBefore(I);
-											vmap[&*callee_I] = newInst;
-											RemapInstruction(newInst. vmap, RF_NoModuleLevelChanges | RF_IgnoreMissingLocals);
+											auto *new_Inst = *callee_I->clone();
+											new_Inst->insertBefore(I);
+											vmap[&*callee_I] = new_Inst;
+											RemapInstruction(new_Inst. vmap, RF_NoModuleLevelChanges | RF_IgnoreMissingLocals);
 										}
 
 
