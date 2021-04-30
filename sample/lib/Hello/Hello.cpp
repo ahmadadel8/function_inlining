@@ -93,8 +93,10 @@ struct Hello :  public FunctionPass
 										// 	}
 
 										for (inst_iterator callee_I = inst_begin(calleeFunc), callee_E=inst_end(calleeFunc); callee_I!=callee_E; ++callee_I)
-												{
-													&*I->getParent()->getInstList().insert(&*I,&*callee_I);
+												{ReturnInst *ri = dyn_cast<ReturnInst>(&*callee_I);
+													if (ri) break;
+													Instruction* new_Inst = callee_I->clone();
+													&*I->getParent()->getInstList().insert(&*I,&*new_Inst);
 												}
 										I++->eraseFromParent();
 
