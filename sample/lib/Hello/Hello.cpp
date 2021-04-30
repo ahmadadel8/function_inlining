@@ -84,7 +84,13 @@ struct Hello :  public FunctionPass
 										 ValueToValueMapTy vmap;
 										for (inst_iterator callee_I = inst_begin(calleeFunc), callee_E=inst_end(calleeFunc); callee_I!=callee_E; ++callee_I)
 											{ ReturnInst *ri = dyn_cast<ReturnInst>(&*callee_I);
-												if (ri) break;
+												if (ri)
+													if(ri->getNumArgOperands()==0 break;
+													else {
+														Type *RetTy= ri->getOperand(0)->getType();
+														//i operand=return instruction operand
+														break;
+													}
 												Instruction* new_Inst = callee_I->clone();
 												new_Inst->insertBefore(&*I);
 										    //&*I->getParent()->getInstList().insert(&*I,&*new_Inst);
