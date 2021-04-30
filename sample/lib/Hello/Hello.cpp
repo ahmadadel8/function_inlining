@@ -41,6 +41,19 @@ struct Hello :  public FunctionPass
          * @param [in,out] func The function to analyze
          * @return true if the function was modified; false otherwise
         */
+				enum RemapFlags {
+							RF_None = 0,
+
+							/// RF_NoModuleLevelChanges - If this flag is set, the remapper knows that
+							/// only local values within a function (such as an instruction or argument)
+							/// are mapped, not global values like functions and global metadata.
+							RF_NoModuleLevelChanges = 1,
+
+							/// RF_IgnoreMissingEntries - If this flag is set, the remapper ignores
+							/// entries that are not in the value map.  If it is unset, it aborts if an
+							/// operand is asked to be remapped which doesn't exist in the mapping.
+							RF_IgnoreMissingEntries = 2
+						};
         virtual bool runOnFunction(llvm::Function &F){
 					errs() <<"In function ";
 					errs().write_escaped(F.getName())<<  "\n";
@@ -76,8 +89,8 @@ struct Hello :  public FunctionPass
 										ArgPtr->replaceAllUsesWith(constArg);
 										}
 									actualArgVector.clear();
-									auto *ai = new AllocaInst(Type::Int32Ty);
-									auto *dummy_Inst = new Instruction(Type::Int32Ty, 0, NULL, 0, *I);
+									//auto *ai = new AllocaInst(Type::Int32Ty);
+									//auto *dummy_Inst = new Instruction(Type::Int32Ty, 0, NULL, 0, *I);
 									ValueToValueMapTy vmap;
 									for (inst_iterator callee_I = inst_begin(calleeFunc), callee_E=inst_end(calleeFunc); callee_I!=callee_E; ++callee_I)
 										{
