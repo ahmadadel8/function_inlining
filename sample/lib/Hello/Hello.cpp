@@ -57,7 +57,7 @@ struct Hello :  public FunctionPass
 					//CallBase value;
 
 					for (inst_iterator I = inst_begin(callerFunc), E=inst_end(callerFunc); I!=E; ++I)
-					{	errs()<<"New Instruction:" << &I<<"\n";
+					{	
 						callInst = dyn_cast<CallInst>(&*I);
 						if (callInst){
 							areArgsConst= true;
@@ -91,7 +91,8 @@ struct Hello :  public FunctionPass
 												llvm::RemapInstruction(new_Inst, vmap,
 								                           RF_NoModuleLevelChanges);
 											}
-										I->eraseFromParent();
+
+										I++->eraseFromParent();
 										errs()<<"Instruction Deleted Successfully\n";
 
 										// for (inst_iterator callee_I = inst_begin(calleeFunc), callee_E=inst_end(calleeFunc); callee_I!=callee_E; ++callee_I){
@@ -116,7 +117,7 @@ struct Hello :  public FunctionPass
 							}
 						}
 					}
-					return false;
+					return true;
 				}
 
 };
