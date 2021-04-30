@@ -23,8 +23,7 @@
 #include "vector"
 #include "llvm/Transforms/Utils/ValueMapper.h"
 #include "llvm/IR/Type.h"
-#include "llvm/ADT/ArrayRef.h"
-#include "llvm/IR/ValueMap.h"
+
 using namespace llvm;
 
 
@@ -72,6 +71,9 @@ struct Hello :  public FunctionPass
 								if (areArgsConst){
 									calleeFunc=callInst->getCalledFunction();
 									//if(!calleeFunc) continue;
+									errs()<<"entering function ";
+									errs().write_escaped(calleeFunc->getName())<<  "\n";
+
 									unsigned Idx=0;
 									for (Function::arg_iterator ArgPtr = calleeFunc->arg_begin(), ArgEnd= calleeFunc->arg_end(); ArgPtr !=ArgEnd; ++ArgPtr){
 										constArg = dyn_cast<ConstantInt>(actualArgVector[Idx++]);
@@ -81,14 +83,14 @@ struct Hello :  public FunctionPass
 
 									//auto *ai = new AllocaInst(Type::getInt32Ty(LLVMContext &C)));
 									//auto *dummy_Inst = new Instruction(Type::getInt32Ty(), 0, NULL, 0, *I);
-									ValueToValueMapTy vmap;
-									for (inst_iterator callee_I = inst_begin(calleeFunc), callee_E=inst_end(calleeFunc); callee_I!=callee_E; ++callee_I)
-										{
-											Instruction* new_Inst = callee_I->clone();
-											new_Inst->insertBefore(&*I);
-											vmap[&*callee_I] = new_Inst;
-											RemapInstruction(new_Inst, vmap, RF_NoModuleLevelChanges | RF_IgnoreMissingLocals);
-										}
+									// ValueToValueMapTy vmap;
+									// for (inst_iterator callee_I = inst_begin(calleeFunc), callee_E=inst_end(calleeFunc); callee_I!=callee_E; ++callee_I)
+									// 	{
+									// 		Instruction* new_Inst = callee_I->clone();
+									// 		new_Inst->insertBefore(&*I);
+									// 		vmap[&*callee_I] = new_Inst;
+									// 		RemapInstruction(new_Inst, vmap, RF_NoModuleLevelChanges | RF_IgnoreMissingLocals);
+									// 	}
 
 									// for (inst_iterator callee_I = inst_begin(calleeFunc), callee_E=inst_end(calleeFunc); callee_I!=callee_E; ++callee_I){
 									//   Instruction* temp = callee_I->clone();
@@ -101,8 +103,6 @@ struct Hello :  public FunctionPass
 									//   copyInstVal->setName(originalInstVal->getName());
 									// }
 
-									// errs()<<"entering function ";
-									// errs().write_escaped(calleeFunc->getName())<<  "\n";
 
 
 									// for (inst_iterator callee_I = inst_begin(calleeFunc), callee_E=inst_end(calleeFunc); callee_I!=callee_E; ++callee_I)
