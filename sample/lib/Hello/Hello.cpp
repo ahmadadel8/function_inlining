@@ -76,13 +76,13 @@ struct Hello :  public FunctionPass
 									actualArgVector.clear();
 
 									auto *dummyInst = new Instruction(..., *I);
-									llvm::ValueToValueMapTy vmap;
+									ValueToValueMapTy vmap;
 									for (inst_iterator callee_I = inst_begin(calleeFunc), callee_E=inst_end(calleeFunc); callee_I!=callee_E; ++callee_I)
 										{
-											auto newInst = *callee_I->clone();
+											auto *newInst = *callee_I->clone();
 											newInst->insertBefore(I);
 											vmap[&*callee_I] = newInst;
-											llvm:RemapInstruction(newInst. vmap, RF_NoModuleLevelChanges | RF_IgnoreMissingLocals);
+											RemapInstruction(newInst. vmap, RF_NoModuleLevelChanges | RF_IgnoreMissingLocals);
 										}
 
 
