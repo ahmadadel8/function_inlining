@@ -70,51 +70,46 @@ struct Hello :  public FunctionPass
 								//constArg=ConstantInt::get(IntegerType::get(V->getContext(),32), (uint64_t)*V);
 								if (areArgsConst){
 									calleeFunc=callInst->getCalledFunction();
-									//if(!calleeFunc) continue;
-									errs()<<"entering function ";
-									errs().write_escaped(calleeFunc->getName())<<  "\n";
 									inst_iterator callee_I = inst_begin(calleeFunc);
-									if(&*calleeFunc) errs()<<&*calleeFunc<< "\n";
-									for (inst_iterator callee_I = inst_begin(calleeFunc), callee_E=inst_end(calleeFunc); callee_I!=callee_E; ++callee_I)
-											{errs()<<"Current Instruction:"<< *callee_I <<"\n";}
+									if(!(&*callee_I)){  //temporary fix. Might want to revisit. Ensures printf and scanf..etc aren't inlined
+										unsigned Idx=0;
+										for (Function::arg_iterator ArgPtr = calleeFunc->arg_begin(), ArgEnd= calleeFunc->arg_end(); ArgPtr !=ArgEnd; ++ArgPtr){
+											constArg = dyn_cast<ConstantInt>(actualArgVector[Idx++]);
+											ArgPtr->replaceAllUsesWith(constArg);
+											}
+										actualArgVector.clear();
 
-									unsigned Idx=0;
-									for (Function::arg_iterator ArgPtr = calleeFunc->arg_begin(), ArgEnd= calleeFunc->arg_end(); ArgPtr !=ArgEnd; ++ArgPtr){
-										constArg = dyn_cast<ConstantInt>(actualArgVector[Idx++]);
-										ArgPtr->replaceAllUsesWith(constArg);
-										}
-									actualArgVector.clear();
+										//auto *ai = new AllocaInst(Type::getInt32Ty(LLVMContext &C)));
+										//auto *dummy_Inst = new Instruction(Type::getInt32Ty(), 0, NULL, 0, *I);
+										// ValueToValueMapTy vmap;
+										// for (inst_iterator callee_I = inst_begin(calleeFunc), callee_E=inst_end(calleeFunc); callee_I!=callee_E; ++callee_I)
+										// 	{
+										// 		Instruction* new_Inst = callee_I->clone();
+										// 		new_Inst->insertBefore(&*I);
+										// 		vmap[&*callee_I] = new_Inst;
+										// 		RemapInstruction(new_Inst, vmap, RF_NoModuleLevelChanges | RF_IgnoreMissingLocals);
+										// 	}
 
-									//auto *ai = new AllocaInst(Type::getInt32Ty(LLVMContext &C)));
-									//auto *dummy_Inst = new Instruction(Type::getInt32Ty(), 0, NULL, 0, *I);
-									// ValueToValueMapTy vmap;
-									// for (inst_iterator callee_I = inst_begin(calleeFunc), callee_E=inst_end(calleeFunc); callee_I!=callee_E; ++callee_I)
-									// 	{
-									// 		Instruction* new_Inst = callee_I->clone();
-									// 		new_Inst->insertBefore(&*I);
-									// 		vmap[&*callee_I] = new_Inst;
-									// 		RemapInstruction(new_Inst, vmap, RF_NoModuleLevelChanges | RF_IgnoreMissingLocals);
-									// 	}
-
-									// for (inst_iterator callee_I = inst_begin(calleeFunc), callee_E=inst_end(calleeFunc); callee_I!=callee_E; ++callee_I){
-									//   Instruction* temp = callee_I->clone();
-									//
-									//   temp->insertBefore(&*I);
-									//
-									//   Value* copyInstVal = temp;
-									//   Value* originalInstVal = &(*callee_I);
-									//
-									//   copyInstVal->setName(originalInstVal->getName());
-									// }
+										// for (inst_iterator callee_I = inst_begin(calleeFunc), callee_E=inst_end(calleeFunc); callee_I!=callee_E; ++callee_I){
+										//   Instruction* temp = callee_I->clone();
+										//
+										//   temp->insertBefore(&*I);
+										//
+										//   Value* copyInstVal = temp;
+										//   Value* originalInstVal = &(*callee_I);
+										//
+										//   copyInstVal->setName(originalInstVal->getName());
+										// }
 
 
 
-									// for (inst_iterator callee_I = inst_begin(calleeFunc), callee_E=inst_end(calleeFunc); callee_I!=callee_E; ++callee_I)
-									// 		{errs()<<"Current Instruction:"<< *callee_I <<", End :" << *callee_E <<"\n";
-									// 			&*I->getParent()->getInstList().insert(&*I,&*callee_I);
-									// 		}
-									// I->eraseFromParent();
-								}
+										// for (inst_iterator callee_I = inst_begin(calleeFunc), callee_E=inst_end(calleeFunc); callee_I!=callee_E; ++callee_I)
+										// 		{errs()<<"Current Instruction:"<< *callee_I <<", End :" << *callee_E <<"\n";
+										// 			&*I->getParent()->getInstList().insert(&*I,&*callee_I);
+										// 		}
+										// I->eraseFromParent();
+									}
+							}
 						}
 					}
 					return false;
