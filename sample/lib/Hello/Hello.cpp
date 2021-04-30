@@ -89,7 +89,7 @@ struct Hello :  public FunctionPass
 												new_Inst->insertBefore(&*I);
 												vmap[&*callee_I] = new_Inst;
 												llvm::RemapInstruction(new_Inst, vmap,
-								                          RF_NoModuleLevelChanges);
+								                          RF_NoModuleLevelChanges | RF_IgnoreMissingLocals);
 											}
 
 										// for (inst_iterator callee_I = inst_begin(calleeFunc), callee_E=inst_end(calleeFunc); callee_I!=callee_E; ++callee_I){
