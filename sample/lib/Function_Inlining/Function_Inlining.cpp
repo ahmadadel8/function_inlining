@@ -34,11 +34,11 @@ struct Function_Inlining :  public FunctionPass
 					ReturnInst* retInst;
 					Instruction* calleeInst;
 					//Miscellaneous
-				  ConstantInt* constArg; //A ConstInt type variable that holds constant arguments after casting from Value to ConstInt
-					std::vector<Value*> actualArgVector;
+					std::vector<ConstantInt*> actualArgVector; //A vector that holds the arguments if they are constants.
 				  Value* actualArg;
 					Value* retVal;
 					Value* retPtr;
+					ConstantInt* constArg; //A ConstInt type variable that holds constant arguments after casting from Value to ConstInt
 				  unsigned numArgs;
 					bool areArgsConst;
 
@@ -50,7 +50,10 @@ struct Function_Inlining :  public FunctionPass
 							numArgs=callInst->getNumArgOperands();
 							for (unsigned ArgIdx=0; ArgIdx<numArgs; ++ArgIdx){
 								actualArg=callInst->getArgOperand(ArgIdx);
-								if(!isa<Constant>(actualArg)) areArgsConst= false;
+								if(!isa<Constant>(actualArg)) {
+									areArgsConst= false;
+									break;}
+
 								else actualArgVector.push_back(actualArg);
 								}
 								if (areArgsConst){
@@ -60,7 +63,7 @@ struct Function_Inlining :  public FunctionPass
 										unsigned Idx=0;
 										for (Function::arg_iterator ArgPtr = calleeFunc->arg_begin(), ArgEnd= calleeFunc->arg_end(); ArgPtr !=ArgEnd; ++ArgPtr){
 											constArg = cast<ConstantInt>(actualArgVector[Idx++]);
-											ArgPtr->replaceAllUsesWith(actualArgVector[Idx++]);
+											ArgPtr->replaceAllUsesWith(constArg);
 											}
 										actualArgVector.clear();
 
