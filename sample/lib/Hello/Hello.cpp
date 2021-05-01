@@ -112,6 +112,7 @@ struct Hello :  public FunctionPass
 											errs()<<"or here\n";
 										  Value* retPtr=strInst->getPointerOperand();
 											errs()<<"or there\n";
+											errs()<<ret<<', '<<retPtr;
 										  StoreInst(ret, retPtr, &*I);
 											errs()<<"or tHeRE\n";
 										  I++->eraseFromParent();}}
