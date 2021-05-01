@@ -49,7 +49,7 @@ struct Hello :  public FunctionPass
 					Function *calleeFunc;
 					CallInst* callInst;
 					Instruction* new_Inst;
-					StoreInst strInst;
+					StoreInst* strInst;
 					bool areArgsConst;
 					bool isNotVoid=false;
 					ConstantInt * constArg;
@@ -118,7 +118,7 @@ struct Hello :  public FunctionPass
 					return true;
 				}
 
-}
+};
 
 
 char Hello::ID = 0;
