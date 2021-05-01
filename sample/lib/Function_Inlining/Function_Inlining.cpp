@@ -72,8 +72,8 @@ struct Function_Inlining :  public FunctionPass
 									if(&*callee_I){  //temporary fix. Might want to reisit. Ensures printf and scanf..etc aren't inlined
 										unsigned Idx=0;
 										for (Function::arg_iterator ArgPtr = calleeFunc->arg_begin(), ArgEnd= calleeFunc->arg_end(); ArgPtr !=ArgEnd; ++ArgPtr){
-											constArg = cast<ConstantInt>(actualArgVector[Idx++]);
-											ArgPtr->replaceAllUsesWith(actualArgVector[Idx++]);
+											constArg = actualArgVector[Idx++];
+											ArgPtr->replaceAllUsesWith(constArg);
 											}
 										actualArgVector.clear();
 
