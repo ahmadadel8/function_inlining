@@ -22,19 +22,18 @@ struct Function_Inlining :  public FunctionPass
 				  Function *callerFunc = &F;
 				  Function *calleeFunc;
 				  CallInst* callInst;
-				  Instruction* new_Inst;
+				  Instruction* calleeInst;
 				  StoreInst* strInst;
 					LoadInst* ldInst;
-					ReturnInst* ri;
+					ReturnInst* retInst;
 				  bool areArgsConst;
-				  bool isNotVoid=false;
-				  ConstantInt * constArg;
-				  Value* V;
+				  ConstantInt* constArg;
+					std::vector<Value*> actualArgVector;
+				  Value* actualArg;
 					Value* ret;
 					Value* retVal;
 					Value* retPtr;
 				  unsigned numArgs;
-				  std::vector<Value*> actualArgVector;
 
 
 					//CallBase value;
@@ -46,15 +45,14 @@ struct Function_Inlining :  public FunctionPass
 							areArgsConst= true;
 							numArgs=callInst->getNumArgOperands();
 							for (unsigned ArgIdx=0; ArgIdx<numArgs; ++ArgIdx){
-								V=callInst->getArgOperand(ArgIdx);
-								if(!isa<Constant>(V)) areArgsConst= false;
-								else actualArgVector.push_back(V);
+								actualArg=callInst->getArgOperand(ArgIdx);
+								if(!isa<Constant>(actualArg)) areArgsConst= false;
+								else actualArgVector.push_back(actualArg);
 								}
-								//constArg=ConstantInt::get(IntegerType::get(V->getContext(),32), (uint64_t)*V);
 								if (areArgsConst){
 									calleeFunc=callInst->getCalledFunction();
 									inst_iterator callee_I = inst_begin(calleeFunc);
-									if(&*callee_I){  //temporary fix. Might want to revisit. Ensures printf and scanf..etc aren't inlined
+									if(&*callee_I){  //temporary fix. Might want to reisit. Ensures printf and scanf..etc aren't inlined
 										unsigned Idx=0;
 										for (Function::arg_iterator ArgPtr = calleeFunc->arg_begin(), ArgEnd= calleeFunc->arg_end(); ArgPtr !=ArgEnd; ++ArgPtr){
 											constArg = dyn_cast<ConstantInt>(actualArgVector[Idx++]);
@@ -66,34 +64,35 @@ struct Function_Inlining :  public FunctionPass
 										//auto *dummy_Inst = new Instruction(Type::getInt32Ty(), 0, NULL, 0, *I);
 										 ValueToValueMapTy vmap;
 										for (inst_iterator callee_I = inst_begin(calleeFunc), callee_E=inst_end(calleeFunc); callee_I!=callee_E; ++callee_I)
-											{ ri = dyn_cast<ReturnInst>(&*callee_I);
-												if (ri)
-												{ret=ri->getReturnValue();
+											{ retInst = dyn_cast<ReturnInst>(&*callee_I);
+												if (retInst)
+												{ret=retInst->getReturnValue();
 													if(!(ret)) {
 														I++->eraseFromParent();
 														break;}}
-												new_Inst = callee_I->clone();
-												new_Inst->insertBefore(&*I);
-										    //&*I->getParent()->getInstList().insert(&*I,&*new_Inst);
-												vmap[&*callee_I] = new_Inst;
-												RemapInstruction(new_Inst, vmap, RF_NoModuleLevelChanges);
+												calleeInst = callee_I->clone();
+												calleeInst->insertBefore(&*I);
+										    //&*I->getParent()->getInstList().insert(&*I,&*calleeInst);
+												vmap[&*callee_I] = calleeInst;
+												RemapInstruction(calleeInst, vmap, RF_NoModuleLevelChanges);
 												inst_iterator dummyItrator=callee_I;
-												strInst=dyn_cast<StoreInst>(new_Inst);
+												strInst=dyn_cast<StoreInst>(calleeInst);
 												ldInst=dyn_cast<LoadInst>(&*(++dummyItrator));
-												ri = dyn_cast<ReturnInst>(&*(++dummyItrator));
+												retInst = dyn_cast<ReturnInst>(&*(++dummyItrator));
 												if(strInst)
 												 	if (ldInst)
-														if(ri){
-															ret=ri->getReturnValue();
+														if(retInst){
+															ret=retInst->getReturnValue();
 															if(ret){
 																	I++->eraseFromParent();
 																	StoreInst* caller_stInst=dyn_cast<StoreInst>(&*I);
 																	if(caller_stInst){
 																		retPtr=strInst->getValueOperand();
 																		retVal=caller_stInst->getPointerOperand();
+																		errs()<<retVal <<ret;
 																		StoreInst *str= new StoreInst(retPtr,retVal,  &*I);
 																		I++->eraseFromParent();
-																		new_Inst->eraseFromParent();
+																		calleeInst->eraseFromParent();
 																		break;
 												}
 											}
