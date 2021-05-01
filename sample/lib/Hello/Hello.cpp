@@ -116,13 +116,14 @@ struct Hello :  public FunctionPass
 																	StoreInst* caller_stInst=dyn_cast<StoreInst>(&*I);
 																	if(caller_stInst){
 																		errs()<<"error here\n";
-																		callee_E++;
-																		errs()<<"error there\n";
 																		retPtr=strInst->getValueOperand();
+																		errs()<<"error there\n";
 																		retVal=caller_stInst->getPointerOperand();
-																		StoreInst(retVal, retPtr,  &*I);
 																		errs()<<"error everywhere\n";
+																		StoreInst(retVal, retPtr,  &*I);
+																		errs()<<"error in my heart\n";
 																		I++->eraseFromParent();
+																		errs()<<"error in my soul\n";
 																		new_Inst->eraseFromParent();
 																		break;
 													}
