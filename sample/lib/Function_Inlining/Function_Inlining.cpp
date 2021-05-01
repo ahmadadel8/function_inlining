@@ -75,9 +75,8 @@ struct Function_Inlining :  public FunctionPass
 												retInst = dyn_cast<ReturnInst>(&*(++dummyItrator));
 												if(strInst)
 												 	if (ldInst)
-														if(retInst){
-															ret=retInst->getReturnValue();
-															if(ret){
+														if(retInst)
+															if(retInst->getNumOperands()!=0){
 																	I++->eraseFromParent();
 																	StoreInst* caller_stInst=dyn_cast<StoreInst>(&*I);
 																	if(caller_stInst){
@@ -87,7 +86,6 @@ struct Function_Inlining :  public FunctionPass
 																		I++->eraseFromParent();
 																		calleeInst->eraseFromParent();
 																		break;
-												}
 											}
 										}
 									}
