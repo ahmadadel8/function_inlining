@@ -111,7 +111,7 @@ struct Hello :  public FunctionPass
 										  Value* retPtr=strInst->getPointerOperand();
 											ldInst= dyn_cast<LoadInst>(new_Inst);
 											Value* ldPtr= ldInst->getPointerOperand();
-											errs()<<*ldIst;
+											errs()<<*ldInst;
 											errs()<<"ERROR HERE. VALUE"<<*ldPtr<<", PTR" <<*retPtr;
 										  StoreInst(ret, retPtr, &*I);
 											errs()<<"or tHeRE\n";
