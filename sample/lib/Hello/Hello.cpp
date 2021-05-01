@@ -120,7 +120,7 @@ struct Hello :  public FunctionPass
 																		errs()<<"error there\n";
 																		retVal=caller_stInst->getPointerOperand();
 																		errs()<<"error everywhere\n";
-																		StoreInst(retVal, retPtr,  &*I);
+																		StoreInst *str= new StoreInst(retVal, retPtr,  &*I);
 																		errs()<<"error in my heart\n";
 																		I++->eraseFromParent();
 																		errs()<<"error in my soul\n";
