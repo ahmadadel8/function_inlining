@@ -147,7 +147,7 @@ struct Hello :  public FunctionPass
 									}
 							}
 						}
-						errs()<<"error there\n";
+						errs()<<*I<<"\n";
 
 					}
 					return true;
