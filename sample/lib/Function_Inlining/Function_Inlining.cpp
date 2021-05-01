@@ -89,7 +89,7 @@ struct Function_Inlining :  public FunctionPass
 																	if(caller_stInst){
 																		retPtr=strInst->getValueOperand();
 																		retVal=caller_stInst->getPointerOperand();
-																		errs()<<retVal <<ret;
+																		errs()<<*retVal <<*ret;
 																		StoreInst *str= new StoreInst(retPtr,retVal,  &*I);
 																		I++->eraseFromParent();
 																		calleeInst->eraseFromParent();
