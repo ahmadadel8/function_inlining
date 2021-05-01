@@ -50,6 +50,7 @@ struct Hello :  public FunctionPass
 				  CallInst* callInst;
 				  Instruction* new_Inst;
 				  StoreInst* strInst;
+					LoadInst* ldInst;
 				  bool areArgsConst;
 				  bool isNotVoid=false;
 				  ConstantInt * constArg;
@@ -107,8 +108,10 @@ struct Hello :  public FunctionPass
 										I++->eraseFromParent();
 										if(isNotVoid){
 										  strInst= dyn_cast<StoreInst>(&*I);
+											ldInst= dyn_cast<LoadInst>(&*new_Inst);
+
 										  Value* retPtr=strInst->getPointerOperand();
-										  StoreInst(new_Inst, retPtr, I++);
+										  StoreInst(ldInst, retPtr, I++);
 										  I++->eraseFromParent();}
 									}
 							}
