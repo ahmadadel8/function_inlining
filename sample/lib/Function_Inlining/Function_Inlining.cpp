@@ -55,7 +55,7 @@ struct Function_Inlining :  public FunctionPass
 							for (unsigned ArgIdx=0; ArgIdx<numArgs; ++ArgIdx){
 								actualArg=callInst->getArgOperand(ArgIdx); //checks one argument at a time
 
-								if(constArg=dyn_cast<ConstantInt>(actualArg)) 	actualArgVector.push_back(actualArg);
+								if(constArg=dyn_cast<ConstantInt>(actualArg)) 	actualArgVector.push_back(constArg);
 								else
 								{ //tries to cast
 									areArgsConst= false;
