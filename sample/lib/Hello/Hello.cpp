@@ -104,26 +104,22 @@ struct Hello :  public FunctionPass
 												vmap[&*callee_I] = new_Inst;
 												RemapInstruction(new_Inst, vmap, RF_NoModuleLevelChanges);
 												inst_iterator dummyItrator=callee_I;
-												errs()<<"ERERROR HERE\n";
 												strInst=dyn_cast<StoreInst>(new_Inst);
 												ldInst=dyn_cast<LoadInst>(&*(++dummyItrator));
 												ri = dyn_cast<ReturnInst>(&*(++dummyItrator));
-												errs()<<"ERERROR THERE\n";
 												if(strInst)
 												 	if (ldInst)
 														if(ri){
 															ret=ri->getReturnValue();
 															if(ret){
 																	I++->eraseFromParent();
-																	errs()<<"ERERROR EVERYWHERE\n";
 																	StoreInst* caller_stInst=dyn_cast<StoreInst>(&*I);
-																	errs()<<"ERERROR YEEEAH\n";
 																	if(caller_stInst){
 																		errs()<<"error here\n";
 																		callee_E++;
+																		errs()<<"error there\n";
 																		retPtr=strInst->getValueOperand();
 																		retVal=caller_stInst->getPointerOperand();
-																		errs()<<"error there\n";
 																		StoreInst(retVal, retPtr,  &*I);
 																		errs()<<"error everywhere\n";
 																		I++->eraseFromParent();
