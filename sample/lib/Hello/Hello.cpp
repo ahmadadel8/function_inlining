@@ -117,8 +117,11 @@ struct Hello :  public FunctionPass
 																	if(caller_stInst){
 																		callee_E++;
 																		retPtr=strInst->getValueOperand();
+																		errs()<<"error here\n";
 																		retVal=caller_stInst->getPointerOperand();
+																		errs()<<"error there\n";
 																		StoreInst(retVal, retPtr,  &*I);
+																		errs()<<"error everywhere\n";
 																		I++->eraseFromParent();
 																		new_Inst->eraseFromParent();
 																		break;
