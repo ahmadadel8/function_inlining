@@ -49,7 +49,7 @@ struct Hello :  public FunctionPass
 					Function *calleeFunc;
 					CallInst* callInst;
 					Instruction* new_Inst;
-					StroreInst strInst;
+					StoreInst strInst;
 					bool areArgsConst;
 					bool isNotVoid=false;
 					ConstantInt * constArg;
@@ -105,7 +105,7 @@ struct Hello :  public FunctionPass
 
 										I++->eraseFromParent();
 										if(isNotVoid){
-											strInst= dyn_cast<StroreInst>(&*I);
+											strInst= dyn_cast<StoreInst>(&*I);
 											Value* retPtr=strInst->getPointerOperand();
 											StoreInst::StoreInst(new_Inst, retPtr, I++);
 											I++->eraseFromParent();}
@@ -114,7 +114,7 @@ struct Hello :  public FunctionPass
 									}
 							}
 						}
-					}
+
 					return true;
 				}
 
