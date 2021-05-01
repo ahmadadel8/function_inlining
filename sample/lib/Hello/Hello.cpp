@@ -45,17 +45,18 @@ struct Hello :  public FunctionPass
         virtual bool runOnFunction(llvm::Function &F){
 					errs() <<"In function ";
 					errs().write_escaped(F.getName())<<  "\n";
-					Function *callerFunc = &F;
-					Function *calleeFunc;
-					CallInst* callInst;
-					Instruction* new_Inst;
-					StoreInst* strInst;
-					bool areArgsConst;
-					bool isNotVoid=false;
-					ConstantInt * constArg;
-					Value* V;
-					unsigned numArgs;
-					std::vector<Value*> actualArgVector;
+				  Function *callerFunc = &F;
+				  Function *calleeFunc;
+				  CallInst* callInst;
+				  Instruction* new_Inst;
+				  StoreInst* strInst;
+				  bool areArgsConst;
+				  bool isNotVoid=false;
+				  ConstantInt * constArg;
+				  Value* V;
+				  unsigned numArgs;
+				  std::vector<Value*> actualArgVector;
+
 
 					//CallBase value;
 
@@ -96,7 +97,7 @@ struct Hello :  public FunctionPass
 														//i operand=return instruction operand
 														break;
 													}}
-												new_Inst = callee_I->clone();
+												Instruction* new_Inst = callee_I->clone();
 												new_Inst->insertBefore(&*I);
 										    //&*I->getParent()->getInstList().insert(&*I,&*new_Inst);
 												vmap[&*callee_I] = new_Inst;
@@ -105,21 +106,19 @@ struct Hello :  public FunctionPass
 
 										I++->eraseFromParent();
 										if(isNotVoid){
-											strInst= dyn_cast<StoreInst>(&*I);
-											Value* retPtr=strInst->getPointerOperand();
-											StoreInst::StoreInst(new_Inst, retPtr, I++);
-											I++->eraseFromParent();}
-										}
-
+										  strInst= dyn_cast<StoreInst>(&*I);
+										  Value* retPtr=strInst->getPointerOperand();
+										  StoreInst::StoreInst(new_Inst, retPtr, I++);
+										  I++->eraseFromParent();}
 									}
 							}
 						}
-
+					}
 					return true;
 				}
 
 };
-
+}
 
 char Hello::ID = 0;
 static RegisterPass<Hello> X("hello", "Hello World Pass", false, false);
