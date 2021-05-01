@@ -51,11 +51,13 @@ struct Hello :  public FunctionPass
 				  Instruction* new_Inst;
 				  StoreInst* strInst;
 					LoadInst* ldInst;
+					ReturnInst *ri;
 				  bool areArgsConst;
 				  bool isNotVoid=false;
 				  ConstantInt * constArg;
 				  Value* V;
 					Value* ret;
+					Value* retVal;
 				  unsigned numArgs;
 				  std::vector<Value*> actualArgVector;
 
@@ -89,33 +91,48 @@ struct Hello :  public FunctionPass
 										//auto *dummy_Inst = new Instruction(Type::getInt32Ty(), 0, NULL, 0, *I);
 										 ValueToValueMapTy vmap;
 										for (inst_iterator callee_I = inst_begin(calleeFunc), callee_E=inst_end(calleeFunc); callee_I!=callee_E; ++callee_I)
-											{ ReturnInst *ri = dyn_cast<ReturnInst>(&*callee_I);
+											{ ri = dyn_cast<ReturnInst>(&*callee_I);
 												if (ri)
 												{ret=ri->getReturnValue();
-													if(!(ret)) break;
-													else {
-														isNotVoid=true;
-														break;
-													}}
+													if(!(ret)) {
+														I++->eraseFromParent();
+														break;}
 												new_Inst = callee_I->clone();
 												new_Inst->insertBefore(&*I);
 										    //&*I->getParent()->getInstList().insert(&*I,&*new_Inst);
 												vmap[&*callee_I] = new_Inst;
 												RemapInstruction(new_Inst, vmap, RF_NoModuleLevelChanges);
+												inst_iterator dummyItrator=callee_I;
+												strInst=dyn_cast<StoreInst>(new_Inst);
+												ldInst=dyn_cast<LoadInst>(&*(++dummyItrator));
+												ri = dyn_cast<ReturnInst>(&*(++dummyItrator));
+												ret=ri->getReturnValue();
+												if(strInst & ldInst & ri & ret) {
+													I++->eraseFromParent();
+													StoreInst caller_stInst=dyn_cast<StoreInst>(&*I);
+													if(caller_stInst){
+														callee_E++;
+														retPtr=strInst->getValueOperand();
+														retVal=caller_stInst->getPointerOperand();
+														new_Inst=StoreInst(retVal, retPtr,  &*I);
+														I++->eraseFromParent();
+														break;
+													}
+													}
 											}
 
-										I++->eraseFromParent();
-										if(isNotVoid){
-										  strInst= dyn_cast<StoreInst>(&*I);
-											if(strInst){
-										  Value* retPtr=strInst->getPointerOperand();
-											ldInst= dyn_cast<LoadInst>(new_Inst);
-											Value* ldPtr= ldInst->getPointerOperand();
-											errs()<<*ldInst;
-											errs()<<"ERROR HERE. VALUE"<<*ldPtr<<", PTR" <<*retPtr;
-										  StoreInst(ret, retPtr, &*I);
-											errs()<<"or tHeRE\n";
-										  I++->eraseFromParent();}}
+										// I++->eraseFromParent();
+										// if(isNotVoid){
+										//   strInst= dyn_cast<StoreInst>(&*I);
+										// 	if(strInst){
+										//   Value* retPtr=strInst->getPointerOperand();
+										// 	ldInst= dyn_cast<LoadInst>(new_Inst);
+										// 	Value* ldPtr= ldInst->getPointerOperand();
+										// 	errs()<<*ldInst;
+										// 	errs()<<"ERROR HERE. VALUE"<<*ldPtr<<", PTR" <<*retPtr;
+										//   StoreInst(ret, retPtr, &*I);
+										// 	errs()<<"or tHeRE\n";
+										//   I++->eraseFromParent();}}
 									}
 							}
 						}
