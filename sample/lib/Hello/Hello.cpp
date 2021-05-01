@@ -109,7 +109,7 @@ struct Hello :  public FunctionPass
 										  strInst= dyn_cast<StoreInst>(&*I);
 											if(strInst){
 										  Value* retPtr=strInst->getPointerOperand();
-											errs()<<"ERROR HERE. VALUE"<<*ret<<", PTR" <<*retPtr;
+											 errs()<<"ERROR HERE. VALUE"<<*ret<<", PTR" <<*retPtr;
 										  StoreInst(ret, retPtr, &*I);
 											errs()<<"or tHeRE\n";
 										  I++->eraseFromParent();}}
