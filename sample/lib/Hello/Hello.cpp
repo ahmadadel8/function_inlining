@@ -115,7 +115,7 @@ struct Hello :  public FunctionPass
 														callee_E++;
 														retPtr=strInst->getValueOperand();
 														retVal=caller_stInst->getPointerOperand();
-														new_Inst=StoreInst(retVal, retPtr,  &*I);
+														StoreInst(retVal, retPtr,  &*I);
 														I++->eraseFromParent();
 														break;
 													}
