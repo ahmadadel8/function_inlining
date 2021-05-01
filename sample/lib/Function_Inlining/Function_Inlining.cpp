@@ -1,4 +1,4 @@
-#define DEBUG_TYPE "inline"
+#define DEBUG_TYPE "func_inline"
 #include "llvm/Pass.h"
 #include "llvm/IR/Function.h"
 #include "llvm/Support/raw_ostream.h"
@@ -17,13 +17,6 @@ struct Function_Inlining :  public FunctionPass
         /** Constructor. */
 	static char ID;
 	Function_Inlining() : FunctionPass(ID) {}
-
-        //DEFINE_INTPASS_ANALYSIS_ADJUSTMENT(PointerAnalysisPass);
-				/*
-         * @brief Runs this pass on the given function.
-         * @param [in,out] func The function to analyze
-         * @return true if the function was modified; false otherwise
-        */
 
         virtual bool runOnFunction(llvm::Function &F){
 				  Function *callerFunc = &F;
@@ -116,5 +109,5 @@ struct Function_Inlining :  public FunctionPass
 };
 }
 
-char Function_Inlining::ID = 0;
-static RegisterPass<Function_Inlining> X("inline", "Function Inlining Pass", false, false);
+char Function_Inlining::ID = 1;
+static RegisterPass<Function_Inlining> X("func_inline", "Function Inlining Pass", false, false);
