@@ -107,19 +107,22 @@ struct Hello :  public FunctionPass
 												strInst=dyn_cast<StoreInst>(new_Inst);
 												ldInst=dyn_cast<LoadInst>(&*(++dummyItrator));
 												ri = dyn_cast<ReturnInst>(&*(++dummyItrator));
-												ret=ri->getReturnValue();
-												if(strInst & ldInst & ri & ret) {
-													I++->eraseFromParent();
-													StoreInst* caller_stInst=dyn_cast<StoreInst>(&*I);
-													if(caller_stInst){
-														callee_E++;
-														retPtr=strInst->getValueOperand();
-														retVal=caller_stInst->getPointerOperand();
-														StoreInst(retVal, retPtr,  &*I);
-														I++->eraseFromParent();
-														break;
+												if(strInst)
+												 	if (ldInst)
+														if(ri){
+															ret=ri->getReturnValue();
+															if(ret){
+																	I++->eraseFromParent();
+																	StoreInst* caller_stInst=dyn_cast<StoreInst>(&*I);
+																	if(caller_stInst){
+																		callee_E++;
+																		retPtr=strInst->getValueOperand();
+																		retVal=caller_stInst->getPointerOperand();
+																		StoreInst(retVal, retPtr,  &*I);
+																		I++->eraseFromParent();
+																		break;
 													}
-													}
+												}}
 											}
 
 										// I++->eraseFromParent();
