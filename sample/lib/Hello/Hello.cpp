@@ -110,8 +110,8 @@ struct Hello :  public FunctionPass
 											if(strInst){
 										  Value* retPtr=strInst->getPointerOperand();
 
-											errs()<<"ERROR HERE. VALUE"<<*ret<<", PTR" <<*retPtr;
-										  StoreInst(*ret, *retPtr, &*I);
+											errs()<<"ERROR HERE. VALUE"<<&*ret<<", PTR" <<&*retPtr;
+										  StoreInst(ret, retPtr, &*I);
 											errs()<<"or tHeRE\n";
 										  I++->eraseFromParent();}}
 									}
