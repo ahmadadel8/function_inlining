@@ -117,14 +117,10 @@ struct Hello :  public FunctionPass
 																	if(caller_stInst){
 																		retPtr=strInst->getValueOperand();
 																		retVal=caller_stInst->getPointerOperand();
-																		errs()<<"error everywhere\n";
 																		errs()<<*retVal<<*retPtr<<"\n";
 																		StoreInst *str= new StoreInst(retPtr,retVal,  &*I);
-																		errs()<<"error in my heart\n";
 																		I++->eraseFromParent();
-																		errs()<<"error in my soul\n";
 																		new_Inst->eraseFromParent();
-																		errs()<<"error here\n";
 																		break;
 													}
 												}
@@ -132,22 +128,9 @@ struct Hello :  public FunctionPass
 
 											}
 
-										// I++->eraseFromParent();
-										// if(isNotVoid){
-										//   strInst= dyn_cast<StoreInst>(&*I);
-										// 	if(strInst){
-										//   Value* retPtr=strInst->getPointerOperand();
-										// 	ldInst= dyn_cast<LoadInst>(new_Inst);
-										// 	Value* ldPtr= ldInst->getPointerOperand();
-										// 	errs()<<*ldInst;
-										// 	errs()<<"ERROR HERE. VALUE"<<*ldPtr<<", PTR" <<*retPtr;
-										//   StoreInst(ret, retPtr, &*I);
-										// 	errs()<<"or tHeRE\n";
-										//   I++->eraseFromParent();}}
 									}
 							}
 						}
-						errs()<<*I<<"\n";
 
 					}
 					return true;
