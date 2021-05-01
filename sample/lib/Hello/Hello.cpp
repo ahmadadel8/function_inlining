@@ -121,7 +121,7 @@ struct Hello :  public FunctionPass
 																		retVal=caller_stInst->getPointerOperand();
 																		errs()<<"error everywhere\n";
 																		errs()<<*retVal<<*retPtr<<"\n";
-																		StoreInst *str= new StoreInst(retVal, retPtr,  &*I);
+																		StoreInst *str= new StoreInst(retPtr,retVal,  &*I);
 																		errs()<<"error in my heart\n";
 																		I++->eraseFromParent();
 																		errs()<<"error in my soul\n";
