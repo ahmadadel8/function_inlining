@@ -97,7 +97,7 @@ struct Hello :  public FunctionPass
 														isNotVoid=true;
 														break;
 													}}
-												Instruction* new_Inst = callee_I->clone();
+												new_Inst = callee_I->clone();
 												new_Inst->insertBefore(&*I);
 										    //&*I->getParent()->getInstList().insert(&*I,&*new_Inst);
 												vmap[&*callee_I] = new_Inst;
