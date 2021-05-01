@@ -66,7 +66,7 @@ struct Function_Inlining :  public FunctionPass
 										for (inst_iterator callee_I = inst_begin(calleeFunc), callee_E=inst_end(calleeFunc); callee_I!=callee_E; ++callee_I)
 											{	if (retInst = dyn_cast<ReturnInst>(&*callee_I))
 												{ret=retInst->getReturnValue();
-													if(retInst->getNumArgOperands()==0) {
+													if(retInst->getNumOperands()==0) {
 														I++->eraseFromParent();
 														break;}}
 												calleeInst = callee_I->clone();
