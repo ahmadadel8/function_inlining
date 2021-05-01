@@ -112,8 +112,9 @@ struct Hello :  public FunctionPass
 												if(strInst)
 												 	if (ldInst)
 														if(ri){
-														errs()<<"ERERROR EVERYWHERE\n";
 															ret=ri->getReturnValue();
+															errs()<<"ERERROR EVERYWHERE\n";
+
 															if(ret){
 																	I++->eraseFromParent();
 																	StoreInst* caller_stInst=dyn_cast<StoreInst>(&*I);
