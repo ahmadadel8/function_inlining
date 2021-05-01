@@ -51,13 +51,14 @@ struct Hello :  public FunctionPass
 				  Instruction* new_Inst;
 				  StoreInst* strInst;
 					LoadInst* ldInst;
-					ReturnInst *ri;
+					ReturnInst* ri;
 				  bool areArgsConst;
 				  bool isNotVoid=false;
 				  ConstantInt * constArg;
 				  Value* V;
 					Value* ret;
 					Value* retVal;
+					Value* retPtr;
 				  unsigned numArgs;
 				  std::vector<Value*> actualArgVector;
 
@@ -96,7 +97,7 @@ struct Hello :  public FunctionPass
 												{ret=ri->getReturnValue();
 													if(!(ret)) {
 														I++->eraseFromParent();
-														break;}
+														break;}}
 												new_Inst = callee_I->clone();
 												new_Inst->insertBefore(&*I);
 										    //&*I->getParent()->getInstList().insert(&*I,&*new_Inst);
@@ -109,7 +110,7 @@ struct Hello :  public FunctionPass
 												ret=ri->getReturnValue();
 												if(strInst & ldInst & ri & ret) {
 													I++->eraseFromParent();
-													StoreInst caller_stInst=dyn_cast<StoreInst>(&*I);
+													StoreInst* caller_stInst=dyn_cast<StoreInst>(&*I);
 													if(caller_stInst){
 														callee_E++;
 														retPtr=strInst->getValueOperand();
