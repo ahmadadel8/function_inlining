@@ -51,7 +51,7 @@ struct Function_Inlining :  public FunctionPass
 							//Now that we found the call instruction, we need to check if all the argments are indeed constants.
 							areArgsConst= true; //initialize the flag to be true. It will be set to false if we encounter a non const argument
 							numArgs=callInst->getNumArgOperands(); //the number of the arguments of the all instruction so we can iterate over them
-							actualArgVector->clear(); //ensures the vector is indeed empty in the case of multiple call functions.
+							actualArgVector.clear(); //ensures the vector is indeed empty in the case of multiple call functions.
 							for (unsigned ArgIdx=0; ArgIdx<numArgs; ++ArgIdx){
 								actualArg=callInst->getArgOperand(ArgIdx); //checks one argument at a time
 
