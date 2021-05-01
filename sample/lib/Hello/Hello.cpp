@@ -43,8 +43,6 @@ struct Hello :  public FunctionPass
         */
 
         virtual bool runOnFunction(llvm::Function &F){
-					errs() <<"In function ";
-					errs().write_escaped(F.getName())<<  "\n";
 				  Function *callerFunc = &F;
 				  Function *calleeFunc;
 				  CallInst* callInst;
@@ -117,7 +115,6 @@ struct Hello :  public FunctionPass
 																	if(caller_stInst){
 																		retPtr=strInst->getValueOperand();
 																		retVal=caller_stInst->getPointerOperand();
-																		errs()<<*retVal<<*retPtr<<"\n";
 																		StoreInst *str= new StoreInst(retPtr,retVal,  &*I);
 																		I++->eraseFromParent();
 																		new_Inst->eraseFromParent();
