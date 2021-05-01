@@ -64,10 +64,9 @@ struct Function_Inlining :  public FunctionPass
 										//auto *dummy_Inst = new Instruction(Type::getInt32Ty(), 0, NULL, 0, *I);
 										 ValueToValueMapTy vmap;
 										for (inst_iterator callee_I = inst_begin(calleeFunc), callee_E=inst_end(calleeFunc); callee_I!=callee_E; ++callee_I)
-											{ retInst = dyn_cast<ReturnInst>(&*callee_I);
-												if (retInst)
+											{	if (retInst = dyn_cast<ReturnInst>(&*callee_I))
 												{ret=retInst->getReturnValue();
-													if(!(ret)) {
+													if(retInst->getNumArgOperands()==0) {
 														I++->eraseFromParent();
 														break;}}
 												calleeInst = callee_I->clone();
