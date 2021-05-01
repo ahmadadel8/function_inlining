@@ -45,26 +45,21 @@ struct Function_Inlining :  public FunctionPass
 
 //First, we need to iterate over all the instructions in the code, until we find a call instruction
 
-					for (inst_iterator I = inst_begin(callerFunc), E=inst_end(callerFunc); I!=E; ++I)
-					{
+					for (inst_iterator I = inst_begin(callerFunc), E=inst_end(callerFunc); I!=E; ++I)	{
 						//tries to cast every instruction to callInst class. Returns NULL if not a callInst
 						if (callInst = dyn_cast<CallInst>(&*I)){ //if callInst is not NULL, i.e. intruction is indeed a call instruction
 							//Now that we found the call instruction, we need to check if all the argments are indeed constants.
 							areArgsConst= true; //initialize the flag to be true. It will be set to false if we encounter a non const argument
 							numArgs=callInst->getNumArgOperands(); //the number of the arguments of the all instruction so we can iterate over them
+							actualArgVector->clear(); //ensures the vector is indeed empty in the case of multiple call functions.
 							for (unsigned ArgIdx=0; ArgIdx<numArgs; ++ArgIdx){
 								actualArg=callInst->getArgOperand(ArgIdx); //checks one argument at a time
 
-								if(constArg=dyn_cast<ConstantInt>(actualArg)) 	actualArgVector.push_back(constArg);
+								if(constArg=dyn_cast<ConstantInt>(actualArg)) 	actualArgVector.push_back(constArg); //if the casting succeeds, add the argument to vector
 								else
-								{ //tries to cast
-									areArgsConst= false;
-									break;}
-
-								// if(!isa<Constant>(actualArg)) { //tries to cast
-								// 	areArgsConst= false;
-								// 	break;}
-								// else actualArgVector.push_back(actualArg);
+								{ areArgsConst= false;
+									break;
+									}
 								}
 								if (areArgsConst){
 									calleeFunc=callInst->getCalledFunction();
