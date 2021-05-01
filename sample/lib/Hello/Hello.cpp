@@ -116,7 +116,6 @@ struct Hello :  public FunctionPass
 																	StoreInst* caller_stInst=dyn_cast<StoreInst>(&*I);
 																	if(caller_stInst){
 																		retPtr=strInst->getValueOperand();
-																		errs()<<"error there\n";
 																		retVal=caller_stInst->getPointerOperand();
 																		errs()<<"error everywhere\n";
 																		errs()<<*retVal<<*retPtr<<"\n";
@@ -128,7 +127,9 @@ struct Hello :  public FunctionPass
 																		errs()<<"error here\n";
 																		break;
 													}
-												}}
+												}
+											}
+
 											}
 
 										// I++->eraseFromParent();
@@ -146,6 +147,8 @@ struct Hello :  public FunctionPass
 									}
 							}
 						}
+						errs()<<"error there\n";
+
 					}
 					return true;
 				}
