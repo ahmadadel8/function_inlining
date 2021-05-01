@@ -30,13 +30,9 @@ struct Function_Inlining :  public FunctionPass
 				  ConstantInt* constArg;
 					std::vector<Value*> actualArgVector;
 				  Value* actualArg;
-					Value* ret;
 					Value* retVal;
 					Value* retPtr;
 				  unsigned numArgs;
-
-
-					//CallBase value;
 
 					for (inst_iterator I = inst_begin(callerFunc), E=inst_end(callerFunc); I!=E; ++I)
 					{
@@ -65,8 +61,7 @@ struct Function_Inlining :  public FunctionPass
 										 ValueToValueMapTy vmap;
 										for (inst_iterator callee_I = inst_begin(calleeFunc), callee_E=inst_end(calleeFunc); callee_I!=callee_E; ++callee_I)
 											{	if (retInst = dyn_cast<ReturnInst>(&*callee_I))
-												{ret=retInst->getReturnValue();
-													if(retInst->getNumOperands()==0) {
+												{	if(retInst->getNumOperands()==0) {
 														I++->eraseFromParent();
 														break;}}
 												calleeInst = callee_I->clone();
@@ -86,10 +81,9 @@ struct Function_Inlining :  public FunctionPass
 																	I++->eraseFromParent();
 																	StoreInst* caller_stInst=dyn_cast<StoreInst>(&*I);
 																	if(caller_stInst){
-																		retPtr=strInst->getValueOperand();
-																		retVal=caller_stInst->getPointerOperand();
-																		errs()<<*retVal <<*ret <<*retPtr;
-																		StoreInst *str= new StoreInst(retPtr,retVal,  &*I);
+																		retVal=strInst->getValueOperand();
+																		retPtr=caller_stInst->getPointerOperand();
+																		StoreInst *str= new StoreInst(retVal, retPtr, &*I);
 																		I++->eraseFromParent();
 																		calleeInst->eraseFromParent();
 																		break;
