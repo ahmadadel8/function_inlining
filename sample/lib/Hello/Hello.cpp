@@ -110,7 +110,7 @@ struct Hello :  public FunctionPass
 										if(isNotVoid){
 										  strInst= dyn_cast<StoreInst>(&*I);
 										  Value* retPtr=strInst->getPointerOperand();
-										  StoreInst(ret, retPtr, I++);
+										  StoreInst(ret, retPtr, &*I);
 										  I++->eraseFromParent();}
 									}
 							}
