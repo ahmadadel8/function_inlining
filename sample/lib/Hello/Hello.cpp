@@ -109,8 +109,11 @@ struct Hello :  public FunctionPass
 										  strInst= dyn_cast<StoreInst>(&*I);
 											if(strInst){
 										  Value* retPtr=strInst->getPointerOperand();
+											errs()<<"error here";
 											ldInst= dyn_cast<LoadInst>(new_Inst);
+											errs()<<"error there";
 											Value* ldPtr= ldInst->getPointerOperand();
+											errs()<<"error everywhere";
 											errs()<<"ERROR HERE. VALUE"<<*ldPtr<<", PTR" <<*retPtr;
 										  StoreInst(ret, retPtr, &*I);
 											errs()<<"or tHeRE\n";
