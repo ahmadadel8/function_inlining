@@ -113,15 +113,15 @@ struct Hello :  public FunctionPass
 												 	if (ldInst)
 														if(ri){
 															ret=ri->getReturnValue();
-															errs()<<"ERERROR EVERYWHERE\n";
-
 															if(ret){
 																	I++->eraseFromParent();
+																	errs()<<"ERERROR EVERYWHERE\n";
 																	StoreInst* caller_stInst=dyn_cast<StoreInst>(&*I);
+																	errs()<<"ERERROR YEEEAH\n";
 																	if(caller_stInst){
+																		errs()<<"error here\n";
 																		callee_E++;
 																		retPtr=strInst->getValueOperand();
-																		errs()<<"error here\n";
 																		retVal=caller_stInst->getPointerOperand();
 																		errs()<<"error there\n";
 																		StoreInst(retVal, retPtr,  &*I);
