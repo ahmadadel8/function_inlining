@@ -94,9 +94,7 @@ struct Hello :  public FunctionPass
 												{ret=ri->getReturnValue();
 													if(!(ret)) break;
 													else {
-														Type *RetTy= ret->getType();
 														isNotVoid=true;
-														//i operand=return instruction operand
 														break;
 													}}
 												Instruction* new_Inst = callee_I->clone();
@@ -109,9 +107,10 @@ struct Hello :  public FunctionPass
 										I++->eraseFromParent();
 										if(isNotVoid){
 										  strInst= dyn_cast<StoreInst>(&*I);
+											if(strInst){
 										  Value* retPtr=strInst->getPointerOperand();
 										  StoreInst(ret, retPtr, &*I);
-										  I++->eraseFromParent();}
+										  I++->eraseFromParent();}}
 									}
 							}
 						}
