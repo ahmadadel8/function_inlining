@@ -48,6 +48,8 @@ struct Hello :  public FunctionPass
 					Function *callerFunc = &F;
 					Function *calleeFunc;
 					CallInst* callInst;
+					Instruction* new_Inst;
+					StroreInst strInst;
 					bool areArgsConst;
 					bool isNotVoid=false;
 					ConstantInt * constArg;
@@ -94,7 +96,7 @@ struct Hello :  public FunctionPass
 														//i operand=return instruction operand
 														break;
 													}}
-												Instruction* new_Inst = callee_I->clone();
+												new_Inst = callee_I->clone();
 												new_Inst->insertBefore(&*I);
 										    //&*I->getParent()->getInstList().insert(&*I,&*new_Inst);
 												vmap[&*callee_I] = new_Inst;
@@ -103,11 +105,10 @@ struct Hello :  public FunctionPass
 
 										I++->eraseFromParent();
 										if(isNotVoid){
-											Value* retPtr=I->getPointerOperand();
+											strInst= dyn_cast<StroreInst>(&*I);
+											Value* retPtr=strInst->getPointerOperand();
 											StoreInst::StoreInst(new_Inst, retPtr, I++);
 											I++->eraseFromParent();}
-
-
 										}
 
 									}
@@ -117,8 +118,8 @@ struct Hello :  public FunctionPass
 					return true;
 				}
 
-};
 }
+
 
 char Hello::ID = 0;
 static RegisterPass<Hello> X("hello", "Hello World Pass", false, false);
