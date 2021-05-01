@@ -54,7 +54,7 @@ struct Function_Inlining :  public FunctionPass
 									areArgsConst= false;
 									break;}
 
-								else actualArgVector.push_back(actualArg);
+								else actualArgVector.push_back(cast<ConstantInt>(actualArg));
 								}
 								if (areArgsConst){
 									calleeFunc=callInst->getCalledFunction();
@@ -63,7 +63,7 @@ struct Function_Inlining :  public FunctionPass
 										unsigned Idx=0;
 										for (Function::arg_iterator ArgPtr = calleeFunc->arg_begin(), ArgEnd= calleeFunc->arg_end(); ArgPtr !=ArgEnd; ++ArgPtr){
 											constArg = cast<ConstantInt>(actualArgVector[Idx++]);
-											ArgPtr->replaceAllUsesWith(constArg);
+											ArgPtr->replaceAllUsesWith(actualArgVector[Idx++]);
 											}
 										actualArgVector.clear();
 
