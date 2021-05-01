@@ -26,7 +26,7 @@ int main()
     scan_int(&a);
     int p;
     int y;
-    y = x*3;
+    y = 3*3;
     p=y;
     int r = a + p;
     print_int(r);
