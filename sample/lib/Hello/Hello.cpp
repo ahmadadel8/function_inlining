@@ -49,6 +49,7 @@ struct Hello :  public FunctionPass
 					Function *calleeFunc;
 					CallInst* callInst;
 					bool areArgsConst;
+					bool isNotVoid=false;
 					ConstantInt * constArg;
 					Value* V;
 					unsigned numArgs;
@@ -89,6 +90,7 @@ struct Hello :  public FunctionPass
 													if(!(ret)) break;
 													else {
 														Type *RetTy= ret->getType();
+														isNotVoid=true;
 														//i operand=return instruction operand
 														break;
 													}}
@@ -100,6 +102,13 @@ struct Hello :  public FunctionPass
 											}
 
 										I++->eraseFromParent();
+										if(isNotVoid){
+											Value* retPtr=I->getPointerOperand();
+											StoreInst::StoreInst(new_Inst, retPtr, I++);
+											I++->eraseFromParent();}
+
+
+										}
 
 									}
 							}
