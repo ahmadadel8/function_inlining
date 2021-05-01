@@ -1,3 +1,8 @@
+///////////////////////////////////////////
+//// FUNCTION INLINING PASS FOR LLVM//////
+/////////////////////////////////////////
+
+
 #define DEBUG_TYPE "func_inline"
 #include "llvm/Pass.h"
 #include "llvm/IR/Function.h"
@@ -19,20 +24,23 @@ struct Function_Inlining :  public FunctionPass
 	Function_Inlining() : FunctionPass(ID) {}
 
         virtual bool runOnFunction(llvm::Function &F){
-				  Function *callerFunc = &F;
+					//Function type variables
+				  Function *callerFunc = &F; //A pointer to the caller function. More usefull that the reference F.
 				  Function *calleeFunc;
+					//Intruction Type Variables
 				  CallInst* callInst;
-				  Instruction* calleeInst;
 				  StoreInst* strInst;
 					LoadInst* ldInst;
 					ReturnInst* retInst;
-				  bool areArgsConst;
-				  ConstantInt* constArg;
+					Instruction* calleeInst;
+					//Miscellaneous
+				  ConstantInt* constArg; //A ConstInt type variable that holds constant arguments
 					std::vector<Value*> actualArgVector;
 				  Value* actualArg;
 					Value* retVal;
 					Value* retPtr;
 				  unsigned numArgs;
+					bool areArgsConst;
 
 					for (inst_iterator I = inst_begin(callerFunc), E=inst_end(callerFunc); I!=E; ++I)
 					{
@@ -51,7 +59,7 @@ struct Function_Inlining :  public FunctionPass
 									if(&*callee_I){  //temporary fix. Might want to reisit. Ensures printf and scanf..etc aren't inlined
 										unsigned Idx=0;
 										for (Function::arg_iterator ArgPtr = calleeFunc->arg_begin(), ArgEnd= calleeFunc->arg_end(); ArgPtr !=ArgEnd; ++ArgPtr){
-											constArg = dyn_cast<ConstantInt>(actualArgVector[Idx++]);
+											constArg = cast<ConstantInt>(actualArgVector[Idx++]);
 											ArgPtr->replaceAllUsesWith(constArg);
 											}
 										actualArgVector.clear();
