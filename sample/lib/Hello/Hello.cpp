@@ -55,6 +55,7 @@ struct Hello :  public FunctionPass
 				  bool isNotVoid=false;
 				  ConstantInt * constArg;
 				  Value* V;
+					Value* ret;
 				  unsigned numArgs;
 				  std::vector<Value*> actualArgVector;
 
@@ -90,7 +91,7 @@ struct Hello :  public FunctionPass
 										for (inst_iterator callee_I = inst_begin(calleeFunc), callee_E=inst_end(calleeFunc); callee_I!=callee_E; ++callee_I)
 											{ ReturnInst *ri = dyn_cast<ReturnInst>(&*callee_I);
 												if (ri)
-												{Value* ret=ri->getReturnValue();
+												{ret=ri->getReturnValue();
 													if(!(ret)) break;
 													else {
 														Type *RetTy= ret->getType();
@@ -108,10 +109,8 @@ struct Hello :  public FunctionPass
 										I++->eraseFromParent();
 										if(isNotVoid){
 										  strInst= dyn_cast<StoreInst>(&*I);
-											ldInst= dyn_cast<LoadInst>(&*new_Inst);
-
 										  Value* retPtr=strInst->getPointerOperand();
-										  StoreInst(ldInst, retPtr, I++);
+										  StoreInst(ret, retPtr, I++);
 										  I++->eraseFromParent();}
 									}
 							}
