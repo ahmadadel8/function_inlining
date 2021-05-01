@@ -34,7 +34,7 @@ struct Function_Inlining :  public FunctionPass
 					ReturnInst* retInst;
 					Instruction* calleeInst;
 					//Miscellaneous
-				  ConstantInt* constArg; //A ConstInt type variable that holds constant arguments
+				  ConstantInt* constArg; //A ConstInt type variable that holds constant arguments after casting from Value to ConstInt
 					std::vector<Value*> actualArgVector;
 				  Value* actualArg;
 					Value* retVal;
@@ -60,7 +60,7 @@ struct Function_Inlining :  public FunctionPass
 										unsigned Idx=0;
 										for (Function::arg_iterator ArgPtr = calleeFunc->arg_begin(), ArgEnd= calleeFunc->arg_end(); ArgPtr !=ArgEnd; ++ArgPtr){
 											constArg = cast<ConstantInt>(actualArgVector[Idx++]);
-											ArgPtr->replaceAllUsesWith(constArg);
+											ArgPtr->replaceAllUsesWith(actualArgVector[Idx++]);
 											}
 										actualArgVector.clear();
 
