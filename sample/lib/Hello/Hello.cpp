@@ -120,6 +120,7 @@ struct Hello :  public FunctionPass
 																		retVal=caller_stInst->getPointerOperand();
 																		StoreInst(retVal, retPtr,  &*I);
 																		I++->eraseFromParent();
+																		new_Inst->eraseFromParent();
 																		break;
 													}
 												}}
