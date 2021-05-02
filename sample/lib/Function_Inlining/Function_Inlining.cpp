@@ -79,7 +79,6 @@ struct Function_Inlining :  public FunctionPass
 											ArgPtr->replaceAllUsesWith(constArg); //and replaces all the uses of the formal argument with the actual argument.
 											}
 										actualArgVector.clear();  //ensures the vector is indeed empty in the case of multiple call functions.
-										I++->eraseFromParent();
 
 										//Now, the function declaration is ready to be copied into the call site. We will clone each intruction and move the clone right before the call instruction.
 										//This makes the function declaration dead.
@@ -108,9 +107,9 @@ struct Function_Inlining :  public FunctionPass
 								}
 							}
 						}
-						for(lookahead_iterator=inst_begin(callerFunc); lookahead_iterator!=E; lookahead_iterator++){
-							vmap[&*lookahead_iterator] = calleeInst;
-							RemapInstruction(&*lookahead_iterator, vmap, RF_NoModuleLevelChanges);}
+						I++->eraseFromParent();
+						vmap[&*I] = calleeInst;
+						RemapInstruction(&*I, vmap, RF_NoModuleLevelChanges);
 					}
 					return true; //return true as the pass has changed the file
 				}
