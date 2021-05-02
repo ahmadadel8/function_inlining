@@ -81,7 +81,7 @@ struct Function_Inlining :  public FunctionPass
 											}
 										actualArgVector.clear();  //ensures the vector is indeed empty in the case of multiple call functions.
 
-
+ 
 										//Now, the function declaration is ready to be copied into the call site. We will clone each intruction and move the clone right before the call instruction.
 										//This makes the function declaration dead.
 										for (inst_iterator callee_I = inst_begin(calleeFunc), callee_E=inst_end(calleeFunc); callee_I!=callee_E; ++callee_I){	//iterating over the instructions in the callee definition
