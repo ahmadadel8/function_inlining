@@ -111,7 +111,7 @@ struct Function_Inlining :  public FunctionPass
 						}
 						//I--;
 						//vmap[&*I]=retInst;
-						//I->eraseFromParent(); //we break before copying the instruction and erase the call instruction, incrementing the iterator to point to the next instuction
+						--I->eraseFromParent(); //we break before copying the instruction and erase the call instruction, incrementing the iterator to point to the next instuction
 						for(lookahead_iterator=inst_begin(callerFunc); lookahead_iterator!=E; lookahead_iterator++){
 							//vmap[&*lookahead_iterator] = &*lookahead_iterator;
 							RemapInstruction(&*lookahead_iterator, vmap, RF_NoModuleLevelChanges);}
