@@ -93,8 +93,10 @@ struct Function_Inlining :  public FunctionPass
 											//resultant of the computation to the variable that the return of the call instruction was originally stored in.
 
 											//So, we first check if we reached the return instruction and that it is indeed returning void
-											if ((retInst = dyn_cast<ReturnInst>(&*callee_I)))
-														break;
+											if ((retInst = dyn_cast<ReturnInst>(&*callee_I))){
+												I++->eraseFromParent();
+												break;
+											}
 												calleeInst = callee_I->clone(); //Now, for a normal instruction, we first clone int
 												calleeInst->insertBefore(&*I); //then move it just before the call instruction
 										    //&*I->getParent()->getInstList().insert(&*I,&*calleeInst); //this is an alternative way to do so that will also work
@@ -102,11 +104,8 @@ struct Function_Inlining :  public FunctionPass
 												RemapInstruction(calleeInst, vmap, RF_NoModuleLevelChanges);
 
 									}
-									I++->eraseFromParent();
-
 									for(lookahead_iterator=I; lookahead_iterator!=E; lookahead_iterator++)
 										RemapInstruction(&*lookahead_iterator, vmap, RF_NoModuleLevelChanges);//we create a dummy instruction iterator to look ahead in the loop
-
 								}
 							}
 						}
