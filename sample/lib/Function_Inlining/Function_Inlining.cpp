@@ -95,7 +95,7 @@ struct Function_Inlining :  public FunctionPass
 											//So, we first check if we reached the return instruction and that it is indeed returning void
 											if ((retInst = dyn_cast<ReturnInst>(&*callee_I)))
 												{//for ret void, getNumOperands returns 0.
-														callInst>eraseFromParent(); //we break before copying the instruction and erase the call instruction, incrementing the iterator to point to the next instuction
+														callInst>eraseFromParent();  //we break before copying the instruction and erase the call instruction, incrementing the iterator to point to the next instuction
 														break;}
 												calleeInst = callee_I->clone(); //Now, for a normal instruction, we first clone int
 												calleeInst->insertBefore(&*I); //then move it just before the call instruction
