@@ -36,7 +36,7 @@ struct Function_Inlining :  public FunctionPass
 					StoreInst* caller_strInst; //holds the store instruction that comes after the call instruction in non void functions
 					//Miscellaneous
 				  Value* actualArg; //A value type variable that iteratively holds the actual arguments
-					std::vector<ConstantInt*> actualArgVector; //A vector that holds the arguments if they are constants.
+					std::vector<Value*> actualArgVector; //A vector that holds the arguments if they are constants.
 					Value* strVal; //The value in the store instruction replacing the call instruction.
 					Value* strPtr; //The return in the store instruction replacing the call instruction.
 					ConstantInt* constArg; //A ConstInt type variable that holds constant arguments after casting from Value to ConstInt
@@ -56,7 +56,7 @@ struct Function_Inlining :  public FunctionPass
 							numArgs=callInst->getNumArgOperands(); //the number of the arguments of the all instruction so we can iterate over them
 							for (unsigned ArgIdx=0; ArgIdx<numArgs; ++ArgIdx){
 								actualArg=callInst->getArgOperand(ArgIdx); //checks one argument at a time
-								if((constArg=dyn_cast<ConstantInt>(actualArg))) 	actualArgVector.push_back(constArg); //if the casting succeeds i.e. the argument is a constant, add the argument to vector
+								if((isa<Constant>(actualArg))) 	actualArgVector.push_back(actualArg); //if the casting succeeds i.e. the argument is a constant, add the argument to vector
 								else
 								{ areArgsConst= false; //if at least one argument is not constant, lower the flag, and break the loop over the instructions
 									break;
@@ -66,7 +66,8 @@ struct Function_Inlining :  public FunctionPass
 									calleeFunc=callInst->getCalledFunction(); //get the callee definition. Now this callee function might be local, or external (defined in another file), or in some libarary
 									//for e.g. printf, scanf. These might have constant arguments (printf("some string");). We need to ignore thes calls as they cannot be inlined.
 									if(&*(inst_begin(calleeFunc))){  //It checks the first intruction of the function definition. If it is external, it returns 0x0, which we can check for.
-										errs().write_escaped(calleeFunc->getName());
+										errs().write_escaped(calleeFunc->getName())<<'\n';
+
 										//Now that we know that
 										//1-We have a call instruction.
 										//2-All the arguments are constants
@@ -75,7 +76,7 @@ struct Function_Inlining :  public FunctionPass
 
 										unsigned Idx=0; //An iterator to iterate over the vector actualArgVector, along with the arguments of the function definition
 										for (Function::arg_iterator ArgPtr = calleeFunc->arg_begin(), ArgEnd= calleeFunc->arg_end(); ArgPtr !=ArgEnd; ++ArgPtr){ //iterating over the formal arguments
-											constArg = actualArgVector[Idx++]; //get the correspoding actual argument
+											constArg = cast<ConstantInt>(actualArgVector[Idx++]); //get the correspoding actual argument
 											ArgPtr->replaceAllUsesWith(constArg); //and replaces all the uses of the formal argument with the actual argument.
 											}
 										actualArgVector.clear();  //ensures the vector is indeed empty in the case of multiple call functions.
