@@ -30,7 +30,6 @@ struct Function_Inlining :  public FunctionPass
 					//Intruction Type Variables
 				  CallInst* callInst;
 				  StoreInst* strInst;
-					LoadInst* ldInst;
 					ReturnInst* retInst;
 					Instruction* calleeInst;
 					StoreInst* caller_strInst; //holds the store instruction that comes after the call instruction in non void functions
@@ -112,10 +111,10 @@ struct Function_Inlining :  public FunctionPass
 														if((retInst = dyn_cast<ReturnInst>(&*(++lookahead_iterator))))
 															if(retInst->getNumOperands()!=0){ //if the function doesn't indeed return void
 																	I++->eraseFromParent(); //erase the call instruction
-																	caller_stInst=dyn_cast<StoreInst>(&*I);
-																	if(caller_stInst){//check if the instruction after the call instruction is indeed a store instruction
+																	caller_strInst=dyn_cast<StoreInst>(&*I);
+																	if(caller_strInst){//check if the instruction after the call instruction is indeed a store instruction
 																		strVal=strInst->getValueOperand(); //then, we will get the value that the store instruction in the callee saves to a local variable in it
-																		strPtr=caller_stInst->getPointerOperand(); //we will get a pointer to the local variable that the caller's store instruction saves the returned value to
+																		strPtr=caller_strInst->getPointerOperand(); //we will get a pointer to the local variable that the caller's store instruction saves the returned value to
 																		new StoreInst(strVal, strPtr, &*I); //and create a new store instruction
 																		I++->eraseFromParent(); //erase the old store instructions.
 																		calleeInst->eraseFromParent();
