@@ -49,6 +49,7 @@ struct Function_Inlining :  public FunctionPass
 //First, we need to iterate over all the instructions in the code, until we find a call instruction
 
 					for (inst_iterator I = inst_begin(callerFunc), E=inst_end(callerFunc); I!=E; ++I)	{
+						errs()<<*I<<'\n';
 						//tries to cast every instruction to callInst class. Returns NULL if not a callInst
 						if ((callInst = dyn_cast<CallInst>(&*I))){ //if callInst is not NULL, i.e. intruction is indeed a call instruction
 							//Now that we found the call instruction, we need to check if all the argments are indeed constants.
@@ -80,6 +81,7 @@ struct Function_Inlining :  public FunctionPass
 											}
 										actualArgVector.clear();  //ensures the vector is indeed empty in the case of multiple call functions.
 
+
 										//Now, the function declaration is ready to be copied into the call site. We will clone each intruction and move the clone right before the call instruction.
 										//This makes the function declaration dead.
 										for (inst_iterator callee_I = inst_begin(calleeFunc), callee_E=inst_end(calleeFunc); callee_I!=callee_E; ++callee_I){	//iterating over the instructions in the callee definition
@@ -94,7 +96,7 @@ struct Function_Inlining :  public FunctionPass
 											//So, we first check if we reached the return instruction and that it is indeed returning void
 											if ((retInst = dyn_cast<ReturnInst>(&*callee_I)))
 												{//for ret void, getNumOperands returns 0.
-														  //we break before copying the instruction and erase the call instruction, incrementing the iterator to point to the next instuction
+														//I++->eraseFromParent(); //we break before copying the instruction and erase the call instruction, incrementing the iterator to point to the next instuction
 														break;}
 												calleeInst = callee_I->clone(); //Now, for a normal instruction, we first clone int
 												calleeInst->insertBefore(&*I); //then move it just before the call instruction
@@ -107,15 +109,10 @@ struct Function_Inlining :  public FunctionPass
 								}
 							}
 						}
-
-
-						for(lookahead_iterator=I; lookahead_iterator!=E; lookahead_iterator++){
-							vmap[&*lookahead_iterator] = calleeInst;
+						for(lookahead_iterator=inst_begin(callerFunc); lookahead_iterator!=E; lookahead_iterator++){
+							vmap[&*lookahead_iterator] = &*lookahead_iterator;
 							RemapInstruction(&*lookahead_iterator, vmap, RF_NoModuleLevelChanges);}
-							//I++->eraseFromParent();
-
 					}
-
 					return true; //return true as the pass has changed the file
 				}
 
