@@ -112,8 +112,9 @@ struct Function_Inlining :  public FunctionPass
 						for(lookahead_iterator=I; lookahead_iterator!=E; lookahead_iterator++){
 							vmap[&*lookahead_iterator] = calleeInst;
 							RemapInstruction(&*lookahead_iterator, vmap, RF_NoModuleLevelChanges);}
+							I->eraseFromParent();
+
 					}
-					I->eraseFromParent();
 
 					return true; //return true as the pass has changed the file
 				}
