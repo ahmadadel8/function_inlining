@@ -81,7 +81,7 @@ struct Function_Inlining :  public FunctionPass
 											}
 										actualArgVector.clear();  //ensures the vector is indeed empty in the case of multiple call functions.
 
- 
+
 										//Now, the function declaration is ready to be copied into the call site. We will clone each intruction and move the clone right before the call instruction.
 										//This makes the function declaration dead.
 										for (inst_iterator callee_I = inst_begin(calleeFunc), callee_E=inst_end(calleeFunc); callee_I!=callee_E; ++callee_I){	//iterating over the instructions in the callee definition
@@ -104,15 +104,14 @@ struct Function_Inlining :  public FunctionPass
 												vmap[&*callee_I] = calleeInst; //then we remap the instructions to update the dominator tree(not sure)
 												RemapInstruction(calleeInst, vmap, RF_NoModuleLevelChanges);
 									}
-									for(lookahead_iterator=I; lookahead_iterator!=E; lookahead_iterator++){
-										errs()<<"in the loop \n";
-										vmap[&*lookahead_iterator] = &*lookahead_iterator;
-										RemapInstruction(&*lookahead_iterator, vmap, RF_NoModuleLevelChanges);}
-										errs()<<"in the loop \n";
+
 
 								}
 							}
 						}
+						for(lookahead_iterator=inst_begin(callerFunc); lookahead_iterator!=E; lookahead_iterator++){
+							vmap[&*lookahead_iterator] = &*lookahead_iterator;
+							RemapInstruction(&*lookahead_iterator, vmap, RF_NoModuleLevelChanges);}
 					}
 					return true; //return true as the pass has changed the file
 				}
