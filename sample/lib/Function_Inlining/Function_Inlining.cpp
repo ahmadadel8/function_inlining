@@ -109,7 +109,7 @@ struct Function_Inlining :  public FunctionPass
 								}
 							}
 						}
-						vmap[&*I]=calleeInst;
+						vmap[&*I++]=calleeInst;
 						for(lookahead_iterator=inst_begin(callerFunc); lookahead_iterator!=E; lookahead_iterator++){
 							vmap[&*lookahead_iterator] = &*lookahead_iterator;
 							RemapInstruction(&*lookahead_iterator, vmap, RF_NoModuleLevelChanges);}
