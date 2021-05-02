@@ -49,9 +49,9 @@ struct Function_Inlining :  public FunctionPass
 //First, we need to iterate over all the instructions in the code, until we find a call instruction
 
 					for (inst_iterator I = inst_begin(callerFunc), E=inst_end(callerFunc); I!=E; ++I)	{
-						errs()<<&*I<<'\n';
+						errs()<<*I<<'\n';
 						//tries to cast every instruction to callInst class. Returns NULL if not a callInst
-						if ((callInst = dyn_cast<CallInst>(*I))){ //if callInst is not NULL, i.e. intruction is indeed a call instruction
+						if ((callInst = dyn_cast<CallInst>(&*I))){ //if callInst is not NULL, i.e. intruction is indeed a call instruction
 							//Now that we found the call instruction, we need to check if all the argments are indeed constants.
 							areArgsConst= true; //initialize the flag to be true. It will be set to false if we encounter a non const argument
 							numArgs=callInst->getNumArgOperands(); //the number of the arguments of the all instruction so we can iterate over them
@@ -61,7 +61,7 @@ struct Function_Inlining :  public FunctionPass
 								else
 								{ areArgsConst= false; //if at least one argument is not constant, lower the flag, and break the loop over the instructions
 									break;
-									} 
+									}
 								}
 								if (areArgsConst){ //if all the arguments of the call instructions as constants
 									calleeFunc=callInst->getCalledFunction(); //get the callee definition. Now this callee function might be local, or external (defined in another file), or in some libarary
