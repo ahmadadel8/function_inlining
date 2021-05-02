@@ -54,17 +54,17 @@ struct Function_Inlining :  public FunctionPass
 							actualArgVector.clear(); //ensures the vector is indeed empty in the case of multiple call functions.
 							for (unsigned ArgIdx=0; ArgIdx<numArgs; ++ArgIdx){
 								actualArg=callInst->getArgOperand(ArgIdx); //checks one argument at a time
-
-								if(constArg=dyn_cast<ConstantInt>(actualArg)) 	actualArgVector.push_back(constArg); //if the casting succeeds, add the argument to vector
+								if(constArg=dyn_cast<ConstantInt>(actualArg)) 	actualArgVector.push_back(constArg); //if the casting succeeds i.e. the argument is a constant, add the argument to vector
 								else
-								{ areArgsConst= false;
+								{ areArgsConst= false; //if at least one argument is not constant, lower the flag, and break the loop over the instructions
 									break;
 									}
 								}
-								if (areArgsConst){
-									calleeFunc=callInst->getCalledFunction();
+								if (areArgsConst){ //if all the arguments of the call instructions as constants
+									calleeFunc=callInst->getCalledFunction(); //get the callee definition. Now this callee function might be local, or external (defined in another file), or in some libarary
+									//for e.g. printf, scanf. These might have constant arguments (printf("some string");). We need to ignore thes calls as they cannot be inlined.
 									inst_iterator callee_I = inst_begin(calleeFunc);
-									if(&*callee_I){  //temporary fix. Might want to reisit. Ensures printf and scanf..etc aren't inlined
+									if(&*(inst_begin(calleeFunc))){  //temporary fix. Might want to reisit. Ensures printf and scanf..etc aren't inlined
 										unsigned Idx=0;
 										for (Function::arg_iterator ArgPtr = calleeFunc->arg_begin(), ArgEnd= calleeFunc->arg_end(); ArgPtr !=ArgEnd; ++ArgPtr){
 											constArg = actualArgVector[Idx++];
