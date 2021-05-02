@@ -94,6 +94,7 @@ struct Function_Inlining :  public FunctionPass
 
 											//So, we first check if we reached the return instruction and that it is indeed returning void
 											if ((retInst = dyn_cast<ReturnInst>(&*callee_I))){
+												errs()<<"here\n";
 												I++->eraseFromParent();
 												break;
 											}
@@ -106,6 +107,7 @@ struct Function_Inlining :  public FunctionPass
 									}
 									for(lookahead_iterator=I; lookahead_iterator!=E; lookahead_iterator++)
 										RemapInstruction(&*lookahead_iterator, vmap, RF_NoModuleLevelChanges);//we create a dummy instruction iterator to look ahead in the loop
+									errs()<<"or there\n";
 								}
 							}
 						}
