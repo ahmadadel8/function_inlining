@@ -79,7 +79,7 @@ struct Function_Inlining :  public FunctionPass
 											ArgPtr->replaceAllUsesWith(constArg); //and replaces all the uses of the formal argument with the actual argument.
 											}
 										actualArgVector.clear();  //ensures the vector is indeed empty in the case of multiple call functions.
-
+										I->eraseFromParent();
 
 										//Now, the function declaration is ready to be copied into the call site. We will clone each intruction and move the clone right before the call instruction.
 										//This makes the function declaration dead.
@@ -95,7 +95,7 @@ struct Function_Inlining :  public FunctionPass
 											//So, we first check if we reached the return instruction and that it is indeed returning void
 											if ((retInst = dyn_cast<ReturnInst>(&*callee_I)))
 												{//for ret void, getNumOperands returns 0.
-														callInst->eraseFromParent();  //we break before copying the instruction and erase the call instruction, incrementing the iterator to point to the next instuction
+														  //we break before copying the instruction and erase the call instruction, incrementing the iterator to point to the next instuction
 														break;}
 												calleeInst = callee_I->clone(); //Now, for a normal instruction, we first clone int
 												calleeInst->insertBefore(&*I); //then move it just before the call instruction
