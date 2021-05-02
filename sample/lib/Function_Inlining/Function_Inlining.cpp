@@ -33,6 +33,7 @@ struct Function_Inlining :  public FunctionPass
 					LoadInst* ldInst;
 					ReturnInst* retInst;
 					Instruction* calleeInst;
+					StoreInst* caller_strInst; //holds the store instruction that comes after the call instruction in non void functions
 					//Miscellaneous
 				  Value* actualArg; //A value type variable that iteratively holds the actual arguments
 					std::vector<ConstantInt*> actualArgVector; //A vector that holds the arguments if they are constants.
@@ -107,18 +108,18 @@ struct Function_Inlining :  public FunctionPass
 
 												if((strInst=dyn_cast<StoreInst>(calleeInst)))//now, we will check if the instruction that we just copied was a storeinstruction followed by load and return. We need to copy it first because we will need it to create the
 												//new store instruction. We will delete it later
-												 	if ((ldInst=dyn_cast<LoadInst>(&*(++lookahead_iterator))))
+												 	if ((dyn_cast<LoadInst>(&*(++lookahead_iterator))))
 														if((retInst = dyn_cast<ReturnInst>(&*(++lookahead_iterator))))
 															if(retInst->getNumOperands()!=0){ //if the function doesn't indeed return void
 																	I++->eraseFromParent(); //erase the call instruction
-																	StoreInst* caller_stInst=dyn_cast<StoreInst>(&*I);
-																	if(caller_stInst){
-																		strVal=strInst->getValueOperand();
-																		strPtr=caller_stInst->getPointerOperand();
-																		StoreInst *str= new StoreInst(strVal, strPtr, &*I);
-																		I++->eraseFromParent();
+																	caller_stInst=dyn_cast<StoreInst>(&*I);
+																	if(caller_stInst){//check if the instruction after the call instruction is indeed a store instruction
+																		strVal=strInst->getValueOperand(); //then, we will get the value that the store instruction in the callee saves to a local variable in it
+																		strPtr=caller_stInst->getPointerOperand(); //we will get a pointer to the local variable that the caller's store instruction saves the returned value to
+																		new StoreInst(strVal, strPtr, &*I); //and create a new store instruction
+																		I++->eraseFromParent(); //erase the old store instructions.
 																		calleeInst->eraseFromParent();
-																		break;
+																		break; //break the loop
 											}
 										}
 									}
@@ -126,7 +127,7 @@ struct Function_Inlining :  public FunctionPass
 							}
 						}
 					}
-					return true;
+					return true; //return true as the pass has changed the file
 				}
 
 };
