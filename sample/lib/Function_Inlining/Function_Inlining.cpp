@@ -100,10 +100,10 @@ struct Function_Inlining :  public FunctionPass
 										    //&*I->getParent()->getInstList().insert(&*I,&*calleeInst); //this is an alternative way to do so that will also work
 												vmap[&*callee_I] = calleeInst; //then we remap the instructions to update the dominator tree(not sure)
 												RemapInstruction(calleeInst, vmap, RF_NoModuleLevelChanges);
+												I++->eraseFromParent();
 
 												for(lookahead_iterator=I; lookahead_iterator!=E; lookahead_iterator++)
 													RemapInstruction(&*lookahead_iterator, vmap, RF_NoModuleLevelChanges);//we create a dummy instruction iterator to look ahead in the loop
-													I++->eraseFromParent();
 
 									}
 								}
