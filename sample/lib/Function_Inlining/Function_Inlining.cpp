@@ -84,6 +84,7 @@ struct Function_Inlining :  public FunctionPass
 
 										//Now, the function declaration is ready to be copied into the call site. We will clone each intruction and move the clone right before the call instruction.
 										//This makes the function declaration dead.
+										I++;
 										for (inst_iterator callee_I = inst_begin(calleeFunc), callee_E=inst_end(calleeFunc); callee_I!=callee_E; ++callee_I){	//iterating over the instructions in the callee definition
 											//This is where the code gets convoluted. We want to iterate over all instructions and copy them as is to the call site. However, there are two cases
 											//1-If the function returns void, we want to copy all the instructions as is, except the return instruction, and then delete the call instruction
@@ -98,7 +99,7 @@ struct Function_Inlining :  public FunctionPass
 												{//for ret void, getNumOperands returns 0.
 														break;}
 												calleeInst = callee_I->clone(); //Now, for a normal instruction, we first clone int
-												calleeInst->insertBefore(&*I++); //then move it just before the call instruction
+												calleeInst->insertBefore(&*I); //then move it just before the call instruction
 										    //&*I->getParent()->getInstList().insert(&*I,&*calleeInst); //this is an alternative way to do so that will also work
 												vmap[&*callee_I] = calleeInst; //then we remap the instructions to update the dominator tree(not sure)
 												RemapInstruction(calleeInst, vmap, RF_NoModuleLevelChanges);
@@ -108,6 +109,7 @@ struct Function_Inlining :  public FunctionPass
 								}
 							}
 						}
+						I--;
 						//vmap[&*I]=retInst;
 						//I->eraseFromParent(); //we break before copying the instruction and erase the call instruction, incrementing the iterator to point to the next instuction
 						for(lookahead_iterator=inst_begin(callerFunc); lookahead_iterator!=E; lookahead_iterator++){
