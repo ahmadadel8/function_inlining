@@ -115,7 +115,7 @@ struct Function_Inlining :  public FunctionPass
 																	//if(caller_strInst){//check if the instruction after the call instruction is indeed a store instruction
 																		strVal=strInst->getValueOperand(); //then, we will get the value that the store instruction in the callee saves to a local variable in it
 																		//strPtr=caller_strInst->getPointerOperand(); //we will get a pointer to the local variable that the caller's store instruction saves the returned value to
-																		new StoreInst(strVal, *I, &*I); //and create a new store instruction
+																		new StoreInst(strVal, &*I, &*I); //and create a new store instruction
 																		I++->eraseFromParent(); //erase the call instruction
 																		I++->eraseFromParent(); //erase the old store instructions.
 																		calleeInst->eraseFromParent();
