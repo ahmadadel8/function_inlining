@@ -111,3 +111,4 @@ struct Function_Inlining :  public FunctionPass
 
 char Function_Inlining::ID = 1;
 static RegisterPass<Function_Inlining> X("func_inline", "Function Inlining Pass", false, false);
+ 
