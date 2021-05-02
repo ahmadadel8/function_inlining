@@ -49,6 +49,7 @@ struct Function_Inlining :  public FunctionPass
 //First, we need to iterate over all the instructions in the code, until we find a call instruction
 
 					for (inst_iterator I = inst_begin(callerFunc), E=inst_end(callerFunc); I!=E; ++I)	{
+						errs()<<&*I<<'\n';
 						//tries to cast every instruction to callInst class. Returns NULL if not a callInst
 						if ((callInst = dyn_cast<CallInst>(&*I))){ //if callInst is not NULL, i.e. intruction is indeed a call instruction
 							//Now that we found the call instruction, we need to check if all the argments are indeed constants.
