@@ -49,7 +49,6 @@ struct Function_Inlining :  public FunctionPass
 //First, we need to iterate over all the instructions in the code, until we find a call instruction
 
 					for (inst_iterator I = inst_begin(callerFunc), E=inst_end(callerFunc); I!=E; ++I)	{
-						errs()<<*I<<'\n';
 						//tries to cast every instruction to callInst class. Returns NULL if not a callInst
 						if ((callInst = dyn_cast<CallInst>(&*I))){ //if callInst is not NULL, i.e. intruction is indeed a call instruction
 							//Now that we found the call instruction, we need to check if all the argments are indeed constants.
@@ -96,7 +95,7 @@ struct Function_Inlining :  public FunctionPass
 											//So, we first check if we reached the return instruction and that it is indeed returning void
 											if ((retInst = dyn_cast<ReturnInst>(&*callee_I)))
 												{//for ret void, getNumOperands returns 0.
-														//I++->eraseFromParent(); //we break before copying the instruction and erase the call instruction, incrementing the iterator to point to the next instuction
+														callInst>eraseFromParent(); //we break before copying the instruction and erase the call instruction, incrementing the iterator to point to the next instuction
 														break;}
 												calleeInst = callee_I->clone(); //Now, for a normal instruction, we first clone int
 												calleeInst->insertBefore(&*I); //then move it just before the call instruction
