@@ -109,7 +109,7 @@ struct Function_Inlining :  public FunctionPass
 								}
 							}
 						}
-						I--;
+						//I--;
 						//vmap[&*I]=retInst;
 						//I->eraseFromParent(); //we break before copying the instruction and erase the call instruction, incrementing the iterator to point to the next instuction
 						for(lookahead_iterator=inst_begin(callerFunc); lookahead_iterator!=E; lookahead_iterator++){
