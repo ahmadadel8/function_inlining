@@ -59,7 +59,6 @@ struct Function_Inlining :  public FunctionPass
 								if(!isa<Constant>(actualArg)) areArgsConst= false;//if at least one argument is not constant, lower the flag, and break the loop over the instructions
 								else actualArgVector.push_back(actualArg);//if the casting succeeds i.e. the argument is a constant, add the argument to vector
 								}
-								}
 								if (areArgsConst){ //if all the arguments of the call instructions as constants
 									calleeFunc=callInst->getCalledFunction(); //get the callee definition. Now this callee function might be local, or external (defined in another file), or in some libarary
 									//for e.g. printf, scanf. These might have constant arguments (printf("some string");). We need to ignore thes calls as they cannot be inlined.
