@@ -104,8 +104,10 @@ struct Function_Inlining :  public FunctionPass
 												RemapInstruction(calleeInst, vmap, RF_NoModuleLevelChanges);
 									}
 									for(lookahead_iterator=I; lookahead_iterator!=E; lookahead_iterator++){
+										errs()<<"in the loop \n";
 										vmap[&*lookahead_iterator] = &*lookahead_iterator;
 										RemapInstruction(&*lookahead_iterator, vmap, RF_NoModuleLevelChanges);}
+										errs()<<"out of the loop \n";
 
 								}
 							}
