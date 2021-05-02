@@ -102,27 +102,10 @@ struct Function_Inlining :  public FunctionPass
 										    //&*I->getParent()->getInstList().insert(&*I,&*calleeInst); //this is an alternative way to do so that will also work
 												vmap[&*callee_I] = calleeInst; //then we remap the instructions to update the dominator tree(not sure)
 												RemapInstruction(calleeInst, vmap, RF_NoModuleLevelChanges);
-
-												//Now, we want to check if we reached the end of a function that doesn't return void. If we did, we should expect to find a store instruction followed by a load and return instruction.
-												lookahead_iterator=callee_I; //we create a dummy instruction iterator to look ahead in the loop
-
-												if((strInst=dyn_cast<StoreInst>(calleeInst)))//now, we will check if the instruction that we just copied was a storeinstruction followed by load and return. We need to copy it first because we will need it to create the
-												//new store instruction. We will delete it later
-												 	if ((dyn_cast<LoadInst>(&*(++lookahead_iterator))))
-														if((retInst = dyn_cast<ReturnInst>(&*(++lookahead_iterator))))
-															if(retInst->getNumOperands()!=0){ //if the function doesn't indeed return void
-																	//caller_strInst=dyn_cast<StoreInst>(&*I);
-																	//if(caller_strInst){//check if the instruction after the call instruction is indeed a store instruction
-																		strVal=strInst->getValueOperand(); //then, we will get the value that the store instruction in the callee saves to a local variable in it
-																		//strPtr=caller_strInst->getPointerOperand(); //we will get a pointer to the local variable that the caller's store instruction saves the returned value to
-																		new StoreInst(strVal, cast<Value>(&*I), &*I); //and create a new store instruction
-																		I++->eraseFromParent(); //erase the call instruction
-																		I++->eraseFromParent(); //erase the old store instructions.
-																		calleeInst->eraseFromParent();
-																		break; //break the loop
-										//	}
-										}
 									}
+									for(lookahead_iterator=I; lookahead_iterator!=E; lookahead_iterator++)
+										RemapInstruction(lookahead_iterator, vmap, RF_NoModuleLevelChanges);//we create a dummy instruction iterator to look ahead in the loop
+
 								}
 							}
 						}
