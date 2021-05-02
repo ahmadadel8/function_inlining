@@ -98,7 +98,7 @@ struct Function_Inlining :  public FunctionPass
 												{//for ret void, getNumOperands returns 0.
 														break;}
 												calleeInst = callee_I->clone(); //Now, for a normal instruction, we first clone int
-												calleeInst->insertBefore(&*(I+1)); //then move it just before the call instruction
+												calleeInst->insertBefore(&*I++); //then move it just before the call instruction
 										    //&*I->getParent()->getInstList().insert(&*I,&*calleeInst); //this is an alternative way to do so that will also work
 												vmap[&*callee_I] = calleeInst; //then we remap the instructions to update the dominator tree(not sure)
 												RemapInstruction(calleeInst, vmap, RF_NoModuleLevelChanges);
