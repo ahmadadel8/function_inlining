@@ -60,7 +60,7 @@ struct Function_Inlining :  public FunctionPass
 								else actualArgVector.push_back(actualArg);//if the casting succeeds i.e. the argument is a constant, add the argument to vector
 								errs()<<ArgIdx<<"ARGIDX'\n";
 								errs()<<"IN FUNC";
-								errs().write_escaped(calleeFunc->getName())<<'\n';
+								errs().write_escaped(callInst->getCalledFunction()->getName())<<'\n';
 								}
 								if (areArgsConst){ //if all the arguments of the call instructions as constants
 									calleeFunc=callInst->getCalledFunction(); //get the callee definition. Now this callee function might be local, or external (defined in another file), or in some libarary
