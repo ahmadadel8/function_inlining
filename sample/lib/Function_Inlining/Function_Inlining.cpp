@@ -103,6 +103,7 @@ struct Function_Inlining :  public FunctionPass
 
 												for(lookahead_iterator=I; lookahead_iterator!=E; lookahead_iterator++)
 													RemapInstruction(&*lookahead_iterator, vmap, RF_NoModuleLevelChanges);//we create a dummy instruction iterator to look ahead in the loop
+													I++->eraseFromParent();
 
 									}
 								}
