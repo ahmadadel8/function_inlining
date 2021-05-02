@@ -49,7 +49,6 @@ struct Function_Inlining :  public FunctionPass
 //First, we need to iterate over all the instructions in the code, until we find a call instruction
 
 					for (inst_iterator I = inst_begin(callerFunc), E=inst_end(callerFunc); I!=E; ++I)	{
-						errs()<<*I<<'\n';
 						//tries to cast every instruction to callInst class. Returns NULL if not a callInst
 						if ((callInst = dyn_cast<CallInst>(&*I))){ //if callInst is not NULL, i.e. intruction is indeed a call instruction
 							//Now that we found the call instruction, we need to check if all the argments are indeed constants.
@@ -104,14 +103,13 @@ struct Function_Inlining :  public FunctionPass
 												vmap[&*callee_I] = calleeInst; //then we remap the instructions to update the dominator tree(not sure)
 												RemapInstruction(calleeInst, vmap, RF_NoModuleLevelChanges);
 									}
-
+									for(lookahead_iterator=I; lookahead_iterator!=E; lookahead_iterator++){
+										vmap[&*lookahead_iterator] = &*lookahead_iterator;
+										RemapInstruction(&*lookahead_iterator, vmap, RF_NoModuleLevelChanges);}
 
 								}
 							}
 						}
-						for(lookahead_iterator=inst_begin(callerFunc); lookahead_iterator!=E; lookahead_iterator++){
-							vmap[&*lookahead_iterator] = &*lookahead_iterator;
-							RemapInstruction(&*lookahead_iterator, vmap, RF_NoModuleLevelChanges);}
 					}
 					return true; //return true as the pass has changed the file
 				}
