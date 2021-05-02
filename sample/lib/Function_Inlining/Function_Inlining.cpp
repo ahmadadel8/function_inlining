@@ -105,7 +105,7 @@ struct Function_Inlining :  public FunctionPass
 												//Now, we want to check if we reached the end of a function that doesn't return void. If we did, we should expect to find a store instruction followed by a load and return instruction.
 												lookahead_iterator=callee_I; //we create a dummy instruction iterator to look ahead in the loop
 
-												if((strInst=dyn_cast<StoreInst>(calleeInst)))/now, we will check if the instruction that we just copied was a storeinstruction followed by load and return. We need to copy it first because we will need it to create the
+												if((strInst=dyn_cast<StoreInst>(calleeInst)))//now, we will check if the instruction that we just copied was a storeinstruction followed by load and return. We need to copy it first because we will need it to create the
 												//new store instruction. We will delete it later
 												 	if ((ldInst=dyn_cast<LoadInst>(&*(++lookahead_iterator))))
 														if((retInst = dyn_cast<ReturnInst>(&*(++lookahead_iterator))))
