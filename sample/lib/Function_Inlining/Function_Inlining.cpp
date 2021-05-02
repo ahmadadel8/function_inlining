@@ -56,11 +56,9 @@ struct Function_Inlining :  public FunctionPass
 							numArgs=callInst->getNumArgOperands(); //the number of the arguments of the all instruction so we can iterate over them
 							for (unsigned ArgIdx=0; ArgIdx<numArgs; ++ArgIdx){
 								actualArg=callInst->getArgOperand(ArgIdx); //checks one argument at a time
-								if((isa<Constant>(actualArg))) 	actualArgVector.push_back(actualArg); //if the casting succeeds i.e. the argument is a constant, add the argument to vector
-								else
-								{ areArgsConst= false; //if at least one argument is not constant, lower the flag, and break the loop over the instructions
-									break;
-									}
+								if(!isa<Constant>(actualArg)) areArgsConst= false;//if at least one argument is not constant, lower the flag, and break the loop over the instructions
+								else actualArgVector.push_back(actualArg);//if the casting succeeds i.e. the argument is a constant, add the argument to vector
+								}
 								}
 								if (areArgsConst){ //if all the arguments of the call instructions as constants
 									calleeFunc=callInst->getCalledFunction(); //get the callee definition. Now this callee function might be local, or external (defined in another file), or in some libarary
