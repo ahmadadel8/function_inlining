@@ -61,7 +61,7 @@ struct Function_Inlining :  public FunctionPass
 								else
 								{ areArgsConst= false; //if at least one argument is not constant, lower the flag, and break the loop over the instructions
 									break;
-									}
+									} 
 								}
 								if (areArgsConst){ //if all the arguments of the call instructions as constants
 									calleeFunc=callInst->getCalledFunction(); //get the callee definition. Now this callee function might be local, or external (defined in another file), or in some libarary
