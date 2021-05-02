@@ -107,10 +107,14 @@ struct Function_Inlining :  public FunctionPass
 								}
 							}
 						}
-						I++->eraseFromParent();
-						vmap[&*I] = calleeInst;
-						RemapInstruction(&*I, vmap, RF_NoModuleLevelChanges);
+
+
+						for(lookahead_iterator=I; lookahead_iterator!=E; lookahead_iterator++){
+							vmap[&*lookahead_iterator] = calleeInst;
+							RemapInstruction(&*lookahead_iterator, vmap, RF_NoModuleLevelChanges);}
 					}
+					I->eraseFromParent();
+
 					return true; //return true as the pass has changed the file
 				}
 
