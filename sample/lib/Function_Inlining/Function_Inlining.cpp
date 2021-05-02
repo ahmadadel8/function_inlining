@@ -94,9 +94,8 @@ struct Function_Inlining :  public FunctionPass
 
 											//So, we first check if we reached the return instruction and that it is indeed returning void
 											if ((retInst = dyn_cast<ReturnInst>(&*callee_I)))
-												{	if(retInst->getNumOperands()==0) {//for ret void, getNumOperands returns 0.
-														I++->eraseFromParent(); //we break before copying the instruction and erase the call instruction, incrementing the iterator to point to the next instuction
-														break;}}
+												{		I++->eraseFromParent(); //we break before copying the instruction and erase the call instruction, incrementing the iterator to point to the next instuction
+														break;}
 												calleeInst = callee_I->clone(); //Now, for a normal instruction, we first clone int
 												calleeInst->insertBefore(&*I); //then move it just before the call instruction
 										    //&*I->getParent()->getInstList().insert(&*I,&*calleeInst); //this is an alternative way to do so that will also work
@@ -104,23 +103,13 @@ struct Function_Inlining :  public FunctionPass
 												RemapInstruction(calleeInst, vmap, RF_NoModuleLevelChanges);
 
 												//Now, we want to check if we reached the end of a function that doesn't return void. If we did, we should expect to find a store instruction followed by a load and return instruction.
-												lookahead_iterator=callee_I; //we create a dummy instruction iterator to look ahead in the loop
 
-												if((strInst=dyn_cast<StoreInst>(calleeInst)))//now, we will check if the instruction that we just copied was a storeinstruction followed by load and return. We need to copy it first because we will need it to create the
-												//new store instruction. We will delete it later
-												 	if ((dyn_cast<LoadInst>(&*(++lookahead_iterator))))
-														if((retInst = dyn_cast<ReturnInst>(&*(++lookahead_iterator))))
-															if(retInst->getNumOperands()!=0){ //if the function doesn't indeed return void
-																	I++->eraseFromParent(); //erase the call instruction
-																	caller_strInst=dyn_cast<StoreInst>(&*I);
-																	if(caller_strInst){//check if the instruction after the call instruction is indeed a store instruction
-																		strVal=strInst->getValueOperand(); //then, we will get the value that the store instruction in the callee saves to a local variable in it
-																		strPtr=caller_strInst->getPointerOperand(); //we will get a pointer to the local variable that the caller's store instruction saves the returned value to
-																		new StoreInst(strVal, strPtr, &*I); //and create a new store instruction
-																		I++->eraseFromParent(); //erase the old store instructions.
-																		calleeInst->eraseFromParent();
-																		break; //break the loop
 											}
+											lookahead_iterator=I; //we create a dummy instruction iterator to look ahead in the loop
+											for(lookahead_iterator;lookahead_iterator!=E; I++){
+												RemapInstruction(calleeInst, vmap, RF_NoModuleLevelChanges);
+											}
+
 										}
 									}
 								}
