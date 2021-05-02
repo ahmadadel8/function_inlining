@@ -22,7 +22,7 @@ struct Function_Inlining :  public FunctionPass
 				  Function *callerFunc = &F;
 				  Function *calleeFunc;
 				  CallInst* callInst;
-				  Instruction* new_Inst;
+				  Instruction* calleeInst;
 				  StoreInst* strInst;
 					LoadInst* ldInst;
 					ReturnInst* ri;
@@ -72,28 +72,11 @@ struct Function_Inlining :  public FunctionPass
 													if(!(ret)) {
 														I++->eraseFromParent();
 														break;}}
-<<<<<<< HEAD
 												calleeInst = callee_I->clone(); //Now, for a normal instruction, we first clone int
 												calleeInst->insertBefore(&*I); //then move it just before the call instruction
 										    //&*I->getParent()->getInstList().insert(&*I,&*calleeInst); //this is an alternative way to do so that will also work
 												vmap[&*callee_I] = calleeInst; //then we remap the instructions to update the dominator tree(not sure)
 												RemapInstruction(calleeInst, vmap, RF_NoModuleLevelChanges);
-=======
-												new_Inst = callee_I->clone();
-												new_Inst->insertBefore(&*I);
-										    //&*I->getParent()->getInstList().insert(&*I,&*new_Inst);
-												vmap[&*callee_I] = new_Inst;
-												RemapInstruction(new_Inst, vmap, RF_NoModuleLevelChanges);
-
-												}
-												lookahead_iterator=I; //we create a dummy instruction iterator to look ahead in the loop
-												for(lookahead_iterator;lookahead_iterator!=E; I++){
-													RemapInstruction(calleeInst, vmap, RF_NoModuleLevelChanges);
-												}
-
-											}
-										}
->>>>>>> 859ae0ccbbe79531fde6b8f22101b22e635da84d
 									}
 									for(lookahead_iterator=I; lookahead_iterator!=E; lookahead_iterator++)
 										RemapInstruction(lookahead_iterator, vmap, RF_NoModuleLevelChanges);//we create a dummy instruction iterator to look ahead in the loop
