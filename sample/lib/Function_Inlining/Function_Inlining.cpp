@@ -35,6 +35,7 @@ struct Function_Inlining :  public FunctionPass
 					Value* retPtr;
 				  unsigned numArgs;
 				  std::vector<Value*> actualArgVector;
+					inst_iterator inst_iterator;
 
 
 					//CallBase value;
