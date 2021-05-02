@@ -58,7 +58,7 @@ struct Function_Inlining :  public FunctionPass
 								actualArg=callInst->getArgOperand(ArgIdx); //checks one argument at a time
 								if(!isa<Constant>(actualArg)) areArgsConst= false;//if at least one argument is not constant, lower the flag, and break the loop over the instructions
 								else actualArgVector.push_back(actualArg);//if the casting succeeds i.e. the argument is a constant, add the argument to vector
-								errs()<<ArgIdx<<"ARGIDX'\n";
+								errs()<<ArgIdx<<"ARGIDX\n"<<"ARG"<<actualArg;
 								errs()<<"IN FUNC";
 								errs().write_escaped(callInst->getCalledFunction()->getName())<<'\n';
 								}
