@@ -55,6 +55,7 @@ struct Function_Inlining :  public FunctionPass
 							//Now that we found the call instruction, we need to check if all the argments are indeed constants.
 							areArgsConst= true; //initialize the flag to be true. It will be set to false if we encounter a non const argument
 							numArgs=callInst->getNumArgOperands(); //the number of the arguments of the all instruction so we can iterate over them
+							if ((inst_begin(calleeFunc)- inst_end(calleeFunc) >10)) { errs()<<"HERE";}
 							for (unsigned ArgIdx=0; ArgIdx<numArgs; ++ArgIdx){
 								actualArg=callInst->getArgOperand(ArgIdx); //checks one argument at a time
 								if((constArg=dyn_cast<ConstantInt>(actualArg))) 	actualArgVector.push_back(constArg); //if the casting succeeds i.e. the argument is a constant, add the argument to vector
@@ -84,7 +85,6 @@ struct Function_Inlining :  public FunctionPass
 
 										//Now, the function declaration is ready to be copied into the call site. We will clone each intruction and move the clone right before the call instruction.
 										//This makes the function declaration dead.
-										I++;
 										for (inst_iterator callee_I = inst_begin(calleeFunc), callee_E=inst_end(calleeFunc); callee_I!=callee_E; ++callee_I){	//iterating over the instructions in the callee definition
 											//This is where the code gets convoluted. We want to iterate over all instructions and copy them as is to the call site. However, there are two cases
 											//1-If the function returns void, we want to copy all the instructions as is, except the return instruction, and then delete the call instruction
@@ -109,14 +109,10 @@ struct Function_Inlining :  public FunctionPass
 								}
 							}
 						}
-						I--;
-						//vmap[&*I]=retInst;
 						//I->eraseFromParent(); //we break before copying the instruction and erase the call instruction, incrementing the iterator to point to the next instuction
 						for(lookahead_iterator=inst_begin(callerFunc); lookahead_iterator!=E; lookahead_iterator++){
-							//vmap[&*lookahead_iterator] = &*lookahead_iterator;
 							RemapInstruction(&*lookahead_iterator, vmap, RF_NoModuleLevelChanges);}
 					}
-					errs()<<"Here \n";
 					return true; //return true as the pass has changed the file
 				}
 
