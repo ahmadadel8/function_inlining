@@ -66,7 +66,7 @@ struct Function_Inlining :  public FunctionPass
 									calleeFunc=callInst->getCalledFunction(); //get the callee definition. Now this callee function might be local, or external (defined in another file), or in some libarary
 									//for e.g. printf, scanf. These might have constant arguments (printf("some string");). We need to ignore thes calls as they cannot be inlined.
 									if(&*(inst_begin(calleeFunc))){  //It checks the first intruction of the function definition. If it is external, it returns 0x0, which we can check for.
-
+										errs().write_escaped(calleeFunc->getName());
 										//Now that we know that
 										//1-We have a call instruction.
 										//2-All the arguments are constants
