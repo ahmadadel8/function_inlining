@@ -37,12 +37,12 @@ opt -dce ~/project/test_codes/Function-inlining/example.3inline.constprop.ll -o 
 opt -dce ~/project/test_codes/Function-inlining/example.4inline.constprop.ll -o ~/project/test_codes/Function-inlining/example.4inline.constprop.dce.bc
 opt -dce ~/project/test_codes/Function-inlining/example.5inline.constprop.ll -o ~/project/test_codes/Function-inlining/example.5inline.constprop.dce.bc
 
-llvm-dis ~/project/test_codes/Function-inlining/example.0inline.constprop.dce.bc -o ~/project/test_codes/Function-inlining/example.0inline.constprob.dce.ll
-llvm-dis ~/project/test_codes/Function-inlining/example.1inline.constprop.dce.bc -o ~/project/test_codes/Function-inlining/example.1inline.constprob.dce.ll
-llvm-dis ~/project/test_codes/Function-inlining/example.2inline.constprop.dce.bc -o ~/project/test_codes/Function-inlining/example.2inline.constprob.dce.ll
-llvm-dis ~/project/test_codes/Function-inlining/example.3inline.constprop.dce.bc -o ~/project/test_codes/Function-inlining/example.3inline.constprob.dce.ll
-llvm-dis ~/project/test_codes/Function-inlining/example.4inline.constprop.dce.bc -o ~/project/test_codes/Function-inlining/example.4inline.constprob.dce.ll
-llvm-dis ~/project/test_codes/Function-inlining/example.5inline.constprop.dce.bc -o ~/project/test_codes/Function-inlining/example.5inline.constprob.dce.ll
+llvm-dis ~/project/test_codes/Function-inlining/example.0inline.constprop.dce.bc -o ~/project/test_codes/Function-inlining/example.0inline.constprop.dce.ll
+llvm-dis ~/project/test_codes/Function-inlining/example.1inline.constprop.dce.bc -o ~/project/test_codes/Function-inlining/example.1inline.constprop.dce.ll
+llvm-dis ~/project/test_codes/Function-inlining/example.2inline.constprop.dce.bc -o ~/project/test_codes/Function-inlining/example.2inline.constprop.dce.ll
+llvm-dis ~/project/test_codes/Function-inlining/example.3inline.constprop.dce.bc -o ~/project/test_codes/Function-inlining/example.3inline.constprop.dce.ll
+llvm-dis ~/project/test_codes/Function-inlining/example.4inline.constprop.dce.bc -o ~/project/test_codes/Function-inlining/example.4inline.constprop.dce.ll
+llvm-dis ~/project/test_codes/Function-inlining/example.5inline.constprop.dce.bc -o ~/project/test_codes/Function-inlining/example.5inline.constprop.dce.ll
 
 
 git add ~/project/test_codes/Function-inlining/example.0inline.ll
