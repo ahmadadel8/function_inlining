@@ -108,15 +108,15 @@ struct Function_Inlining :  public FunctionPass
 												RemapInstruction(calleeInst, vmap, RF_NoModuleLevelChanges);
 									}
 									ReplaceInstWithValue(i->getInstList(), I, retValue);
-
+									for(lookahead_iterator=inst_begin(callerFunc); lookahead_iterator!=E; lookahead_iterator++){
+										vmap[&*lookahead_iterator] = &*lookahead_iterator;
+										RemapInstruction(&*lookahead_iterator, vmap, RF_NoModuleLevelChanges);}
 
 
 								}
 							}
 						}
-						 for(lookahead_iterator=inst_begin(callerFunc); lookahead_iterator!=E; lookahead_iterator++){
-						// 	vmap[&*lookahead_iterator] = &*lookahead_iterator;
-							RemapInstruction(&*lookahead_iterator, vmap, RF_NoModuleLevelChanges);}
+
 					}
 					return true; //return true as the pass has changed the file
 				}
