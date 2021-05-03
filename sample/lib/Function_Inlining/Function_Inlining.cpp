@@ -50,7 +50,7 @@ struct Function_Inlining :  public FunctionPass
 
 //First, we need to iterate over all the instructions in the code, until we find a call instruction
 
-						for (Function::iterator bs = F.begin(), be = F.end(); bs != be; ++be)
+						for (Function::iterator bs = F.begin(), be = F.end(); bs != be; ++bs)
 								for (BasicBlock::iterator I = bs->begin(), E = be->end(); I != E; ++I) {
 						errs()<<*I<<'\n';
 						//tries to cast every instruction to callInst class. Returns NULL if not a callInst
