@@ -45,7 +45,7 @@ struct Function_Inlining :  public FunctionPass
 					ValueToValueMapTy vmap;
 					unsigned int instcount=0;
 					inst_iterator lookahead_iterator; //will be usefull to lookahead when looping over a function
-					LLVMContext& context = getGlobalContext();
+					LLVMContext& context = llvm::getGlobalContext();
 //First, we need to iterate over all the instructions in the code, until we find a call instruction
 
 					for (inst_iterator I = inst_begin(callerFunc), E=inst_end(callerFunc); I!=E; ++I)	{
