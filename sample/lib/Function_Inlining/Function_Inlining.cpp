@@ -32,15 +32,11 @@ struct Function_Inlining :  public FunctionPass
 				  Function *calleeFunc;
 					//Intruction Type Variables
 				  CallInst* callInst;
-				  StoreInst* strInst;
 					ReturnInst* retInst;
 					Instruction* calleeInst;
-					StoreInst* caller_strInst; //holds the store instruction that comes after the call instruction in non void functions
 					//Miscellaneous
 				  Value* actualArg; //A value type variable that iteratively holds the actual arguments
 					std::vector<ConstantInt*> actualArgVector; //A vector that holds the arguments if they are constants.
-					Value* strVal; //The value in the store instruction replacing the call instruction.
-					Value* strPtr; //The return in the store instruction replacing the call instruction.
 					ConstantInt* constArg; //A ConstInt type variable that holds constant arguments after casting from Value to ConstInt
 				  unsigned numArgs; //number of arguments in a call instruction
 					bool areArgsConst; //a flag. True if all arguments of a call instruction are constants.
@@ -109,11 +105,6 @@ struct Function_Inlining :  public FunctionPass
 						//Fixing broken references
 						for (BasicBlock::iterator lookahead_iterator = I; lookahead_iterator!= E; ++lookahead_iterator)
 							RemapInstruction(lookahead_iterator, vmap, RF_NoModuleLevelChanges);
-
-
-
-
-
 					}
 					return true; //return true as the pass has changed the file
 				}
