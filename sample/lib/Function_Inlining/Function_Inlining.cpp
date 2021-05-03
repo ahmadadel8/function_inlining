@@ -108,9 +108,9 @@ struct Function_Inlining :  public FunctionPass
 										    vmap[&*callee_I] = calleeInst; //then we remap the instructions to update the dominator tree(not sure)
 										    RemapInstruction(calleeInst, vmap, RF_NoModuleLevelChanges);
 										}
-										ReplaceInstWithValue(bs->getInstList(), I, retValue);
-										I++;
-										errs()<<"Infinite loop\n";
+										// ReplaceInstWithValue(bs->getInstList(), I, retValue);
+										// I++;
+										// errs()<<"Infinite loop\n";
 									}
 							}
 						}
