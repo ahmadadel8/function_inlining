@@ -1,6 +1,6 @@
 #!/bin/bash
 cd project/obj
-export CLASSPATH= "/afs/glue.umd.edu/class/old/enee/759c/llvm/llvm-3.4-install/opt/bin/"
+export PATH= "/afs/glue.umd.edu/class/old/enee/759c/llvm/llvm-3.4-install/opt/bin/:$PATH"
 make install
 opt -load ../opt/lib/libFunction_Inlining.so -func_inline ~/project/test_codes/Function-inlining/example0.ll -o example.0inline.bc
 opt -load ../opt/lib/libFunction_Inlining.so -func_inline ~/project/test_codes/Function-inlining/example1.ll -o example.1inline.bc
