@@ -19,10 +19,10 @@ llvm-dis example.5inline.bc -o example.5inline.ll
 
 opt -constprop example.0inline.ll -o example.0inline.constprop.bc
 opt -constprop example.1inline.ll -o example.1inline.constprop.bc
-opt -constprop example.2inline.ll -o example.1inline.constprop.bc
-opt -constprop example.3inline.ll -o example.1inline.constprop.bc
-opt -constprop example.4inline.ll -o example.1inline.constprop.bc
-opt -constprop example.5inline.ll -o example.1inline.constprop.bc
+opt -constprop example.2inline.ll -o example.2inline.constprop.bc
+opt -constprop example.3inline.ll -o example.3inline.constprop.bc
+opt -constprop example.4inline.ll -o example.4inline.constprop.bc
+opt -constprop example.5inline.ll -o example.5inline.constprop.bc
 
 llvm-dis example.0inline.constprop.bc -o example.0inline.constprop.ll
 llvm-dis example.1inline.constprop.bc -o example.1inline.constprop.ll
