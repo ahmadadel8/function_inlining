@@ -46,7 +46,6 @@ struct Function_Inlining :  public FunctionPass
 					bool areArgsConst; //a flag. True if all arguments of a call instruction are constants.
 					ValueToValueMapTy vmap;
 					Value* retValue; //Holds the value of the return of the callee
-					inst_iterator lookahead_iterator; //will be usefull to lookahead when looping over a function
 
 //First, we need to iterate over all the instructions in the code, until we find a call instruction
 
@@ -108,9 +107,9 @@ struct Function_Inlining :  public FunctionPass
 												RemapInstruction(calleeInst, vmap, RF_NoModuleLevelChanges);
 									}
 									ReplaceInstWithValue(i->getInstList(), I, retValue); //replaces the call instruction with the return value of the callee and deletes it
-									for(lookahead_iterator=I; lookahead_iterator!=inst_end(callerFunc); lookahead_iterator++)
+									for (BasicBlock::iterator lookahead_iterator = I; lookahead_iterator!= E; ++lookahead_iterator){
 										RemapInstruction(lookahead_iterator, vmap, RF_NoModuleLevelChanges);
-									
+
 
 
 									}
