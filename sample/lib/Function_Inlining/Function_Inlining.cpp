@@ -110,7 +110,7 @@ struct Function_Inlining :  public FunctionPass
 										}
 										ReplaceInstWithValue(bs->getInstList(), I, retValue);
 										I++;
-										errs()<<"Infinite loop\n"
+										errs()<<"Infinite loop\n";
 									}
 							}
 						}
