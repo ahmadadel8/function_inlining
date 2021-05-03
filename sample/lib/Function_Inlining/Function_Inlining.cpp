@@ -47,9 +47,10 @@ struct Function_Inlining :  public FunctionPass
 					unsigned int instcount=0;
 					inst_iterator lookahead_iterator; //will be usefull to lookahead when looping over a function
 					LLVMContext& context = llvm::getGlobalContext();
+					Value* retValue;
 //First, we need to iterate over all the instructions in the code, until we find a call instruction
-
-					for (inst_iterator I = inst_begin(callerFunc), E=inst_end(callerFunc); I!=E; ++I)	{
+					for (Function::iterator bs = F.begin(), be = F.end(); bs != be; ++be)
+							for (BasicBlock::iterator I = bs->begin(), E = be->end(); I != I; ++I) {
 						//tries to cast every instruction to callInst class. Returns NULL if not a callInst
 						if (!(callInst = dyn_cast<CallInst>(&*I))) continue; //if callInst is  NULL, i.e. intruction is not a call instruction, continue to the next iteration
 						//Now that we found the call instruction, we need to check if all the argments are indeed constants.
@@ -102,7 +103,7 @@ struct Function_Inlining :  public FunctionPass
 
 							//So, we first check if we reached the return instruction and that it is indeed returning void
 							if ((retInst = dyn_cast<ReturnInst>(&*callee_I)))
-								{	Value* retValue=retInst->getReturnValue();
+								{	retValue=retInst->getReturnValue();
 										break;}
 								calleeInst = callee_I->clone(); //Now, for a normal instruction, we first clone int
 								calleeInst->insertBefore(ai); //then move it just before the call instruction
@@ -110,7 +111,7 @@ struct Function_Inlining :  public FunctionPass
 								vmap[&*callee_I] = calleeInst; //then we remap the instructions to update the dominator tree(not sure)
 								RemapInstruction(calleeInst, vmap, RF_NoModuleLevelChanges);
 					}
-					ReplaceInstWithValue(&*I->getParent()->getInstList(), I,retValue);
+					ReplaceInstWithValue(bs->getInstList(), I, retValue);
 
 						}
 					return true; //return true as the pass has changed the file
