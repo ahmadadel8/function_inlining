@@ -109,6 +109,10 @@ struct Function_Inlining :  public FunctionPass
 										    RemapInstruction(calleeInst, vmap, RF_NoModuleLevelChanges);
 										}
 										ReplaceInstWithValue(bs->getInstList(), I, retValue);
+									}
+							}
+						}
+					}
 					return true; //return true as the pass has changed the file
 				}
 
