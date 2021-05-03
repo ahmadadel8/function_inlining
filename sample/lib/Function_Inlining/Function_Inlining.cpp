@@ -1,3 +1,6 @@
+// #include "llvm/IR/Type.h"
+// #include "llvm/IR/LLVMContext.h"
+// #include "llvm/Transform
 ///////////////////////////////////////////
 //// FUNCTION INLINING PASS FOR LLVM//////
 /////////////////////////////////////////
@@ -14,8 +17,7 @@
 #include "vector"
 #include "llvm/Transforms/Utils/ValueMapper.h"
 #include "llvm/IR/Type.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/Transforms/Utils/BasicBlockUtils.h"
+
 
 using namespace llvm;
 namespace {
@@ -44,7 +46,7 @@ struct Function_Inlining :  public FunctionPass
 				  unsigned numArgs; //number of arguments in a call instruction
 					bool areArgsConst; //a flag. True if all arguments of a call instruction are constants.
 					ValueToValueMapTy vmap;
-					Value* retValue;
+
 					inst_iterator lookahead_iterator; //will be usefull to lookahead when looping over a function
 
 //First, we need to iterate over all the instructions in the code, until we find a call instruction
@@ -126,7 +128,6 @@ struct Function_Inlining :  public FunctionPass
 
 char Function_Inlining::ID = 1;
 static RegisterPass<Function_Inlining> X("func_inline", "Function Inlining Pass", false, false);
-
 // ReplaceInstWithValue(bs->getInstList(), I, retValue);
 // I++;
 // errs()<<"Infinite loop\n";
