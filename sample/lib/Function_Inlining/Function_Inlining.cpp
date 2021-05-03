@@ -52,7 +52,7 @@ struct Function_Inlining :  public FunctionPass
 //First, we need to iterate over all the instructions in the code, until we find a call instruction
 
 					for (inst_iterator I = inst_begin(callerFunc), E=inst_end(callerFunc); I!=E; ++I)	{
-						//errs()<<*I<<'\n';
+						errs()<<*I<<'\n';
 						//tries to cast every instruction to callInst class. Returns NULL if not a callInst
 						if ((callInst = dyn_cast<CallInst>(&*I))){ //if callInst is not NULL, i.e. intruction is indeed a call instruction
 							//Now that we found the call instruction, we need to check if all the argments are indeed constants.
@@ -87,7 +87,6 @@ struct Function_Inlining :  public FunctionPass
 
 										//Now, the function declaration is ready to be copied into the call site. We will clone each intruction and move the clone right before the call instruction.
 										//This makes the function declaration dead.
-										I++;
 										for (inst_iterator callee_I = inst_begin(calleeFunc), callee_E=inst_end(calleeFunc); callee_I!=callee_E; ++callee_I){	//iterating over the instructions in the callee definition
 											//This is where the code gets convoluted. We want to iterate over all instructions and copy them as is to the call site. However, there are two cases
 											//1-If the function returns void, we want to copy all the instructions as is, except the return instruction, and then delete the call instruction
@@ -100,6 +99,7 @@ struct Function_Inlining :  public FunctionPass
 											//So, we first check if we reached the return instruction and that it is indeed returning void
 											if ((retInst = dyn_cast<ReturnInst>(&*callee_I)))
 												{//for ret void, getNumOperands returns 0.
+														//I++->eraseFromParent(); //we break before copying the instruction and erase the call instruction, incrementing the iterator to point to the next instuction
 														break;}
 												calleeInst = callee_I->clone(); //Now, for a normal instruction, we first clone int
 												calleeInst->insertBefore(&*I); //then move it just before the call instruction
@@ -112,14 +112,10 @@ struct Function_Inlining :  public FunctionPass
 								}
 							}
 						}
-						I--;
-						//vmap[&*I]=retInst;
-						//I->eraseFromParent(); //we break before copying the instruction and erase the call instruction, incrementing the iterator to point to the next instuction
 						for(lookahead_iterator=inst_begin(callerFunc); lookahead_iterator!=E; lookahead_iterator++){
-							//vmap[&*lookahead_iterator] = &*lookahead_iterator;
+							vmap[&*lookahead_iterator] = &*lookahead_iterator;
 							RemapInstruction(&*lookahead_iterator, vmap, RF_NoModuleLevelChanges);}
 					}
-					errs()<<"Here \n";
 					return true; //return true as the pass has changed the file
 				}
 
@@ -127,7 +123,6 @@ struct Function_Inlining :  public FunctionPass
 }
 
 char Function_Inlining::ID = 1;
-static RegisterPass<Function_Inlining> X("func_inline", "Function Inlining Pass", false, false);
-// ReplaceInstWithValue(bs->getInstList(), I, retValue);
+static RegisterPass<Function_Inlining> X("func_inline", "Function Inlining Pass", false, false);// ReplaceInstWithValue(bs->getInstList(), I, retValue);
 // I++;
 // errs()<<"Infinite loop\n";
