@@ -29,3 +29,21 @@ llvm-dis ~/project/test_codes/Function-inlining/example.2inline.constprop.bc -o 
 llvm-dis ~/project/test_codes/Function-inlining/example.3inline.constprop.bc -o ~/project/test_codes/Function-inlining/example.3inline.constprop.ll
 llvm-dis ~/project/test_codes/Function-inlining/example.4inline.constprop.bc -o ~/project/test_codes/Function-inlining/example.4inline.constprop.ll
 llvm-dis ~/project/test_codes/Function-inlining/example.5inline.constprop.bc -o ~/project/test_codes/Function-inlining/example.5inline.constprop.ll
+
+git add ~/project/test_codes/Function-inlining/example.0inline.ll
+git add ~/project/test_codes/Function-inlining/example.1inline.ll
+git add ~/project/test_codes/Function-inlining/example.2inline.ll
+git add ~/project/test_codes/Function-inlining/example.3inline.ll
+git add ~/project/test_codes/Function-inlining/example.4inline.ll
+git add ~/project/test_codes/Function-inlining/example.5inline.ll
+
+
+git add ~/project/test_codes/Function-inlining/example.0inline.constprop.ll
+git add ~/project/test_codes/Function-inlining/example.1inline.constprop.ll
+git add ~/project/test_codes/Function-inlining/example.2inline.constprop.ll
+git add ~/project/test_codes/Function-inlining/example.3inline.constprop.ll
+git add ~/project/test_codes/Function-inlining/example.4inline.constprop.ll
+git add ~/project/test_codes/Function-inlining/example.5inline.constprop.ll
+
+git commit -m "uploading test resutls"
+git push origin main
