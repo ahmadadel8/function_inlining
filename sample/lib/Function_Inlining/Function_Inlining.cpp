@@ -1,6 +1,3 @@
-// #include "llvm/IR/Type.h"
-// #include "llvm/IR/LLVMContext.h"
-// #include "llvm/Transform
 ///////////////////////////////////////////
 //// FUNCTION INLINING PASS FOR LLVM//////
 /////////////////////////////////////////
@@ -17,6 +14,8 @@
 #include "vector"
 #include "llvm/Transforms/Utils/ValueMapper.h"
 #include "llvm/IR/Type.h"
+#include "llvm/IR/LLVMContext.h"
+#include "llvm/Transforms/Utils/BasicBlockUtils.h"
 
 
 using namespace llvm;
@@ -46,7 +45,7 @@ struct Function_Inlining :  public FunctionPass
 				  unsigned numArgs; //number of arguments in a call instruction
 					bool areArgsConst; //a flag. True if all arguments of a call instruction are constants.
 					ValueToValueMapTy vmap;
-
+					Value* retValue;
 					inst_iterator lookahead_iterator; //will be usefull to lookahead when looping over a function
 
 //First, we need to iterate over all the instructions in the code, until we find a call instruction
@@ -98,8 +97,8 @@ struct Function_Inlining :  public FunctionPass
 
 											//So, we first check if we reached the return instruction and that it is indeed returning void
 											if ((retInst = dyn_cast<ReturnInst>(&*callee_I)))
-												{//for ret void, getNumOperands returns 0.
-														//I++->eraseFromParent(); //we break before copying the instruction and erase the call instruction, incrementing the iterator to point to the next instuction
+												{	retValue=retInst->getReturnValue();
+													//for ret void, getNumOperands returns 0.
 														break;}
 												calleeInst = callee_I->clone(); //Now, for a normal instruction, we first clone int
 												calleeInst->insertBefore(&*I); //then move it just before the call instruction
@@ -107,14 +106,16 @@ struct Function_Inlining :  public FunctionPass
 												vmap[&*callee_I] = calleeInst; //then we remap the instructions to update the dominator tree(not sure)
 												RemapInstruction(calleeInst, vmap, RF_NoModuleLevelChanges);
 									}
+									ReplaceInstWithValue(bs->getInstList(), I, retValue);
+
 
 
 								}
 							}
 						}
-						for(lookahead_iterator=inst_begin(callerFunc); lookahead_iterator!=E; lookahead_iterator++){
-							vmap[&*lookahead_iterator] = &*lookahead_iterator;
-							RemapInstruction(&*lookahead_iterator, vmap, RF_NoModuleLevelChanges);}
+						// for(lookahead_iterator=inst_begin(callerFunc); lookahead_iterator!=E; lookahead_iterator++){
+						// 	vmap[&*lookahead_iterator] = &*lookahead_iterator;
+						// 	RemapInstruction(&*lookahead_iterator, vmap, RF_NoModuleLevelChanges);}
 					}
 					return true; //return true as the pass has changed the file
 				}
