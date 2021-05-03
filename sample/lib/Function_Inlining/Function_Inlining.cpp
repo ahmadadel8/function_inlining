@@ -45,14 +45,13 @@ struct Function_Inlining :  public FunctionPass
 				  unsigned numArgs; //number of arguments in a call instruction
 					bool areArgsConst; //a flag. True if all arguments of a call instruction are constants.
 					ValueToValueMapTy vmap;
-					Value* retValue;
+					Value* retValue; //Holds the value of the return of the callee
 					inst_iterator lookahead_iterator; //will be usefull to lookahead when looping over a function
 
 //First, we need to iterate over all the instructions in the code, until we find a call instruction
 
 						for (Function::iterator i = callerFunc->begin(), e = callerFunc->end(); i != e; ++i)
 							for (BasicBlock::iterator I = i->begin(), E = i->end(); I!= E; ++I){
-						errs()<<*I<<'\n';
 						//tries to cast every instruction to callInst class. Returns NULL if not a callInst
 						if ((callInst = dyn_cast<CallInst>(&*I))){ //if callInst is not NULL, i.e. intruction is indeed a call instruction
 							//Now that we found the call instruction, we need to check if all the argments are indeed constants.
@@ -76,7 +75,7 @@ struct Function_Inlining :  public FunctionPass
 										//2-All the arguments are constants
 										//3-The function declaration is local within the file.
 										//We will replace all the formal arguments with the actual constant arguments within the function definition.
-										if(std::distance(inst_begin(calleeFunc), inst_end(calleeFunc))<10) {
+										if(std::distance(inst_begin(calleeFunc), inst_end(calleeFunc))<=10) {//limits the number of IR instructions to inline to 10
 
 										unsigned Idx=0; //An iterator to iterate over the vector actualArgVector, along with the arguments of the function definition
 										for (Function::arg_iterator ArgPtr = calleeFunc->arg_begin(), ArgEnd= calleeFunc->arg_end(); ArgPtr !=ArgEnd; ++ArgPtr){ //iterating over the formal arguments
@@ -105,13 +104,13 @@ struct Function_Inlining :  public FunctionPass
 												calleeInst = callee_I->clone(); //Now, for a normal instruction, we first clone int
 												calleeInst->insertBefore(&*I); //then move it just before the call instruction
 										    //&*I->getParent()->getInstList().insert(&*I,&*calleeInst); //this is an alternative way to do so that will also work
-												vmap[&*callee_I] = calleeInst; //then we remap the instructions to update the dominator tree(not sure)
+												vmap[&*callee_I] = calleeInst; //then we remap the new instructions to map to the original values
 												RemapInstruction(calleeInst, vmap, RF_NoModuleLevelChanges);
 									}
-									ReplaceInstWithValue(i->getInstList(), I, retValue);
-									for(lookahead_iterator=inst_begin(callerFunc); lookahead_iterator!=inst_end(callerFunc); lookahead_iterator++){
-										vmap[&*lookahead_iterator] = &*lookahead_iterator;
-										RemapInstruction(&*lookahead_iterator, vmap, RF_NoModuleLevelChanges);}
+									ReplaceInstWithValue(i->getInstList(), I, retValue); //replaces the call instruction with the return value of the callee and deletes it
+									//for(lookahead_iterator=inst_begin(callerFunc); lookahead_iterator!=inst_end(callerFunc); lookahead_iterator++){
+										//vmap[&*lookahead_iterator] = &*lookahead_iterator;
+										RemapInstruction(I, vmap, RF_NoModuleLevelChanges);}
 
 									}
 								}
@@ -127,5 +126,3 @@ struct Function_Inlining :  public FunctionPass
 
 char Function_Inlining::ID = 1;
 static RegisterPass<Function_Inlining> X("func_inline", "Function Inlining Pass", false, false);// ReplaceInstWithValue(bs->getInstList(), I, retValue);
-// I++;
-// errs()<<"Infinite loop\n";
