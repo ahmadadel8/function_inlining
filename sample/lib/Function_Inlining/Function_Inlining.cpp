@@ -52,70 +52,67 @@ struct Function_Inlining :  public FunctionPass
 						for (Function::iterator i = callerFunc->begin(), e = callerFunc->end(); i != e; ++i)
 							for (BasicBlock::iterator I = i->begin(), E = i->end(); I!= E; ++I){
 						//tries to cast every instruction to callInst class. Returns NULL if not a callInst
-						if ((callInst = dyn_cast<CallInst>(&*I))){ //if callInst is not NULL, i.e. intruction is indeed a call instruction
-							//Now that we found the call instruction, we need to check if all the argments are indeed constants.
-							areArgsConst= true; //initialize the flag to be true. It will be set to false if we encounter a non const argument
-							numArgs=callInst->getNumArgOperands(); //the number of the arguments of the all instruction so we can iterate over them
-							for (unsigned ArgIdx=0; ArgIdx<numArgs; ++ArgIdx){
-								actualArg=callInst->getArgOperand(ArgIdx); //checks one argument at a time
-								if((constArg=dyn_cast<ConstantInt>(actualArg))) 	actualArgVector.push_back(constArg); //if the casting succeeds i.e. the argument is a constant, add the argument to vector
-								else
-								{ areArgsConst= false; //if at least one argument is not constant, lower the flag, and break the loop over the instructions
-									break;
-									}
-								}
-								if (areArgsConst){ //if all the arguments of the call instructions as constants
-									calleeFunc=callInst->getCalledFunction(); //get the callee definition. Now this callee function might be local, or external (defined in another file), or in some libarary
-									//for e.g. printf, scanf. These might have constant arguments (printf("some string");). We need to ignore thes calls as they cannot be inlined.
-									if(&*(inst_begin(calleeFunc))){  //It checks the first intruction of the function definition. If it is external, it returns 0x0, which we can check for.
-
-										//Now that we know that
-										//1-We have a call instruction.
-										//2-All the arguments are constants
-										//3-The function declaration is local within the file.
-										//We will replace all the formal arguments with the actual constant arguments within the function definition.
-										if(std::distance(inst_begin(calleeFunc), inst_end(calleeFunc))<=10) {//limits the number of IR instructions to inline to 10
-
-										unsigned Idx=0; //An iterator to iterate over the vector actualArgVector, along with the arguments of the function definition
-										for (Function::arg_iterator ArgPtr = calleeFunc->arg_begin(), ArgEnd= calleeFunc->arg_end(); ArgPtr !=ArgEnd; ++ArgPtr){ //iterating over the formal arguments
-											constArg = actualArgVector[Idx++]; //get the correspoding actual argument
-											ArgPtr->replaceAllUsesWith(constArg); //and replaces all the uses of the formal argument with the actual argument.
-											}
-										actualArgVector.clear();  //ensures the vector is indeed empty in the case of multiple call functions.
-
-
-										//Now, the function declaration is ready to be copied into the call site. We will clone each intruction and move the clone right before the call instruction.
-										//This makes the function declaration dead.
-										for (inst_iterator callee_I = inst_begin(calleeFunc), callee_E=inst_end(calleeFunc); callee_I!=callee_E; ++callee_I){	//iterating over the instructions in the callee definition
-											//This is where the code gets convoluted. We want to iterate over all instructions and copy them as is to the call site. However, there are two cases
-											//1-If the function returns void, we want to copy all the instructions as is, except the return instruction, and then delete the call instruction
-											//2-If the function returns a value, the IR takes the following form.
-											//In the callee function, the last three instructions are storeInst that store the result of the computation in a variable, loadInst that loads such result in memory/registers, then the return instuction.
-											// In the call site, the call instruction, which will store the return value in memory, and will then be followed by a store instructions which will link that pointer to the variable.
-											//What we want to do is copy all the instructions in the callee except the last three, and then delete the call instruction and the storeInst after it, and replace it with another storeinstruction that stores the
-											//resultant of the computation to the variable that the return of the call instruction was originally stored in.
-
-											//So, we first check if we reached the return instruction and that it is indeed returning void
-											if ((retInst = dyn_cast<ReturnInst>(&*callee_I)))
-												{	retValue=retInst->getReturnValue();
-													//for ret void, getNumOperands returns 0.
-														break;}
-												calleeInst = callee_I->clone(); //Now, for a normal instruction, we first clone int
-												calleeInst->insertBefore(&*I); //then move it just before the call instruction
-										    //&*I->getParent()->getInstList().insert(&*I,&*calleeInst); //this is an alternative way to do so that will also work
-												vmap[&*callee_I] = calleeInst; //then we remap the new instructions to map to the original values
-												RemapInstruction(calleeInst, vmap, RF_NoModuleLevelChanges);
-									}
-									ReplaceInstWithValue(i->getInstList(), I, retValue); //replaces the call instruction with the return value of the callee and deletes it
-									for (BasicBlock::iterator lookahead_iterator = I; lookahead_iterator!= E; ++lookahead_iterator)
-										RemapInstruction(lookahead_iterator, vmap, RF_NoModuleLevelChanges);
-
-
-
-									}
+						if (!(callInst = dyn_cast<CallInst>(&*I))) continue; //if callInst is  NULL, i.e. intruction is not a call instruction, skip the rest of the iteration
+						//Now that we found the call instruction, we need to check if all the argments are indeed constants.
+						areArgsConst= true; //initialize the flag to be true. It will be set to false if we encounter a non const argument
+						numArgs=callInst->getNumArgOperands(); //the number of the arguments of the all instruction so we can iterate over them
+						for (unsigned ArgIdx=0; ArgIdx<numArgs; ++ArgIdx){
+							actualArg=callInst->getArgOperand(ArgIdx); //checks one argument at a time
+							if((constArg=dyn_cast<ConstantInt>(actualArg))) 	actualArgVector.push_back(constArg); //if the casting succeeds i.e. the argument is a constant, add the argument to vector
+							else
+							{ areArgsConst= false; //if at least one argument is not constant, lower the flag, and break the loop over the instructions
+								break;
 								}
 							}
+							if (!areArgsConst) continue; //if at least one  argument of the call instructions is not a constant, skip the rest of the iteration
+							calleeFunc=callInst->getCalledFunction(); //get the callee definition. Now this callee function might be local, or external (defined in another file), or in some libarary
+							//for e.g. printf, scanf. These might have constant arguments (printf("some string");). We need to ignore thes calls as they cannot be inlined.
+							if(!(&*(inst_begin(calleeFunc)))) continue; //It checks the first intruction of the function definition. If it is external, it returns 0x0, which we can check for.
+
+							if(std::distance(inst_begin(calleeFunc), inst_end(calleeFunc))>10) continue;//limits the number of IR instructions to inline to 10
+
+
+							//Now that we know that
+							//1-We have a call instruction.
+							//2-All the arguments are constants
+							//3-The function declaration is local within the file.
+							//4-The calee function has less than 10 IR instructions
+							//We will replace all the formal arguments with the actual constant arguments within the function definition.
+
+
+							unsigned Idx=0; //An iterator to iterate over the vector actualArgVector, along with the arguments of the function definition
+							for (Function::arg_iterator ArgPtr = calleeFunc->arg_begin(), ArgEnd= calleeFunc->arg_end(); ArgPtr !=ArgEnd; ++ArgPtr){ //iterating over the formal arguments
+								constArg = actualArgVector[Idx++]; //get the correspoding actual argument
+								ArgPtr->replaceAllUsesWith(constArg); //and replaces all the uses of the formal argument with the actual argument.
+								}
+							actualArgVector.clear();  //ensures the vector is indeed empty in the case of multiple call functions.
+
+
+							//Now, the function declaration is ready to be copied into the call site. We will clone each intruction and move the clone right before the call instruction.
+							//This makes the function declaration dead.
+							for (inst_iterator callee_I = inst_begin(calleeFunc), callee_E=inst_end(calleeFunc); callee_I!=callee_E; ++callee_I){	//iterating over the instructions in the callee definition
+								//Now, we copy the modified function definition to the call site. We want to copy ALL the instructions in the function definition except the return instruction, so we break when we find it,
+								//we store the return value because it will be useful later
+								if ((retInst = dyn_cast<ReturnInst>(&*callee_I)))
+									{	retValue=retInst->getReturnValue();
+										//for ret void, getNumOperands returns 0.
+											break;}
+									//we map the new instructions to the old instructions' values. This copies the cfg subtree from the definition to the call site, and fixes broken references
+									calleeInst = callee_I->clone(); //Now, for a normal instruction, we first clone int
+									calleeInst->insertBefore(&*I); //then move it just before the call instruction
+							    //&*I->getParent()->getInstList().insert(&*I,&*calleeInst); //this is an alternative way to do so that will also work
+									vmap[&*callee_I] = calleeInst; //then we remap the new instructions to map to the original values
+									RemapInstruction(calleeInst, vmap, RF_NoModuleLevelChanges);
 						}
+
+						ReplaceInstWithValue(i->getInstList(), I, retValue); //We replaces the call instruction with the return value of the callee and deletes it, so uses of the call instruction now uses the return value directly.
+						//Fixing broken references
+						for (BasicBlock::iterator lookahead_iterator = I; lookahead_iterator!= E; ++lookahead_iterator)
+							RemapInstruction(lookahead_iterator, vmap, RF_NoModuleLevelChanges);
+
+
+
+
 
 					}
 					return true; //return true as the pass has changed the file
