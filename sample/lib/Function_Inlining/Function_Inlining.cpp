@@ -76,6 +76,7 @@ struct Function_Inlining :  public FunctionPass
 										//2-All the arguments are constants
 										//3-The function declaration is local within the file.
 										//We will replace all the formal arguments with the actual constant arguments within the function definition.
+										if(std::distance(inst_begin(calleeFunc), inst_end(calleeFunc))<10) {
 
 										unsigned Idx=0; //An iterator to iterate over the vector actualArgVector, along with the arguments of the function definition
 										for (Function::arg_iterator ArgPtr = calleeFunc->arg_begin(), ArgEnd= calleeFunc->arg_end(); ArgPtr !=ArgEnd; ++ArgPtr){ //iterating over the formal arguments
@@ -112,7 +113,7 @@ struct Function_Inlining :  public FunctionPass
 										vmap[&*lookahead_iterator] = &*lookahead_iterator;
 										RemapInstruction(&*lookahead_iterator, vmap, RF_NoModuleLevelChanges);}
 
-
+									}
 								}
 							}
 						}
