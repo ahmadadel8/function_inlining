@@ -15,6 +15,7 @@
 #include "llvm/Transforms/Utils/ValueMapper.h"
 #include "llvm/IR/Type.h"
 #include "llvm/IR/LLVMContext.h"
+#include "llvm/Transforms/Utils/BasicBlockUtils.h"
 
 
 using namespace llvm;
