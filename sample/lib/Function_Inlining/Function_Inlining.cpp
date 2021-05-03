@@ -89,7 +89,6 @@ struct Function_Inlining :  public FunctionPass
 						//Now, the function declaration is ready to be copied into the call site. We will clone each intruction and move the clone right before the call instruction.
 						//This makes the function declaration dead.
 
-						AllocaInst* ai = new AllocaInst(IntegerType::get(context, 32));
 
 
 						for (inst_iterator callee_I = inst_begin(calleeFunc), callee_E=inst_end(calleeFunc); callee_I!=callee_E; ++callee_I){	//iterating over the instructions in the callee definition
@@ -103,7 +102,7 @@ struct Function_Inlining :  public FunctionPass
 
 							//So, we first check if we reached the return instruction and that it is indeed returning void
 							if ((retInst = dyn_cast<ReturnInst>(&*callee_I)))
-								{//for ret void, getNumOperands returns 0.
+								{	Value* retValue=retInst->getReturnValue();
 										break;}
 								calleeInst = callee_I->clone(); //Now, for a normal instruction, we first clone int
 								calleeInst->insertBefore(ai); //then move it just before the call instruction
@@ -111,6 +110,7 @@ struct Function_Inlining :  public FunctionPass
 								vmap[&*callee_I] = calleeInst; //then we remap the instructions to update the dominator tree(not sure)
 								RemapInstruction(calleeInst, vmap, RF_NoModuleLevelChanges);
 					}
+					ReplaceInstWithValue(&*I->getParent()->getInstList(), I,retValue);
 
 						}
 					return true; //return true as the pass has changed the file
