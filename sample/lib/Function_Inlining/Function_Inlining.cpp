@@ -108,10 +108,9 @@ struct Function_Inlining :  public FunctionPass
 												RemapInstruction(calleeInst, vmap, RF_NoModuleLevelChanges);
 									}
 									ReplaceInstWithValue(i->getInstList(), I, retValue); //replaces the call instruction with the return value of the callee and deletes it
-									//for(lookahead_iterator=inst_begin(callerFunc); lookahead_iterator!=inst_end(callerFunc); lookahead_iterator++){
-										//vmap[&*lookahead_iterator] = &*lookahead_iterator;
-										RemapInstruction(I, vmap, RF_NoModuleLevelChanges);
-									//}
+									for(lookahead_iterator=I; lookahead_iterator!=inst_end(callerFunc); lookahead_iterator++)
+										RemapInstruction(lookahead_iterator, vmap, RF_NoModuleLevelChanges);
+									
 
 
 									}
