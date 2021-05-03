@@ -45,7 +45,7 @@ struct Function_Inlining :  public FunctionPass
 					ValueToValueMapTy vmap;
 					unsigned int instcount=0;
 					inst_iterator lookahead_iterator; //will be usefull to lookahead when looping over a function
-
+					LLVMContext& context;
 //First, we need to iterate over all the instructions in the code, until we find a call instruction
 
 					for (inst_iterator I = inst_begin(callerFunc), E=inst_end(callerFunc); I!=E; ++I)	{
@@ -87,52 +87,44 @@ struct Function_Inlining :  public FunctionPass
 
 						//Now, the function declaration is ready to be copied into the call site. We will clone each intruction and move the clone right before the call instruction.
 						//This makes the function declaration dead.
+						AllocaInst* ai = new AllocaInst(IntegerType::get(context, 32));
+
 						for (inst_iterator callee_I = inst_begin(calleeFunc), callee_E=inst_end(calleeFunc); callee_I!=callee_E; ++callee_I){	//iterating over the instructions in the callee definition
-							//This is where the code gets convoluted. We want to iterate over all instructions and copy them as is to the call site. However, there are two cases
-							//1-If the function returns void, we want to copy all the instructions as is, except the return instruction, and then delete the call instruction
-							//2-If the function returns a value, the IR takes the following form.
-							//In the callee function, the last three instructions are storeInst that store the result of the computation in a variable, loadInst that loads such result in memory/registers, then the return instuction.
-							// In the call site, the call instruction, which will store the return value in memory, and will then be followed by a store instructions which will link that pointer to the variable.
-							//What we want to do is copy all the instructions in the callee except the last three, and then delete the call instruction and the storeInst after it, and replace it with another storeinstruction that stores the
-							//resultant of the computation to the variable that the return of the call instruction was originally stored in.
+												//This is where the code gets convoluted. We want to iterate over all instructions and copy them as is to the call site. However, there are two cases
+												//1-If the function returns void, we want to copy all the instructions as is, except the return instruction, and then delete the call instruction
+												//2-If the function returns a value, the IR takes the following form.
+												//In the callee function, the last three instructions are storeInst that store the result of the computation in a variable, loadInst that loads such result in memory/registers, then the return instuction.
+												// In the call site, the call instruction, which will store the return value in memory, and will then be followed by a store instructions which will link that pointer to the variable.
+												//What we want to do is copy all the instructions in the callee except the last three, and then delete the call instruction and the storeInst after it, and replace it with another storeinstruction that stores the
+												//resultant of the computation to the variable that the return of the call instruction was originally stored in.
 
-							//So, we first check if we reached the return instruction and that it is indeed returning void
-							if ((retInst = dyn_cast<ReturnInst>(&*callee_I)))
-								{	if(retInst->getNumOperands()==0) {//for ret void, getNumOperands returns 0.
-										I++->eraseFromParent(); //we break before copying the instruction and erase the call instruction, incrementing the iterator to point to the next instuction
-										break;}}
-								calleeInst = callee_I->clone(); //Now, for a normal instruction, we first clone int
-								calleeInst->insertBefore(&*I); //then move it just before the call instruction
-						    //&*I->getParent()->getInstList().insert(&*I,&*calleeInst); //this is an alternative way to do so that will also work
-								vmap[&*callee_I] = calleeInst; //then we remap the instructions to update the dominator tree(not sure)
-								RemapInstruction(calleeInst, vmap, RF_NoModuleLevelChanges);
+												//So, we first check if we reached the return instruction and that it is indeed returning void
+												if ((retInst = dyn_cast<ReturnInst>(&*callee_I)))
+													{//for ret void, getNumOperands returns 0.
+															break;}
+													calleeInst = callee_I->clone(); //Now, for a normal instruction, we first clone int
+													calleeInst->insertBefore(&*I); //then move it just before the call instruction
+											    //&*I->getParent()->getInstList().insert(&*I,&*calleeInst); //this is an alternative way to do so that will also work
+													vmap[&*callee_I] = calleeInst; //then we remap the instructions to update the dominator tree(not sure)
+													RemapInstruction(calleeInst, vmap, RF_NoModuleLevelChanges);
+										}
 
-								//Now, we want to check if we reached the end of a function that doesn't return void. If we did, we should expect to find a store instruction followed by a load and return instruction.
-								lookahead_iterator=callee_I; //we create a dummy instruction iterator to look ahead in the loop
 
-								if((strInst=dyn_cast<StoreInst>(calleeInst)))//now, we will check if the instruction that we just copied was a storeinstruction followed by load and return. We need to copy it first because we will need it to create the
-								//new store instruction. We will delete it later
-								 	if ((dyn_cast<LoadInst>(&*(++lookahead_iterator))))
-										if((retInst = dyn_cast<ReturnInst>(&*(++lookahead_iterator))))
-											if(retInst->getNumOperands()!=0){ //if the function doesn't indeed return void
-													I++->eraseFromParent(); //erase the call instruction
-													caller_strInst=dyn_cast<StoreInst>(&*I);
-													if(caller_strInst){//check if the instruction after the call instruction is indeed a store instruction
-														strVal=strInst->getValueOperand(); //then, we will get the value that the store instruction in the callee saves to a local variable in it
-														strPtr=caller_strInst->getPointerOperand(); //we will get a pointer to the local variable that the caller's store instruction saves the returned value to
-														new StoreInst(strVal, strPtr, &*I); //and create a new store instruction
-														I++->eraseFromParent(); //erase the old store instructions.
-														calleeInst->eraseFromParent();
-														break; //break the loop
-														}
-																											}
+									}
+								}
 							}
+							//vmap[&*I]=retInst;
+							//I->eraseFromParent(); //we break before copying the instruction and erase the call instruction, incrementing the iterator to point to the next instuction
+							for(lookahead_iterator=inst_begin(callerFunc); lookahead_iterator!=E; lookahead_iterator++){
+								//vmap[&*lookahead_iterator] = &*lookahead_iterator;
+								RemapInstruction(&*lookahead_iterator, vmap, RF_NoModuleLevelChanges);}
 						}
-					return true; //return true as the pass has changed the file
-				}
+						errs()<<"Here \n";
+						return true; //return true as the pass has changed the file
+					}
 
-};
-}
+	};
+	}
 
-char Function_Inlining::ID = 1;
-static RegisterPass<Function_Inlining> X("func_inline", "Function Inlining Pass", false, false);
+	char Function_Inlining::ID = 1;
+	static RegisterPass<Function_Inlining> X("func_inline", "Function Inlining Pass", false, false);
